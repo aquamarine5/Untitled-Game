@@ -5,26 +5,13 @@ using UnityEngine;
 public class WeaponAttack : MonoBehaviour
 {
     public AttackType at;
-    public Test[] ts;
-    public int a;
+    public RectTransform SpriteTf;
     public enum AttackType
     {
         Melee=1
     }
-    public struct Test
+    public void OnButtonClick()
     {
-        public int a;
-        string b;
-    }
-    
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
