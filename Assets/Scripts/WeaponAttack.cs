@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class WeaponAttack : MonoBehaviour
 {
-    public AttackType at;
+    public WeaponBase.AttackType at;
     public RectTransform SpriteTf;
-    public enum AttackType
-    {
-        Melee=1
-    }
+    
     public void OnButtonClick()
     {
 
