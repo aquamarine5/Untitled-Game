@@ -61507,6 +61507,72 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &1562285394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1562285397}
+  - component: {fileID: 1562285396}
+  - component: {fileID: 1562285395}
+  m_Layer: 0
+  m_Name: CatalogueScript
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1562285395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562285394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d6bae2dd8aade348a74d16d787309d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WeaponScripts:
+  - {fileID: 21300000, guid: d2c66c55d7fba9442ab9c11fdcb95c92, type: 3}
+  - {fileID: 21300000, guid: 0c53b8ed5210fe848a5ecbef7d2e315d, type: 3}
+  - {fileID: -8939597894346492589, guid: cc244916321f6bd4f939d7e1508e59d4, type: 3}
+  - {fileID: 7847361223103492584, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
+  - {fileID: -5413588151576599491, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
+  - {fileID: -1944613750615570822, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
+  WeaponBaseScripts: []
+  NowWeapon: {fileID: 0}
+--- !u!114 &1562285396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562285394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec95375f88d97044ad6b882f72a2606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponBaseScript: {fileID: 1562285395}
+--- !u!4 &1562285397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562285394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1650707109
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chalk : WeaponBase
+public class Chalk : WeaponBase, WeaponBase.IWeapon
 {
-    public void OnChange() { }
+    void IWeapon.OnChange() 
+    { 
+
+    }
+    void IWeapon.OnAttack()
+    {
+
+    }
+    void IWeapon.OnUpdate()
+    {
+
+    }
 }

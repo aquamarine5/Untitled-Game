@@ -6,20 +6,20 @@ using UnityEngine.UI;
 public class WeaponChange : MonoBehaviour
 {
     public Sprite[] sprites;
-    public int Weapon;
+    public WeaponBase.WeaponType Weapon;
     public Image buttonImage;
     public SpriteRenderer characterImage;
     public void OnButtonClick()
     {
-        if (Weapon == sprites.Length-1)
+        if ((int)Weapon == (sprites.Length-1)+100)
         {
-            Weapon = 0;
+            Weapon = (WeaponBase.WeaponType)100;
         }
         else
         {
             Weapon++;
         }
-        buttonImage.sprite = sprites[Weapon];
-        characterImage.sprite = sprites[Weapon];
+        buttonImage.sprite = sprites[(int)Weapon];
+        characterImage.sprite = sprites[(int)Weapon];
     }
 }
