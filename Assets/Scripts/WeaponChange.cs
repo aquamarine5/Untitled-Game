@@ -8,6 +8,7 @@ public class WeaponChange : MonoBehaviour
     public Sprite[] sprites;
     public WeaponBase.WeaponType Weapon;
     public Image buttonImage;
+    public WeaponAsset[] weaponAsset;
     public SpriteRenderer characterImage;
     public void OnButtonClick()
     {

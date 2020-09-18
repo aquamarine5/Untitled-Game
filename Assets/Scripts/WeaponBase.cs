@@ -5,8 +5,8 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
 {
     public Sprite[] WeaponScripts;
-    public WeaponBase[] WeaponBaseScripts;
-    public WeaponBase NowWeapon;
+    public Object[] WeaponBaseScripts;
+    public Object NowWeapon;
     public enum AttackType
     {
         Base = -1,

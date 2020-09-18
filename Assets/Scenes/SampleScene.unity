@@ -61544,7 +61544,13 @@ MonoBehaviour:
   - {fileID: 7847361223103492584, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
   - {fileID: -5413588151576599491, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
   - {fileID: -1944613750615570822, guid: 3c875ab20c9421b49aea5dd2ace34abd, type: 3}
-  WeaponBaseScripts: []
+  WeaponBaseScripts:
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
+  - {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
   NowWeapon: {fileID: 0}
 --- !u!114 &1562285396
 MonoBehaviour:
