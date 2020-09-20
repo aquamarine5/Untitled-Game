@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Chalk
+  m_Name: NewWeaponAsset
   m_EditorClassIdentifier: Assembly-CSharp::WeaponAsset
   wbScript: {fileID: 0}
-  weaponScript: {fileID: 11500000, guid: fd209bd1b3b4e48458ab6d01595f0c52, type: 3}
-  sprite: {fileID: 0}
+  weaponScript: {fileID: 0}
+  weaponSprite: []
   rotate: 0
+  attackSprite: []

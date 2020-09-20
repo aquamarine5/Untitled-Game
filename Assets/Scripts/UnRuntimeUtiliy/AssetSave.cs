@@ -1,9 +1,11 @@
 ﻿using System;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.IO;
 using Object = UnityEngine.Object;
-
+#if UNITY_EDITOR
 class AssetSave
 {
     public static class ScriptableObjectUtility
@@ -40,10 +42,11 @@ class AssetSave
         }
     }
 }
+#endif
 [Serializable]
 public class WeaponAsset : ScriptableObject
 {
-    public WeaponBase wbScript = null;
+    public Object wbScript = null;
     public Object weaponScript=null;
     public Sprite[] weaponSprite;
     public float rotate;

@@ -5,8 +5,8 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
 {
     public Sprite[] WeaponScripts;
-    public Object[] WeaponBaseScripts;
-    public Object NowWeapon;
+    public WeaponAsset[] weaponAsset;
+    public WeaponAsset nowWeaponAsset;
     public enum AttackType
     {
         Base = -1,
@@ -28,7 +28,9 @@ public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
 
     public interface IWeapon
     {
+        //public float a { get; set; }
         AttackType attackType { get; set; }
+        void SetValue(AttackType attack);
         void OnAttack();
         void OnChange();
         void OnUpdate();
@@ -36,17 +38,22 @@ public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
 
     public void OnAttackClick()
     {
-        ((IWeapon)NowWeapon).OnAttack();
+        ((IWeapon)nowWeaponAsset).OnAttack();
     }
     public void OnChangeClick()
     {
-        ((IWeapon)NowWeapon).OnChange();
+        ((IWeapon)nowWeaponAsset).OnChange();
     }
     void Update()
     {
-        ((IWeapon)NowWeapon).OnUpdate();
+        //((IWeapon)nowWeaponAsset.wbScript.GetClass()).OnUpdate();
     }
     void IWeapon.OnAttack(){ }
     void IWeapon.OnChange(){ }
     void IWeapon.OnUpdate(){ }
+
+    public void SetValue(AttackType attack)
+    {
+        throw new System.NotImplementedException();
+    }
 }

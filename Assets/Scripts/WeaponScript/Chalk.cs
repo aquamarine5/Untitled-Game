@@ -1,19 +1,32 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chalk : WeaponBase, WeaponBase.IWeapon
+public class Chalk : WeaponBase.IWeapon
 {
-    void IWeapon.OnChange() 
-    { 
-
-    }
-    void IWeapon.OnAttack()
+    public WeaponBase.AttackType attackType { get; set; }
+    public Chalk(WeaponBase.AttackType attackType)
     {
-
+        SetValue(attackType);
     }
-    void IWeapon.OnUpdate()
+    public void OnAttack()
     {
+        
+    }
 
+    public void OnChange()
+    {
+        
+    }
+
+    public void OnUpdate()
+    {
+        
+    }
+
+    public void SetValue(WeaponBase.AttackType attack)
+    {
+        attackType = attack;
     }
 }
