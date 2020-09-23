@@ -46,7 +46,7 @@ public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
     }
     void Update()
     {
-        //((IWeapon)nowWeaponAsset.wbScript.GetClass()).OnUpdate();
+        CatalogueScript.convert("chalk").OnUpdate();
     }
     void IWeapon.OnAttack(){ }
     void IWeapon.OnChange(){ }

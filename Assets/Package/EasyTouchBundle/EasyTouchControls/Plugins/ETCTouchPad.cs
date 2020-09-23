@@ -13,6 +13,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 
 [System.Serializable]
+
 public class ETCTouchPad : ETCBase,IBeginDragHandler, IDragHandler,IPointerEnterHandler,  IPointerDownHandler, IPointerUpHandler, IPointerExitHandler {
 
 	#region Unity Events
@@ -40,7 +41,9 @@ public class ETCTouchPad : ETCBase,IBeginDragHandler, IDragHandler,IPointerEnter
 	[SerializeField] public OnMoveEndHandler onMoveEnd;
 	
 	[SerializeField] public OnTouchStartHandler onTouchStart;
-	[SerializeField] public OnTouchUPHandler onTouchUp;
+	[SerializeField]
+    
+    public OnTouchUPHandler onTouchUp;
 	
 	
 	[SerializeField] public OnDownUpHandler OnDownUp;
