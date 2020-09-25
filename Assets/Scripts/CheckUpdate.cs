@@ -15,10 +15,14 @@ public class CheckUpdate : MonoBehaviour
     string newUrl;
     public struct ApplicationUrls
     {
+        public static string path = Application.persistentDataPath + "/" + "a0_3_5.apk";
+        
         public static string a0_1_3;
         public static string a0_2_4 =  "15257aa10f8c6ce6e81dd05ad746729a";
         public static string a0_2_10 = "443a1d5136d0f6e9ae0fae327d19c355";
         public static string a0_3_4 =  "66e9b08d91c336a0854389027a943298";
+        public static string a0_3_4_r1="a032db337f5c5e9e336388c09621286e";
+        public static string a0_3_5 =  "92594e55d1493cc18c35b760ee6a1eba";
     }
     public void CheckUpdated()
     {
@@ -40,10 +44,10 @@ public class CheckUpdate : MonoBehaviour
             {
                 Debug.Log(webRequest.downloadHandler.text);
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
-                if ((string)jsonData["data"]["sign"] != ApplicationUrls.a0_3_4)
+                if ((string)jsonData["data"]["sign"] != ApplicationUrls.a0_3_5)
                 {
                     newUrl = "http://d0.ananas.chaoxing.com/download/"+ (string)jsonData["data"]["sign"];
-                    yield return StartCoroutine(DownloadApplicationFile(Application.persistentDataPath+"/"+"a0_3_4.apk", slider));
+                    yield return StartCoroutine(DownloadApplicationFile(ApplicationUrls.path, slider));
                 }
                 else {
                     text.text = "已经是最新版本";
@@ -68,6 +72,7 @@ public class CheckUpdate : MonoBehaviour
             {
                 //print(downloader.downloadProgress);
                 sliderProgress.value = downloader.downloadProgress;
+                //text.text=downloader.downloadedBytes.ToString();
                 text.text = (downloader.downloadProgress * 100).ToString("F2") + "%";
                 yield return null;
             }
@@ -82,40 +87,17 @@ public class CheckUpdate : MonoBehaviour
                 print("下载结束");
                 sliderProgress.value = 1f;
                 text.text = 100.ToString("F2") + "%";
-                Application.OpenURL("file:///"+ Application.persistentDataPath + "/" + "a0_3_4.apk");
+                //Application.OpenURL("file:///"+ Application.persistentDataPath + "/" + "a0_3_4.apk");
+                installApp(ApplicationUrls.path);
             }
         }
     }
-    public bool installApp(string apkPath)
+    public void installApp(string apkPath)
     {
 #if UNITY_ANDROID
-        try
-        {
-            AndroidJavaClass intentObj = new AndroidJavaClass("android.content.Intent");
-            string ACTION_VIEW = intentObj.GetStatic<string>("ACTION_VIEW");
-            int FLAG_ACTIVITY_NEW_TASK = intentObj.GetStatic<int>("FLAG_ACTIVITY_NEW_TASK");
-            AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", ACTION_VIEW);
-
-            AndroidJavaObject fileObj = new AndroidJavaObject("java.io.File", apkPath);
-            AndroidJavaClass uriObj = new AndroidJavaClass("android.net.Uri");
-            AndroidJavaObject uri = uriObj.CallStatic<AndroidJavaObject>("fromFile", fileObj);
-
-            intent.Call<AndroidJavaObject>("setDataAndType", uri, "application/vnd.android.package-archive");
-            intent.Call<AndroidJavaObject>("addFlags", FLAG_ACTIVITY_NEW_TASK);
-            intent.Call<AndroidJavaObject>("setClassName", "com.android.packageinstaller", "com.android.packageinstaller.PackageInstallerActivity");
-
-            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-            currentActivity.Call("startActivity", intent);
-
-            GameObject.Find("TextDebug").GetComponent<Text>().text = "Success";
-            return true;
-        }
-        catch (System.Exception e)
-        {
-            GameObject.Find("TextDebug").GetComponent<Text>().text = "Error: " + e.Message;
-            return false;
-        }
+        
+        AndroidJavaObject jo = new AndroidJavaObject("com.syz.unitygame.AndroidPlugin");
+        jo.Call("installApk", apkPath);
     }
 #endif
 }
