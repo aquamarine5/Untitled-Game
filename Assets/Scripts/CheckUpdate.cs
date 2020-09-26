@@ -11,18 +11,20 @@ public class CheckUpdate : MonoBehaviour
     public Slider slider;
     public GameObject panel;
     public Text text;
+    public Text speed;
     bool isDone=false;
     string newUrl;
     public struct ApplicationUrls
     {
         public static string path = Application.persistentDataPath + "/" + "a0_3_5.apk";
-        
         public static string a0_1_3;
         public static string a0_2_4 =  "15257aa10f8c6ce6e81dd05ad746729a";
         public static string a0_2_10 = "443a1d5136d0f6e9ae0fae327d19c355";
         public static string a0_3_4 =  "66e9b08d91c336a0854389027a943298";
         public static string a0_3_4_r1="a032db337f5c5e9e336388c09621286e";
         public static string a0_3_5 =  "92594e55d1493cc18c35b760ee6a1eba";
+        public static string a0_3_7 =  "01693f6e4065f8bca0ca15a612458049";
+        public static string a0_3_8 =  "64b149fda30c802726f9bb5d300443f1";
     }
     public void CheckUpdated()
     {
@@ -56,6 +58,7 @@ public class CheckUpdate : MonoBehaviour
         }
         print(1);
     }
+    //public Camera c;
     public IEnumerator DownloadApplicationFile(string downloadFileName, Slider sliderProgress)
     {
         using (UnityWebRequest downloader = UnityWebRequest.Get(newUrl))
@@ -67,6 +70,7 @@ public class CheckUpdate : MonoBehaviour
 
             print("开始下载");
             downloader.SendWebRequest();
+            ulong size= downloader.downloadedBytes;
             print("同步进度条");
             while (!downloader.isDone)
             {
@@ -98,6 +102,7 @@ public class CheckUpdate : MonoBehaviour
         
         AndroidJavaObject jo = new AndroidJavaObject("com.syz.unitygame.AndroidPlugin");
         jo.Call("installApk", apkPath);
-    }
 #endif
+    }
+
 }
