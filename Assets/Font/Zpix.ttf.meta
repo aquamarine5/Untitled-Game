@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 9305c1aa2a4304a44acc3a448bddbd13
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 45
+  forceTextureCase: 3
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Zpix
+  fallbackFontReferences: []
+  customCharacters: "\u68C0\u67E5\u66F4\u65B0"
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

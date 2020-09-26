@@ -8,11 +8,13 @@ using UnityEngine.UI;
 
 public class CheckUpdate : MonoBehaviour
 {
+    public string nowVersion;
     public Slider slider;
     public GameObject panel;
     public Text text;
     public Text speed;
-    bool isDone=false;
+    bool isBackstage = false;
+    //bool isDone=false;
     string newUrl;
     public struct ApplicationUrls
     {
@@ -29,10 +31,12 @@ public class CheckUpdate : MonoBehaviour
     public void CheckUpdated()
     {
         panel.SetActive(true);
-        StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid=474085001&jsonp=jsonp"));
-        
+        if (!isBackstage)
+        {
+            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid=474085001&jsonp=jsonp"));
+        }
     }
-    public IEnumerator WebRequests(string url)
+    IEnumerator WebRequests(string url)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -41,25 +45,31 @@ public class CheckUpdate : MonoBehaviour
             if (webRequest.isHttpError || webRequest.isNetworkError)
             {
                 text.text=webRequest.error + "\n" + webRequest.downloadHandler.text;
+                text.color = Color.red;
             }
             else
             {
                 Debug.Log(webRequest.downloadHandler.text);
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
-                if ((string)jsonData["data"]["sign"] != ApplicationUrls.a0_3_5)
+                if (((string)jsonData["data"]["sign"]).Split('*')[0] != nowVersion)
                 {
-                    newUrl = "http://d0.ananas.chaoxing.com/download/"+ (string)jsonData["data"]["sign"];
+                    newUrl = "http://d0.ananas.chaoxing.com/download/"+ ((string)jsonData["data"]["sign"]).Split('*')[1];
                     yield return StartCoroutine(DownloadApplicationFile(ApplicationUrls.path, slider));
                 }
                 else {
+                    text.color = Color.green;
                     text.text = "已经是最新版本";
                 };
             }
         }
         print(1);
     }
-    //public Camera c;
-    public IEnumerator DownloadApplicationFile(string downloadFileName, Slider sliderProgress)
+    public void OnBackstage()
+    {
+        isBackstage = true;
+        panel.SetActive(false);
+    }
+    IEnumerator DownloadApplicationFile(string downloadFileName, Slider sliderProgress)
     {
         using (UnityWebRequest downloader = UnityWebRequest.Get(newUrl))
         {
@@ -87,16 +97,15 @@ public class CheckUpdate : MonoBehaviour
             }
             else
             {
-                isDone = downloader.isDone;
+                //isDone = downloader.isDone;
                 print("下载结束");
                 sliderProgress.value = 1f;
                 text.text = 100.ToString("F2") + "%";
-                //Application.OpenURL("file:///"+ Application.persistentDataPath + "/" + "a0_3_4.apk");
-                installApp(ApplicationUrls.path);
+                InstallApp(ApplicationUrls.path);
             }
         }
     }
-    public void installApp(string apkPath)
+    void InstallApp(string apkPath)
     {
 #if UNITY_ANDROID
         
