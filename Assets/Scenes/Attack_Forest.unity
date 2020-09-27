@@ -942,6 +942,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827857117}
   m_CullTransparentMesh: 0
+--- !u!1 &910715430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 910715431}
+  - component: {fileID: 910715433}
+  - component: {fileID: 910715432}
+  m_Layer: 0
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &910715431
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910715430}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2044434975}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -50, y: 40.53}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &910715432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910715430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 196d84e67815f664bba3889dea836cb1, type: 3}
+    m_FontSize: 16
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0.00B/s
+--- !u!222 &910715433
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910715430}
+  m_CullTransparentMesh: 0
 --- !u!1 &920373713
 GameObject:
   m_ObjectHideFlags: 0
@@ -61562,7 +61641,7 @@ MonoBehaviour:
   isSwipeIn: 0
   isSwipeOut: 0
   showPSInspector: 1
-  showSpriteInspector: 1
+  showSpriteInspector: 0
   showEventInspector: 1
   showBehaviourInspector: 0
   showAxesInspector: 0
@@ -61587,7 +61666,19 @@ MonoBehaviour:
         m_CallState: 2
   onMove:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onMoveSpeed:
     m_PersistentCalls:
       m_Calls: []
@@ -61870,7 +61961,8 @@ MonoBehaviour:
   slider: {fileID: 165403967}
   panel: {fileID: 2044434974}
   text: {fileID: 2077207283}
-  speed: {fileID: 2077207283}
+  speed: {fileID: 910715432}
+  isBackstage: 0
 --- !u!114 &1218477577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61980,7 +62072,6 @@ GameObject:
   - component: {fileID: 1287706499}
   - component: {fileID: 1287706498}
   - component: {fileID: 1287706497}
-  - component: {fileID: 1287706496}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -62007,23 +62098,6 @@ RectTransform:
   m_AnchoredPosition: {x: -25, y: -25}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1287706496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1287706494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ece4a9d9c9596d43ba9fe62c180642e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nowVersion: a0.3.9
-  slider: {fileID: 165403967}
-  panel: {fileID: 2044434974}
-  text: {fileID: 2077207283}
-  speed: {fileID: 2077207283}
 --- !u!114 &1287706497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62071,7 +62145,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1287706496}
+      - m_Target: {fileID: 1218477576}
         m_TargetAssemblyTypeName: CheckUpdate, Assembly-CSharp
         m_MethodName: OnBackstage
         m_Mode: 1
@@ -63017,6 +63091,7 @@ RectTransform:
   - {fileID: 165403966}
   - {fileID: 2077207282}
   - {fileID: 1287706495}
+  - {fileID: 910715431}
   m_Father: {fileID: 808886414}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63075,7 +63150,7 @@ GameObject:
   - component: {fileID: 2077207284}
   - component: {fileID: 2077207283}
   m_Layer: 0
-  m_Name: Text
+  m_Name: Progress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
