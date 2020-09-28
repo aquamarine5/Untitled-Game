@@ -17,6 +17,7 @@ public class CheckUpdate : MonoBehaviour
     //bool isDone=false;
     string newUrl;
     float downloads = 0;
+    bool isOnStart = true;
     float downloadsCD = 0;
     public struct ApplicationUrls
     {
@@ -66,7 +67,6 @@ public class CheckUpdate : MonoBehaviour
                 };
             }
         }
-        print(1);
     }
     public void OnBackstage()
     {
@@ -82,36 +82,32 @@ public class CheckUpdate : MonoBehaviour
                 "User-Agent", 
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36 Edg/85.0.564.51");
             downloader.downloadHandler = new DownloadHandlerFile(downloadFileName);
-            
-            print("开始下载");
             downloader.SendWebRequest();
             ulong size= downloader.downloadedBytes;
-            print(size);
-            print("同步进度条");
             while (!downloader.isDone)
             {
+                
                 downloadsCD += Time.deltaTime;
+                if (isOnStart && downloadsCD >= 0.1)speed.text = ConvertToData(downloader.downloadedBytes - 0, "/s");
+                if (isOnStart && downloadsCD >= 0.5)speed.text = ConvertToData(downloader.downloadedBytes - 0, "/s");isOnStart = false;
                 if (downloadsCD >= 1)
                 {
                     speed.text = ConvertToData(downloader.downloadedBytes - downloads, "/s");
                     downloads = downloader.downloadedBytes;
                     downloadsCD = 0;
                 }
-                //print(downloader.downloadedBytes);
                 sliderProgress.value = downloader.downloadProgress;
-                //text.text=downloader.downloadedBytes.ToString();
                 text.text = (downloader.downloadProgress * 100).ToString("F2") + "%";
                 yield return null;
             }
 
             if (downloader.error != null)
             {
+                text.color = Color.red;
                 text.text=downloader.error;
             }
             else
             {
-                //isDone = downloader.isDone;
-                print("下载结束");
                 sliderProgress.value = 1f;
                 text.text = 100.ToString("F2") + "%";
                 InstallApp(ApplicationUrls.path);

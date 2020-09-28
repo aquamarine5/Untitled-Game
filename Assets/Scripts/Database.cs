@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Database : MonoBehaviour
 {
-    public Database DefaultDatabase;
+    public struct Data
+    {
+        public Weapon weapon;
+    }
     public struct Weapon
     {
         public Chalk chalk;
@@ -16,17 +19,6 @@ public class Database : MonoBehaviour
     private void Start()
     {
         
-    }
-    public Database NowDatabase
-    {
-        get
-        {
-            return NowDatabase;
-        }
-        set
-        {
-            NowDatabase = value;
-        }
     }
     private void Awake()
     {
