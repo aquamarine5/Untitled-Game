@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Database : MonoBehaviour
 {
+    #region Data
     public struct Data
     {
         public Weapon weapon;
@@ -16,6 +17,17 @@ public class Database : MonoBehaviour
     {
         public float damage;
     }
+    #endregion
+    #region Text
+    public struct Text
+    {
+        public UI ui;
+    }
+    public struct UI 
+    {
+        public string text_FPS;
+    }
+    #endregion
     private void Start()
     {
         
