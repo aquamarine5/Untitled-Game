@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,13 +14,14 @@ class AssetSave
         [MenuItem("CreateAsset/Asset")]
         public static void CreateAssetMenu()
         {
-            CreateAsset<WeaponAsset>();
+            CreateAsset<BlockAsset>();
         }
         [MenuItem("CreateAsset/Load")]
         public static void Load()
         {
-
+            //new BlockAsset() { glass=new Tile()};
         }
+        
         public static void CreateAsset<T>() where T : ScriptableObject
         {
             T asset = ScriptableObject.CreateInstance<T>();
@@ -51,4 +53,11 @@ public class WeaponAsset : ScriptableObject
     public Sprite[] weaponSprite;
     public float rotate;
     public Sprite[] attackSprite;
+}
+[Serializable]
+public class BlockAsset : ScriptableObject
+{
+    public Tile glass;
+    public Tile glass_dirt;
+    public Tile water;
 }

@@ -24,7 +24,7 @@ namespace Mirror.Examples.Chat
             base.OnStartServer();
             NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
         }
-
+        
         public override void OnClientConnect(NetworkConnection conn)
         {
             base.OnClientConnect(conn);
