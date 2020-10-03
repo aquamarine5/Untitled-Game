@@ -15,7 +15,7 @@ public class CatalogueScript : MonoBehaviour
         switch (i)
         {
             case "chalk":
-                return new Chalk(WeaponBase.AttackType.Melee);
+                return new Chalk() { attackType = WeaponBase.AttackType.Melee };
             case "o":
                 return null;
             default:

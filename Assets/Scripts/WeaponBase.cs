@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Database;
 
 public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
 {
@@ -30,7 +31,6 @@ public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
     {
         //public float a { get; set; }
         AttackType attackType { get; set; }
-        void SetValue(AttackType attack);
         void OnAttack();
         void OnChange();
         void OnUpdate();
@@ -51,9 +51,4 @@ public class WeaponBase : MonoBehaviour,WeaponBase.IWeapon
     void IWeapon.OnAttack(){ }
     void IWeapon.OnChange(){ }
     void IWeapon.OnUpdate(){ }
-
-    public void SetValue(AttackType attack)
-    {
-        throw new System.NotImplementedException();
-    }
 }

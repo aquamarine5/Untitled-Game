@@ -9,16 +9,23 @@ public class TilemapSpawn : MonoBehaviour
     public Tilemap tilemap;
     private void Awake()
     {
-        StartCoroutine(TilemapSpawnFunc());
+        print(1);
+        tilemap.BoxFill(new Vector3Int(1,1,1), blockAsset.glass_dirt, 1, 1, 15, 15);
+        tilemap.SetTile(new Vector3Int(0, 0, 0), blockAsset.glass);
+        //StartCoroutine(TilemapSpawnFunc());
     }
     IEnumerator TilemapSpawnFunc()
     {
-        for (int i=50; i<25; i++)
+        
+        //tilemap.BoxFill(new Vector3Int(),blockAsset.glass)
+        for (int i=0; i<25; i++)
         {
-            tilemap.SetTiles()
+            
+            //tilemap.SetTiles();
         }
         yield return null;
     }
+    Vector3Int CreateVector(int x, int y) { return new Vector3Int(x, y, 0); }
     void Start()
     {
         

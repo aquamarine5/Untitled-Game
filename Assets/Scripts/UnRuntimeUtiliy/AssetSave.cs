@@ -1,11 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using System.IO;
-using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 class AssetSave
 {
@@ -45,19 +43,4 @@ class AssetSave
     }
 }
 #endif
-[Serializable]
-public class WeaponAsset : ScriptableObject
-{
-    public Object wbScript = null;
-    public Object weaponScript=null;
-    public Sprite[] weaponSprite;
-    public float rotate;
-    public Sprite[] attackSprite;
-}
-[Serializable]
-public class BlockAsset : ScriptableObject
-{
-    public Tile glass;
-    public Tile glass_dirt;
-    public Tile water;
-}
+

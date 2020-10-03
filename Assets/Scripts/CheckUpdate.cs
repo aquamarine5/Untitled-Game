@@ -14,7 +14,6 @@ public class CheckUpdate : MonoBehaviour
     public Text text;
     public Text speed;
     public bool isBackstage = false;
-    //bool isDone=false;
     string newUrl;
     float downloads = 0;
     bool isOnStart = true;
@@ -114,7 +113,7 @@ public class CheckUpdate : MonoBehaviour
             }
         }
     }
-    string ConvertToData(float bytes,string inp)
+    public static string ConvertToData(float bytes,string inp)
     {
         if (1024 > bytes) return bytes.ToString("F2") + "B" + inp;
         else if ((bytes == Mathf.Pow(1024, 1)) || (Mathf.Pow(1024, 2) > bytes)) return (bytes / 1024).ToString("F2") + "KB" + inp;
