@@ -1,12 +1,11 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 class FpsShow : MonoBehaviour
 {
     public Text FpsText;
-    private float time;
-    private int frameCount;
-    private void Update()
+    float time=0;
+    int frameCount=0;
+    void Update()
     {
         time += Time.unscaledDeltaTime;
         frameCount++;
@@ -15,7 +14,7 @@ class FpsShow : MonoBehaviour
             float fps = frameCount / time;
             time = 0;
             frameCount = 0;
-            FpsText.text = fps.ToString("f2");//#0.00
+            FpsText.text = fps.ToString("f2");
             FpsText.color = fps >= 24 ? Color.green : (fps > 15 ? Color.yellow : Color.red);
         }
     }

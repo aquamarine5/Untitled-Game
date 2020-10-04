@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 using LitJson;
-using Newtonsoft.Json;
 
 public class TilemapUtil : MonoBehaviour
 {

@@ -8,19 +8,31 @@ using UnityEngine.UI;
 
 public class CheckUpdate : MonoBehaviour
 {
-    public string nowVersion;
+    [TextArea()]
+    [SerializeField]
+    public string descripe = 
+        "更新后请讲APK文件使用up.py上传至网盘后选取直连后的md5码更新b站签名\n"+
+        "使用B站作为小型数据库，在每次更新后，按照以下格式更新指定UID用户的B站签名：\n"+
+        "版本号* 超星网盘md5\n如：a0.3.10*71c1ee39b8a9febd848635ddeafe5592";
+    [Space(20f)]
+    [Tooltip("B站UID（用于小型数据库）")]
+    public int b_id;
+    [Tooltip("显示下载进度的进度条")]
     public Slider slider;
+    [Tooltip("显示更新窗口的GameObject")]
     public GameObject panel;
+    [Tooltip("显示下载进度的Text")]
     public Text text;
+    [Tooltip("显示下载速度的Text")]
     public Text speed;
-    public bool isBackstage = false;
+    bool isBackstage = false;
     string newUrl;
     float downloads = 0;
     bool isOnStart = true;
     float downloadsCD = 0;
     public struct ApplicationUrls
     {
-        public static string path = Application.persistentDataPath + "/" + "a0_3_5.apk";
+        public static string path = Application.persistentDataPath + "/" + "newApplicationUrl.apk";
         public static string a0_1_3;
         public static string a0_2_4 =  "15257aa10f8c6ce6e81dd05ad746729a";
         public static string a0_2_10 = "443a1d5136d0f6e9ae0fae327d19c355";
@@ -36,8 +48,7 @@ public class CheckUpdate : MonoBehaviour
         panel.SetActive(true);
         if (isBackstage == false)
         {
-            print(isBackstage);
-            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid=474085001&jsonp=jsonp"));
+            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid="+b_id+"&jsonp=jsonp"));
         }
     }
     IEnumerator WebRequests(string url)
@@ -55,14 +66,16 @@ public class CheckUpdate : MonoBehaviour
             {
                 Debug.Log(webRequest.downloadHandler.text);
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
-                if (((string)jsonData["data"]["sign"]).Split('*')[0] != nowVersion)
+                if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version+"1")
                 {
+                    print(1);
                     newUrl = "http://d0.ananas.chaoxing.com/download/"+ ((string)jsonData["data"]["sign"]).Split('*')[1];
                     yield return StartCoroutine(DownloadApplicationFile(ApplicationUrls.path, slider));
                 }
                 else {
+                    print(2);
                     text.color = Color.green;
-                    text.text = "已经是最新版本";
+                    text.text = "Your application\nis NEW!";
                 };
             }
         }
@@ -87,8 +100,8 @@ public class CheckUpdate : MonoBehaviour
             {
                 
                 downloadsCD += Time.deltaTime;
-                if (isOnStart && downloadsCD >= 0.1)speed.text = ConvertToData(downloader.downloadedBytes - 0, "/s");
-                if (isOnStart && downloadsCD >= 0.5)speed.text = ConvertToData(downloader.downloadedBytes - 0, "/s");isOnStart = false;
+                if (isOnStart && downloadsCD >= 0.1) speed.text = ConvertToData((downloader.downloadedBytes * 10) - 0, "/s");
+                if (isOnStart && downloadsCD >= 0.5) speed.text = ConvertToData((downloader.downloadedBytes *  2) - 0, "/s"); isOnStart = false;
                 if (downloadsCD >= 1)
                 {
                     speed.text = ConvertToData(downloader.downloadedBytes - downloads, "/s");
@@ -99,7 +112,6 @@ public class CheckUpdate : MonoBehaviour
                 text.text = (downloader.downloadProgress * 100).ToString("F2") + "%";
                 yield return null;
             }
-
             if (downloader.error != null)
             {
                 text.color = Color.red;
@@ -129,5 +141,4 @@ public class CheckUpdate : MonoBehaviour
         jo.Call("installApk", apkPath);
 #endif
     }
-
 }

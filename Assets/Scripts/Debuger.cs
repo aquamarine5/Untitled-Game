@@ -10,6 +10,7 @@ class Debuger : MonoBehaviour
         DontDestroyOnLoad(this);
         Application.logMessageReceivedThreaded += OnReceiveLogMessage;
     }
+
     void OnReceiveLogMessage(string condition,string strckTrace,LogType type)
     {
 
