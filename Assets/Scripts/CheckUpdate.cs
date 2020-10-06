@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class CheckUpdate : MonoBehaviour
 {
     [TextArea()]
-    [SerializeField]
     public string descripe = 
         "更新后请讲APK文件使用up.py上传至网盘后选取直连后的md5码更新b站签名\n"+
         "使用B站作为小型数据库，在每次更新后，按照以下格式更新指定UID用户的B站签名：\n"+

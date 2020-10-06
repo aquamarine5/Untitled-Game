@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26209c276d567ae458c7f677d93bc730, type: 3}
+  m_Name: MiniRogue Generator Tunnel Brancher
+  m_EditorClassIdentifier: 
+  overwriteFilledSpaces: 1
+  generatesEmptySpace: 0
+  tunnelLength: 400
+  useDefaultEmptyChar: 1
+  alternateCharToUse: 48
+  turnPercentChance: 15
+  turnNoiseValue: 50
+  tunnelWidth: 2
+  roomSpawnChance: 10
+  spawnRandomRoomsOnTunnel: 1
+  roomTemplates:
+  - {fileID: 11400000, guid: d71f4c17a833fcc4da456de408a52a1c, type: 2}
+  branchPercentChance: 2
+  branchTunnel: {fileID: 11400000, guid: 6a8bec84e45565844ba5fbd2516ac5e7, type: 2}
+  startLocations:
+  - {x: 30, y: 30}

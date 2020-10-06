@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a95d519d1d57044e8f6ca7e59fa6d76, type: 3}
+  m_Name: MiniRogue RoomSequence
+  m_EditorClassIdentifier: 
+  overwriteFilledSpaces: 1
+  generatesEmptySpace: 0
+  minimumGeneratedRooms: 10
+  maximumGeneratedRooms: 30
+  roomSizeX: 10
+  roomSizeY: 10
+  startRoomList: {fileID: 11400000, guid: 2a2c96b51a46aac47b6cc251b55b63d1, type: 2}
+  placeCustomEndRoom: 1
+  endRoomList: {fileID: 11400000, guid: 819be70affa4fa5418d5871e12cb7a75, type: 2}
+  hasSouthExit: {fileID: 11400000, guid: d4b7a3fe25a7a5243af76cf76f34be93, type: 2}
+  hasNorthExit: {fileID: 11400000, guid: bd550c9e1c6a0e148b2a77dd88d91c2d, type: 2}
+  hasEastExit: {fileID: 11400000, guid: d1845d1cc1569814182ec36b7806a0cb, type: 2}
+  hasWestExit: {fileID: 11400000, guid: 95afc1c54ba8c1643b5b2a77ce341522, type: 2}
+  pickStartPositionFromList: 0
+  startPositions: []
+  destroyRoomChainHolderOnCompletion: 0
+  fillEmptySpaceWithRandomRooms: 0
+  randomFillRoomList: {fileID: 0}

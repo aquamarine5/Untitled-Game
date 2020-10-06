@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a957ecdd415190f47b22e47e98aae123, type: 3}
+  m_Name: MiniRogue Demo RoomChain
+  m_EditorClassIdentifier: 
+  overwriteFilledSpaces: 1
+  generatesEmptySpace: 1
+  roomSize: 10
+  roomsOnPathMin: 6
+  roomsOnPathMax: 15
+  maximumGenerationAttempts: 1007
+  roomSequenceStartLocations:
+  - {x: 30, y: 30}
+  - {x: 40, y: 50}
+  startRoomList: {fileID: 11400000, guid: 2a2c96b51a46aac47b6cc251b55b63d1, type: 2}
+  randomFillList: {fileID: 0}
+  fillEmptySpaceWithRandomRooms: 0
+  fillBranchesOffChainWithRooms: 0

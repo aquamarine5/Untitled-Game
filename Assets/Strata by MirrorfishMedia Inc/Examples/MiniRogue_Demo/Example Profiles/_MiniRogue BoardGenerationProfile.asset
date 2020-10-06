@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb54412e0f82da4caf22151b67a0b98, type: 3}
+  m_Name: _MiniRogue BoardGenerationProfile
+  m_EditorClassIdentifier: 
+  seedValue: '@mattmirrorfish'
+  boardHorizontalSize: 60
+  boardVerticalSize: 60
+  boardLibrary: {fileID: 11400000, guid: 5caeaf98dd531c84c81b73176efa50b5, type: 2}
+  generators:
+  - {fileID: 11400000, guid: 360e8673819448b48856af4a7adc8b87, type: 2}
+  - {fileID: 11400000, guid: 10a62c5fea05e494981e7d5db30269d9, type: 2}
+  - {fileID: 11400000, guid: d20e8bbc6d089824ba6ac11d73d34067, type: 2}
+  - {fileID: 11400000, guid: 932dff8c707fc4242bc835d149e6e4de, type: 2}
+  - {fileID: 11400000, guid: 6d323117c18cc324ebedf9e732278a52, type: 2}
+  - {fileID: 11400000, guid: a242c4875570a9e4cae7e41fb48578f7, type: 2}

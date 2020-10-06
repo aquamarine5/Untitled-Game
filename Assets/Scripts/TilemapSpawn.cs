@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
+
 public static class TilemapPlugin
 {
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
@@ -23,12 +25,30 @@ public static class TilemapPlugin
 
 public class TilemapSpawn : MonoBehaviour
 {
+    public Strata.BoardGenerator sbg;
+    public Text showSeedText;
+    public GameObject loadingPanel;
+    public Animator anim;
     public BlockAsset blockAsset;
     public Tilemap tilemap;
-    private void Awake()
+    public static int x, y = 0;
+    private void Start()
     {
-        Random.InitState((int)Random.Range(0, 233333333333));
-        StartCoroutine(TilemapSpawnFunc());
+        int seed = Random.Range(0, 2333333);
+        showSeedText.text = seed.ToString();
+        Random.InitState(seed);
+        //loadingPanel.SetActive(true);
+        x = 250;y = 500;
+        StartCoroutine(StartBuildMap());
+    }
+    IEnumerator StartBuildMap()
+    {
+        print(1);
+        anim.SetBool("isRuning", true);
+        StartCoroutine(sbg.BuildLevel());
+        anim.SetBool("isRuning", false);
+        loadingPanel.SetActive(false);
+        yield return null;
     }
     IEnumerator TilemapSpawnFunc()
     {
@@ -37,21 +57,10 @@ public class TilemapSpawn : MonoBehaviour
         for (int i=0; i<25; i++)
         {
             
-            //tilemap.SetTiles();
+            
         }
         yield return null;
     }
     
     //Vector3Int CreateVector(int x, int y) { return new Vector3Int(x, y, 0); }
-    void Start()
-    {
-        Random.InitState(11);
-        print(Random.Range(1, 10));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
