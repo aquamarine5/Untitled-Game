@@ -13,22 +13,26 @@ class Lake : MonoBehaviour
     {
 #if UNITY_EDITOR
         Debug.Log(1);
-        AssetBundle asb = AssetBundle.LoadFromFile(Application.streamingAssetsPath+"//__data.assetbundle");
+        AssetBundle asb = AssetBundle.LoadFromFile(Application.streamingAssetsPath+"//__data");
         string[] ass = asb.GetAllAssetNames();
+        print(ass.Length);
+        foreach(var s in ass)
+        {
+            print(s);
+            var a=(LayerMask)LayerMask.GetMask("");
+        }
         foreach(string o in ass)
         {
             GameObject oo=(GameObject)Instantiate(asb.LoadAsset(o));
+            
             Texture2D t = oo.GetComponentInChildren<Image>().sprite.texture;
-            Debug.Log(AssetDatabase.GetAssetPath(t));
-            //Debug.LogError(1);
-            StartCoroutine(ScreenShot_ReadPixels(t));
             /*
-            FileStream fs = new FileStream("D://a.jpg", FileMode.Create, FileAccess.Write);
-            fs.Write(t.EncodeToPNG(), 0, t.EncodeToPNG().Length);
-            fs.Flush();
-            fs.Close();
-            fs.Dispose();
-            Debug.LogError(1);*/
+            AssetImporter ai = AssetImporter.GetAtPath(o);
+            print(ai.assetPath);
+            print(ai.userData);
+            Debug.Log(o);
+            Debug.Log(AssetDatabase.GetAssetPath(oo));
+            StartCoroutine(ScreenShot_ReadPixels(t));*/
         }
 #endif
     }

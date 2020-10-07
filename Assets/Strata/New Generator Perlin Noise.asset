@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b658bcd202938d3498d21163f3597f0e, type: 3}
-  m_Name: New Generator Cave Digger
+  m_Script: {fileID: 11500000, guid: 67eb02253c37f6b42867ef05e6352ab1, type: 3}
+  m_Name: New Generator Perlin Noise
   m_EditorClassIdentifier: 
-  overwriteFilledSpaces: 1
-  generatesEmptySpace: 1
-  mapPercentageToClear: 60
-  useDefaultEmptyChar: 0
-  charToWriteEmpty: 117
+  overwriteFilledSpaces: 0
+  generatesEmptySpace: 0
+  noiseScaler: 0.5
+  useDefaultEmptySpaceChar: 1
+  alternateEmptyChar: 48
+  filledSpaceChar: 109

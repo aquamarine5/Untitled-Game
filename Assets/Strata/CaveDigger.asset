@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b658bcd202938d3498d21163f3597f0e, type: 3}
-  m_Name: New Generator Cave Digger
+  m_Name: CaveDigger
   m_EditorClassIdentifier: 
   overwriteFilledSpaces: 1
-  generatesEmptySpace: 1
-  mapPercentageToClear: 60
+  generatesEmptySpace: 0
+  mapPercentageToClear: 14
   useDefaultEmptyChar: 0
   charToWriteEmpty: 117

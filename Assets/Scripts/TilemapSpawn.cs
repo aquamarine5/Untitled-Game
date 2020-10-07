@@ -26,41 +26,30 @@ public static class TilemapPlugin
 public class TilemapSpawn : MonoBehaviour
 {
     public Strata.BoardGenerator sbg;
+    public CompositeCollider2D cc2d;
     public Text showSeedText;
     public GameObject loadingPanel;
     public Animator anim;
     public BlockAsset blockAsset;
     public Tilemap tilemap;
     public static int x, y = 0;
-    private void Start()
+    public void BuildMap()
     {
         int seed = Random.Range(0, 2333333);
         showSeedText.text = seed.ToString();
         Random.InitState(seed);
-        //loadingPanel.SetActive(true);
-        x = 250;y = 500;
+        loadingPanel.SetActive(true);
+        x = 250; y = 500;
+        
         StartCoroutine(StartBuildMap());
+        
     }
     IEnumerator StartBuildMap()
     {
-        print(1);
         anim.SetBool("isRuning", true);
-        StartCoroutine(sbg.BuildLevel());
+        yield return StartCoroutine(sbg.BuildLevel());
         anim.SetBool("isRuning", false);
         loadingPanel.SetActive(false);
-        yield return null;
+        showSeedText.text += "\nShape:"+cc2d.shapeCount;
     }
-    IEnumerator TilemapSpawnFunc()
-    {
-
-        tilemap.Fill(blockAsset.glass, new Vector3Int(-25, -25, 0), new Vector3Int(25, 0, 0));
-        for (int i=0; i<25; i++)
-        {
-            
-            
-        }
-        yield return null;
-    }
-    
-    //Vector3Int CreateVector(int x, int y) { return new Vector3Int(x, y, 0); }
 }

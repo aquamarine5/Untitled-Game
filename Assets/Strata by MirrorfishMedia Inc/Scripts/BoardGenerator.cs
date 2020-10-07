@@ -142,7 +142,7 @@ namespace Strata
             //Clear the Tilemap before refilling it
             if (tilemap != null)
             {
-                tilemap.ClearAllTiles();
+                //tilemap.ClearAllTiles();
             }
 
             //Build an empty grid in our character array to get ready for filling
@@ -151,7 +151,7 @@ namespace Strata
             //Run the generation process
             RunGenerators();
             //Once we've generated our level, turn the grid of ASCII characters into actual viewable data, like a Tilemap
-            InstantiateGeneratedLevelData();
+            yield return StartCoroutine(InstantiateGeneratedLevelData());
 
 
             yield return null;
@@ -256,7 +256,7 @@ namespace Strata
         }
 
         //This method turns our array of ASCII data into actual displayable data in Unity
-        public void InstantiateGeneratedLevelData()
+        public IEnumerator InstantiateGeneratedLevelData()
         {
             //Loop over the two dimensional array of characters along the x and y axes
             for (int x = 0; x < boardGenerationProfile.boardHorizontalSize; x++)
@@ -266,8 +266,10 @@ namespace Strata
                     Vector2 spawnPos = new Vector2(x, y);
                     //Spawn something at the coordinates based on the character stored in the array
                     CreateMapEntryFromGrid(boardGridAsCharacters[x, y], spawnPos);
+                    
                 }
             }
+            yield return null;
         }
 
         public void CreateMapEntryFromGrid(char charId, Vector2 position)

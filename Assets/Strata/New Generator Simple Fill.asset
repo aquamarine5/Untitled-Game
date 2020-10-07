@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b658bcd202938d3498d21163f3597f0e, type: 3}
-  m_Name: New Generator Cave Digger
+  m_Script: {fileID: 11500000, guid: 4ba699f094591844b973966471d6c2d9, type: 3}
+  m_Name: New Generator Simple Fill
   m_EditorClassIdentifier: 
-  overwriteFilledSpaces: 1
-  generatesEmptySpace: 1
-  mapPercentageToClear: 60
-  useDefaultEmptyChar: 0
-  charToWriteEmpty: 117
+  overwriteFilledSpaces: 0
+  generatesEmptySpace: 0
+  charToFill: 109
