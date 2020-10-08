@@ -10,7 +10,7 @@ class AssetSave
         [MenuItem("CreateAsset/Asset")]
         public static void CreateAssetMenu()
         {
-            CreateAsset<BlockAsset>();
+            CreateAsset<LanguageData>();
         }
         [MenuItem("CreateAsset/Load")]
         public static void Load()

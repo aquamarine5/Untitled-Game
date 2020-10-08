@@ -4,35 +4,40 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public static class TilemapPlugin
-{
-    public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
-    {
-        int xDir = start.x < end.x ? 1 : -1;
-        int yDir = start.y < end.y ? 1 : -1;
-        int xCols = 1 + Mathf.Abs(start.x - end.x);
-        int yCols = 1 + Mathf.Abs(start.y - end.y);
-        for (int x = 0; x < xCols; x++)
-        {
-            for (int y = 0; y < yCols; y++)
-            {
-                Vector3Int tilePos = start + new Vector3Int(x * xDir, y * yDir, 0);
-                map.SetTile(tilePos, tile);
-            }
-        }
-    }
-}
-
 public class TilemapSpawn : MonoBehaviour
 {
+    public CatalogueScript catalogue;
     public Strata.BoardGenerator sbg;
     public CompositeCollider2D cc2d;
     public Text showSeedText;
     public GameObject loadingPanel;
     public Animator anim;
     public BlockAsset blockAsset;
+    public SliderData[] sliderDatas;
+    public Slider slider;
     public Tilemap tilemap;
+    public Text showTips;
+    public static Slider staticSlider;
+    public static Text staticTips;
+    public static BuildMapStatus buildMapStatus;
+    public static int TargetProgress { get { return TargetProgress; }
+        set {
+            TargetProgress = value;
+        }
+    }
+    public static int Progress { get { return Progress; } 
+        set {
+            Progress = value;
+            staticSlider.value = Progress / TargetProgress;
+            staticTips.text = buildMapStatus.ConvertToString();
+        } 
+    }
     public static int x, y = 0;
+    private void Awake()
+    {
+        staticSlider = slider;
+        staticTips = showTips;
+    }
     public void BuildMap()
     {
         int seed = Random.Range(0, 2333333);
@@ -50,6 +55,20 @@ public class TilemapSpawn : MonoBehaviour
         yield return StartCoroutine(sbg.BuildLevel());
         anim.SetBool("isRuning", false);
         loadingPanel.SetActive(false);
-        showSeedText.text += "\nShape:"+cc2d.shapeCount;
+        showSeedText.text += "\n"+catalogue.languageData.RenderShapeCount+":"+cc2d.shapeCount;
     }
+    public enum BuildMapStatus
+    {
+        CaveDigging,
+        GlassBuilding,
+        StartBuild
+    }
+
+}
+[System.Serializable]
+public class SliderData
+{
+    public Sprite sliderEdge;
+    public Sprite sliderInside;
+    public Sprite sliderBall;
 }

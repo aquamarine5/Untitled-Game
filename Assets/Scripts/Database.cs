@@ -27,12 +27,5 @@ public class Database : MonoBehaviour
         public string text_FPS;
     }
     #endregion
-    private void Start()
-    {
-        
-    }
-    private void Awake()
-    {
-        
-    }
+
 }

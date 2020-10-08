@@ -95,7 +95,7 @@ namespace Strata
         //This sets the state of the random number generator to produce predictable, repeatable random generation
         void SetRandomStateFromStringSeed()
         {
-            int seedInt = 0;
+            int seedInt;
 
             //If you're using random seeding, just pick a random number for the seed, this *will not* produce repeating results
             if (randomSeed)
@@ -131,7 +131,7 @@ namespace Strata
             //Build the Dictionary of BoardLibraryEntries to get it ready for use before generation
             InitializeLibraryDictionary();
         }
-
+/////////////////////////////////////////////////////////////////////////
         public IEnumerator BuildLevel()
         {
 
@@ -145,20 +145,22 @@ namespace Strata
                 //tilemap.ClearAllTiles();
             }
 
-            //Build an empty grid in our character array to get ready for filling
-            SetupEmptyGrid();
 
+            TilemapSpawn.buildMapStatus = TilemapSpawn.BuildMapStatus.StartBuild;
+            //Build an empty grid in our character array to get ready for filling
+            yield return StartCoroutine(SetupEmptyGrid());
             //Run the generation process
-            RunGenerators();
+            yield return StartCoroutine(RunGenerators());
+
+            TilemapSpawn.buildMapStatus = TilemapSpawn.BuildMapStatus.CaveDigging;
             //Once we've generated our level, turn the grid of ASCII characters into actual viewable data, like a Tilemap
             yield return StartCoroutine(InstantiateGeneratedLevelData());
-
 
             yield return null;
         }
 
 
-        private void RunGenerators()
+        private IEnumerator RunGenerators()
         {
 
             //Go through all the generators in the currently loaded profile
@@ -176,7 +178,7 @@ namespace Strata
                 //Run the generator
                 boardGenerationProfile.generators[i].Generate(this);
 
-
+                yield return null;
             }
         }
 
@@ -205,7 +207,7 @@ namespace Strata
        
 
         //Create an empty two dimensional grid of ASCII characters to prepare for generation
-        void SetupEmptyGrid()
+        IEnumerator SetupEmptyGrid()
         {
             boardGridAsCharacters = new char[boardGenerationProfile.boardHorizontalSize, boardGenerationProfile.boardVerticalSize];
             for (int i = 0; i < boardGenerationProfile.boardHorizontalSize; i++)
@@ -213,6 +215,7 @@ namespace Strata
                 for (int j = 0; j < boardGenerationProfile.boardVerticalSize; j++)
                 {
                     boardGridAsCharacters[i, j] = boardGenerationProfile.boardLibrary.GetDefaultEmptyChar();
+                    yield return null;
                 }
             }
         }
@@ -258,6 +261,7 @@ namespace Strata
         //This method turns our array of ASCII data into actual displayable data in Unity
         public IEnumerator InstantiateGeneratedLevelData()
         {
+            TilemapSpawn.TargetProgress = boardGenerationProfile.boardHorizontalSize;
             //Loop over the two dimensional array of characters along the x and y axes
             for (int x = 0; x < boardGenerationProfile.boardHorizontalSize; x++)
             {
@@ -266,7 +270,7 @@ namespace Strata
                     Vector2 spawnPos = new Vector2(x, y);
                     //Spawn something at the coordinates based on the character stored in the array
                     CreateMapEntryFromGrid(boardGridAsCharacters[x, y], spawnPos);
-                    
+                    yield return null;
                 }
             }
             yield return null;

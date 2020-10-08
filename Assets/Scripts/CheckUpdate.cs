@@ -41,6 +41,12 @@ public class CheckUpdate : MonoBehaviour
         public static string a0_3_7 =  "01693f6e4065f8bca0ca15a612458049";
         public static string a0_3_8 =  "64b149fda30c802726f9bb5d300443f1";
         public static string a0_3_10 = "71c1ee39b8a9febd848635ddeafe5592";
+        public static string a0_3_11;
+        public static string a0_4_1;
+        public static string a0_4_2;
+        public static string a0_5_5;
+        public static string a0_5_8 = "00cdd954dec2ca2be66df94e28b06cdf";
+        public static string a0_5_9 = "4beac5a8b37f38f5ed654d0110684610";
     }
     public void CheckUpdated()
     {
