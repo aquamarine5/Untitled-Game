@@ -15,7 +15,7 @@ class AssetSave
         [MenuItem("CreateAsset/Load")]
         public static void Load()
         {
-            //new BlockAsset() { glass=new Tile()};
+            
         }
         
         public static void CreateAsset<T>() where T : ScriptableObject

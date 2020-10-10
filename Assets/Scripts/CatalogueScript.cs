@@ -18,4 +18,8 @@ public class CatalogueScript : MonoBehaviour
                 return null;
         }
     }
+    public static CatalogueScript ReturnThis()
+    {
+        return GameObject.FindGameObjectWithTag("Catalogue").GetComponent<CatalogueScript>();
+    }
 }

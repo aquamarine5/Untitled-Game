@@ -17,19 +17,17 @@ public class TilemapSpawn : MonoBehaviour
     public Slider slider;
     public Tilemap tilemap;
     public Text showTips;
+    private static int progress = 0;
     public static Slider staticSlider;
     public static Text staticTips;
     public static BuildMapStatus buildMapStatus;
-    public static int TargetProgress { get { return TargetProgress; }
+    public static int TargetProgress { get; set; } = 0;
+    public static int Progress { get { return progress; } 
         set {
-            TargetProgress = value;
-        }
-    }
-    public static int Progress { get { return Progress; } 
-        set {
-            Progress = value;
+            progress = value;
             staticSlider.value = Progress / TargetProgress;
-            staticTips.text = buildMapStatus.ConvertToString();
+            print(staticSlider.value);
+            staticTips.text = buildMapStatus.ConvertToString().Replace("#", Progress+"："+TargetProgress);
         } 
     }
     public static int x, y = 0;
@@ -45,7 +43,6 @@ public class TilemapSpawn : MonoBehaviour
         Random.InitState(seed);
         loadingPanel.SetActive(true);
         x = 250; y = 500;
-        
         StartCoroutine(StartBuildMap());
         
     }

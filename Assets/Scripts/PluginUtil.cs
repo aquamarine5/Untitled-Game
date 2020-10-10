@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Tilemaps;
 using UnityEngine;
+
 public static class TilemapPlugin
 {
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
@@ -19,12 +20,15 @@ public static class TilemapPlugin
     }
     public static string ConvertToString(this TilemapSpawn.BuildMapStatus buildMapStatus)
     {
+        CatalogueScript catalogueScript = CatalogueScript.ReturnThis();
         switch (buildMapStatus)
         {
+            case TilemapSpawn.BuildMapStatus.StartBuild:
+                return catalogueScript.languageData.Buildmap_StartBuild;
             case TilemapSpawn.BuildMapStatus.CaveDigging:
-                return "挖洞中（#）";
+                return catalogueScript.languageData.Buildmap_CaveDigging;
             case TilemapSpawn.BuildMapStatus.GlassBuilding:
-                return "";
+                return catalogueScript.languageData.Buildmap_PlantGlass;
             default:return "";
         }
     }

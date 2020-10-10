@@ -27,12 +27,15 @@ namespace Strata
         [HideInInspector]
         public string startingCharIdPoolForAutogeneration = "!#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
-        public void Initialize()
+        public IEnumerator Initialize()
         {
             for (int i = 0; i < boardLibraryEntryList.Count; i++)
             {
+                TilemapSpawn.Progress++;
                 boardLibraryEntryList[i].chanceBoardLibraryEntry.BuildChanceCharListProbabilities();
+                
             }
+            yield return null;
         }
         
         public char GetDefaultEmptyChar()

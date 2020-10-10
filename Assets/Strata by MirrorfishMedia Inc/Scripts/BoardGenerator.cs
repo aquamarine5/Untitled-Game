@@ -123,35 +123,41 @@ namespace Strata
 
         //These operations are separate from BoardGeneration since they don't need to be repeated for every level and
         //they generate a lot of garbage allocations.
-        public void InitializeGeneration()
+        public IEnumerator InitializeGeneration()
         {
             //Setup the BoardLibrary, in this case build the dictionary of ChanceCharacters
-            boardGenerationProfile.boardLibrary.Initialize();
+            yield return StartCoroutine(boardGenerationProfile.boardLibrary.Initialize());
+
 
             //Build the Dictionary of BoardLibraryEntries to get it ready for use before generation
-            InitializeLibraryDictionary();
+            yield return StartCoroutine(InitializeLibraryDictionary());
         }
 /////////////////////////////////////////////////////////////////////////
         public IEnumerator BuildLevel()
         {
-
-            InitializeGeneration();
+            TilemapSpawn.buildMapStatus = TilemapSpawn.BuildMapStatus.StartBuild;
+            TilemapSpawn.TargetProgress += boardGenerationProfile.boardLibrary.boardLibraryEntryList.Count * 2;
+            print(TilemapSpawn.TargetProgress);
+            TilemapSpawn.TargetProgress += 1;
+            print(TilemapSpawn.TargetProgress);
+            TilemapSpawn.TargetProgress += boardGenerationProfile.generators.Count;
+            print(TilemapSpawn.TargetProgress);
+            //TilemapSpawn.targetProgress += boardGenerationProfile.boardLibrary.boardLibraryEntryList.Count;
+            yield return StartCoroutine(InitializeGeneration());
             //Choose seeding RNG approach (see above)
-            //SetRandomStateFromStringSeed();
-
+            /*SetRandomStateFromStringSeed();
             //Clear the Tilemap before refilling it
             if (tilemap != null)
             {
                 //tilemap.ClearAllTiles();
-            }
-
-
-            TilemapSpawn.buildMapStatus = TilemapSpawn.BuildMapStatus.StartBuild;
+            }*/
+            print(1);
             //Build an empty grid in our character array to get ready for filling
-            yield return StartCoroutine(SetupEmptyGrid());
+            SetupEmptyGrid();
             //Run the generation process
             yield return StartCoroutine(RunGenerators());
-
+            TilemapSpawn.Progress = 0;
+            TilemapSpawn.TargetProgress = boardGenerationProfile.boardHorizontalSize * boardGenerationProfile.boardVerticalSize;
             TilemapSpawn.buildMapStatus = TilemapSpawn.BuildMapStatus.CaveDigging;
             //Once we've generated our level, turn the grid of ASCII characters into actual viewable data, like a Tilemap
             yield return StartCoroutine(InstantiateGeneratedLevelData());
@@ -174,7 +180,7 @@ namespace Strata
                     //Match the current index of the Generator in the array to a list of empty spaces
                     currentGeneratorIndexIdForEmptySpaceTracking = i;
                 }
-
+                TilemapSpawn.Progress++;
                 //Run the generator
                 boardGenerationProfile.generators[i].Generate(this);
 
@@ -204,10 +210,8 @@ namespace Strata
 
 
 #endif
-       
-
         //Create an empty two dimensional grid of ASCII characters to prepare for generation
-        IEnumerator SetupEmptyGrid()
+        void SetupEmptyGrid()
         {
             boardGridAsCharacters = new char[boardGenerationProfile.boardHorizontalSize, boardGenerationProfile.boardVerticalSize];
             for (int i = 0; i < boardGenerationProfile.boardHorizontalSize; i++)
@@ -215,13 +219,13 @@ namespace Strata
                 for (int j = 0; j < boardGenerationProfile.boardVerticalSize; j++)
                 {
                     boardGridAsCharacters[i, j] = boardGenerationProfile.boardLibrary.GetDefaultEmptyChar();
-                    yield return null;
                 }
             }
+            TilemapSpawn.Progress++;
         }
 
         //Set up the BoardLibraryDictionary to prepare for generation
-        public void InitializeLibraryDictionary()
+        public IEnumerator InitializeLibraryDictionary()
         {
             //Create a new dictionary of characters and BoardLibraryEntry objects
             libraryDictionary = new Dictionary<char, BoardLibraryEntry>();
@@ -230,8 +234,11 @@ namespace Strata
             //characterId to the Entry object so that we can look things up based on the characterId
             for (int i = 0; i < boardGenerationProfile.boardLibrary.boardLibraryEntryList.Count; i++)
             {
+                TilemapSpawn.Progress++;
                 libraryDictionary.Add(boardGenerationProfile.boardLibrary.boardLibraryEntryList[i].characterId, boardGenerationProfile.boardLibrary.boardLibraryEntryList[i]);
+                
             }
+            yield return null;
         }
 
         //Now that we've built a dictionary of characters and BoardLibraryEntry objects, you can query that Dictionary with this function
@@ -261,19 +268,22 @@ namespace Strata
         //This method turns our array of ASCII data into actual displayable data in Unity
         public IEnumerator InstantiateGeneratedLevelData()
         {
-            TilemapSpawn.TargetProgress = boardGenerationProfile.boardHorizontalSize;
+            
             //Loop over the two dimensional array of characters along the x and y axes
             for (int x = 0; x < boardGenerationProfile.boardHorizontalSize; x++)
             {
                 for (int y = 0; y < boardGenerationProfile.boardVerticalSize; y++)
                 {
+                    TilemapSpawn.Progress++;
                     Vector2 spawnPos = new Vector2(x, y);
                     //Spawn something at the coordinates based on the character stored in the array
                     CreateMapEntryFromGrid(boardGridAsCharacters[x, y], spawnPos);
-                    yield return null;
+                    if (TilemapSpawn.Progress % 5 == 0)
+                    {
+                        yield return null;
+                    }
                 }
             }
-            yield return null;
         }
 
         public void CreateMapEntryFromGrid(char charId, Vector2 position)
