@@ -16,7 +16,8 @@ public class TilemapSpawn : MonoBehaviour
     public Tilemap tilemap;
     public Text showTips;
     public Text showSpeed;
-    
+
+    float timerLoop = 0;
     int tempProgress = 0;
     int timerTargetCount = 1;
     float timer = 0f;
@@ -31,7 +32,7 @@ public class TilemapSpawn : MonoBehaviour
     public static int Progress { get => progress;
         set {
             progress = value;
-            staticSlider.value = (float)Progress / TargetProgress;
+            staticSlider.value = (float)progress / TargetProgress;
             print(staticSlider.value);
             staticTips.text = buildMapStatus.ConvertToString().Replace("#", Progress+"："+TargetProgress);
         } 
@@ -43,10 +44,11 @@ public class TilemapSpawn : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        timerLoop += Time.fixedDeltaTime;
         timer += Time.fixedDeltaTime;
-        if (timer >= 1f)
+        if (timer >= timerTargetCount)
         {
-            showSpeed.text = (progress - tempProgress).ToString() + "格/秒\n" + ((float)TargetProgress / (progress - tempProgress)).ToString("F2");
+            showSpeed.text = (tempProgress / timerLoop).ToString("F2") + "格/秒\n" + (TargetProgress / (tempProgress / timerLoop)).ToString("F2");
             tempProgress = progress;
             timer = 0;
         }
