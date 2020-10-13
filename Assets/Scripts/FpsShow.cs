@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-class FpsShow : MonoBehaviour
+public class FpsShow : MonoBehaviour
 {
     public Text FpsText;
     float time=0;

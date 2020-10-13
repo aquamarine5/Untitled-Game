@@ -15,7 +15,6 @@ namespace Strata
             {
                 if (inputEntry.prefabToSpawn == null)
                 {
-
                     Vector3Int pos = new Vector3Int((int)location.x - TilemapSpawn.x, (int)location.y - TilemapSpawn.y, 0);
                     //Write the Tile in the BoardLibraryEntry to the Tilemap
                     boardGenerator.tilemap.SetTile(pos, inputEntry.tile);

@@ -11,30 +11,45 @@ public class TilemapSpawn : MonoBehaviour
     public CompositeCollider2D cc2d;
     public Text showSeedText;
     public GameObject loadingPanel;
-    public Animator anim;
-    public BlockAsset blockAsset;
     public SliderData[] sliderDatas;
     public Slider slider;
     public Tilemap tilemap;
     public Text showTips;
+    public Text showSpeed;
+    
+    int tempProgress = 0;
+    int timerTargetCount = 1;
+    float timer = 0f;
+
     private static int progress = 0;
     public static Slider staticSlider;
     public static Text staticTips;
     public static BuildMapStatus buildMapStatus;
+    public static int x, y = 0;
+
     public static int TargetProgress { get; set; } = 0;
-    public static int Progress { get { return progress; } 
+    public static int Progress { get => progress;
         set {
             progress = value;
-            staticSlider.value = Progress / TargetProgress;
+            staticSlider.value = (float)Progress / TargetProgress;
             print(staticSlider.value);
             staticTips.text = buildMapStatus.ConvertToString().Replace("#", Progress+"："+TargetProgress);
         } 
     }
-    public static int x, y = 0;
     private void Awake()
     {
         staticSlider = slider;
         staticTips = showTips;
+    }
+    private void FixedUpdate()
+    {
+        timer += Time.fixedDeltaTime;
+        if (timer >= 1f)
+        {
+            showSpeed.text = (progress - tempProgress).ToString() + "格/秒\n" + ((float)TargetProgress / (progress - tempProgress)).ToString("F2");
+            tempProgress = progress;
+            timer = 0;
+        }
     }
     public void BuildMap()
     {
@@ -48,9 +63,7 @@ public class TilemapSpawn : MonoBehaviour
     }
     IEnumerator StartBuildMap()
     {
-        anim.SetBool("isRuning", true);
         yield return StartCoroutine(sbg.BuildLevel());
-        anim.SetBool("isRuning", false);
         loadingPanel.SetActive(false);
         showSeedText.text += "\n"+catalogue.languageData.RenderShapeCount+":"+cc2d.shapeCount;
     }

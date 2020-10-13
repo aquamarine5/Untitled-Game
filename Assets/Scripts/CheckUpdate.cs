@@ -26,7 +26,7 @@ public class CheckUpdate : MonoBehaviour
     public Text speed;
     bool isBackstage = false;
     string newUrl;
-    float downloads = 0;
+    ulong downloads = 0;
     bool isOnStart = true;
     float downloadsCD = 0;
     public struct ApplicationUrls
@@ -105,11 +105,11 @@ public class CheckUpdate : MonoBehaviour
             {
                 
                 downloadsCD += Time.deltaTime;
-                if (isOnStart && downloadsCD >= 0.1) speed.text = ConvertToData((downloader.downloadedBytes * 10) - 0, "/s");
-                if (isOnStart && downloadsCD >= 0.5) speed.text = ConvertToData((downloader.downloadedBytes *  2) - 0, "/s"); isOnStart = false;
+                if (isOnStart && downloadsCD >= 0.1) speed.text = (downloader.downloadedBytes * 10 - 0).ConvertToWebBase() + "/s";
+                if (isOnStart && downloadsCD >= 0.5) speed.text = (downloader.downloadedBytes * 2 - 0).ConvertToWebBase() + "/s"; isOnStart = false;
                 if (downloadsCD >= 1)
                 {
-                    speed.text = ConvertToData(downloader.downloadedBytes - downloads, "/s");
+                    speed.text = (downloader.downloadedBytes - downloads).ConvertToWebBase() + "/s";
                     downloads = downloader.downloadedBytes;
                     downloadsCD = 0;
                 }
@@ -129,14 +129,6 @@ public class CheckUpdate : MonoBehaviour
                 InstallApp(ApplicationUrls.path);
             }
         }
-    }
-    public static string ConvertToData(float bytes,string inp)
-    {
-        if (1024 > bytes) return bytes.ToString("F2") + "B" + inp;
-        else if ((bytes == Mathf.Pow(1024, 1)) || (Mathf.Pow(1024, 2) > bytes)) return (bytes / 1024).ToString("F2") + "KB" + inp;
-        else if ((bytes == Mathf.Pow(1024, 2)) || (Mathf.Pow(1024, 3) > bytes)) return (bytes / Mathf.Pow(1024, 2)).ToString("F2") + "MB" + inp;
-        else if ((bytes == Mathf.Pow(1024, 3)) || (Mathf.Pow(1024, 4) > bytes)) return (bytes / Mathf.Pow(1024, 3)).ToString("F2") + "GB" + inp;
-        else return "Failed";
     }
     void InstallApp(string apkPath)
     {

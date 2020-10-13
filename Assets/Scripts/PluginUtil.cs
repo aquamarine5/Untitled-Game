@@ -18,6 +18,14 @@ public static class TilemapPlugin
             }
         }
     }
+    public static string ConvertToWebBase(this ulong bytes)
+    {
+        if (1024 > bytes) return bytes.ToString("F2") + "B";
+        else if ((bytes == Mathf.Pow(1024, 1)) || (Mathf.Pow(1024, 2) > bytes)) return (bytes / 1024).ToString("F2") + "KB";
+        else if ((bytes == Mathf.Pow(1024, 2)) || (Mathf.Pow(1024, 3) > bytes)) return (bytes / Mathf.Pow(1024, 2)).ToString("F2") + "MB";
+        else if ((bytes == Mathf.Pow(1024, 3)) || (Mathf.Pow(1024, 4) > bytes)) return (bytes / Mathf.Pow(1024, 3)).ToString("F2") + "GB";
+        else return "Failed";
+    }
     public static string ConvertToString(this TilemapSpawn.BuildMapStatus buildMapStatus)
     {
         CatalogueScript catalogueScript = CatalogueScript.ReturnThis();

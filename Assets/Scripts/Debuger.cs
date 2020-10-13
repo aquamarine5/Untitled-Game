@@ -1,8 +1,7 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-class Debuger : MonoBehaviour
+public class Debuger : MonoBehaviour
 {
     public Text text;
     private void Awake()
