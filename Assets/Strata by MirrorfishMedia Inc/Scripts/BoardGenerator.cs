@@ -278,12 +278,14 @@ namespace Strata
                     Vector2 spawnPos = new Vector2(x, y);
                     //Spawn something at the coordinates based on the character stored in the array
                     CreateMapEntryFromGrid(boardGridAsCharacters[x, y], spawnPos);
-                    if (TilemapSpawn.Progress % 50 == 0)
+                    if (TilemapSpawn.Progress % 5000 == 0)
                     {
                         yield return null;
                     }
                 }
+                
             }
+            yield return null;
         }
 
         public void CreateMapEntryFromGrid(char charId, Vector2 position)

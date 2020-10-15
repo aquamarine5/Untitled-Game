@@ -18,4 +18,5 @@ MonoBehaviour:
   unityTileSizeInWorldspace: 1
   boardLibrary: {fileID: 11400000, guid: 6edcea46072547347b92a8ca80c586e3, type: 2}
   generators:
-  - {fileID: 11400000, guid: 852ef937d9a6dc14ea46fbb611cf2700, type: 2}
+  - {fileID: 11400000, guid: 33676b368206d75499d642ea2126876c, type: 2}
+  - {fileID: 11400000, guid: d70be55be89bae0408cb73fa79489a54, type: 2}

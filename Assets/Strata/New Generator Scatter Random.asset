@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba699f094591844b973966471d6c2d9, type: 3}
-  m_Name: New Generator Simple Fill
+  m_Script: {fileID: 11500000, guid: cfe8aaeffe7401241bd04fb607c22de4, type: 3}
+  m_Name: New Generator Scatter Random
   m_EditorClassIdentifier: 
   overwriteFilledSpaces: 0
   generatesEmptySpace: 0
-  charToFill: 109
+  charIdToScatter: 117
+  howManyToScatter: 100
