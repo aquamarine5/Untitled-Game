@@ -102,12 +102,12 @@ namespace Strata
         //Subscribe to the delegates for scene drawing, used for drawing the red box guides in the Scene view
         void OnEnable()
         {
-            SceneView.onSceneGUIDelegate += this.OnSceneGUI;
+            SceneView.duringSceneGui += this.OnSceneGUI;
         }
 
         void OnDisable()
         {
-            SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
+            SceneView.duringSceneGui -= this.OnSceneGUI;
         }
 
         //Draw the red box in the shape of the loaded RoomTemplate in the Scene view

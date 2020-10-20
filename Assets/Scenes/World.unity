@@ -3287,6 +3287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6ff7e4d4280db45be9b0c71af29c80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cs: {fileID: 1608598716}
   FpsText: {fileID: 1521788390}
 --- !u!114 &1521788390
 MonoBehaviour:
@@ -3366,7 +3367,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -380, y: 50}
+  m_AnchoredPosition: {x: -380, y: 0}
   m_SizeDelta: {x: 80, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1534123002
@@ -3647,7 +3648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponBaseScript: {fileID: 0}
-  blockAsset: {fileID: 0}
+  blockAsset: {fileID: 11400000, guid: 12226eede14b5e3448ff836e0322231e, type: 2}
   languageData: {fileID: 11400000, guid: f7fb3566bfb3d9a478e9cfb634a8558c, type: 2}
 --- !u!4 &1608598717
 Transform:
@@ -4521,7 +4522,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5794,7 +5795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ece4a9d9c9596d43ba9fe62c180642e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descripe: "\u66F4\u65B0\u540E\u8BF7\u8BB2APK\u6587\u4EF6\u4F7F\u7528up.py\u4E0A\u4F20\u81F3\u7F51\u76D8\u540E\u9009\u53D6\u76F4\u8FDE\u540E\u7684md5\u7801\u66F4\u65B0b\u7AD9\u7B7E\u540D\n\u4F7F\u7528B\u7AD9\u4F5C\u4E3A\u5C0F\u578B\u6570\u636E\u5E93\uFF0C\u5728\u6BCF\u6B21\u66F4\u65B0\u540E\uFF0C\u6309\u7167\u4EE5\u4E0B\u683C\u5F0F\u66F4\u65B0\u6307\u5B9AUID\u7528\u6237\u7684B\u7AD9\u7B7E\u540D\uFF1A\n\u7248\u672C\u53F7*\u8D85\u661F\u7F51\u76D8md5\n\u5982\uFF1Aa0.3.10*71c1ee39b8a9febd848635ddeafe5592"
   b_id: 474085001
   slider: {fileID: 1310298852}
   panel: {fileID: 2013508444}
@@ -6169,8 +6169,10 @@ MonoBehaviour:
       type: 3}
   slider: {fileID: 1417687873}
   tilemap: {fileID: 1906281714}
+  defaultBlackTile: {fileID: 11400000, guid: 0b936d2f11612c14da2e61afdd8be8c2, type: 2}
   showTips: {fileID: 564519599}
   showSpeed: {fileID: 307759593}
+  timerTargetCount: 1
 --- !u!1 &2132903015
 GameObject:
   m_ObjectHideFlags: 0

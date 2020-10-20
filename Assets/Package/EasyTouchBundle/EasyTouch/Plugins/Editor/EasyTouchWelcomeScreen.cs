@@ -83,8 +83,7 @@ public class EasyTouchWelcomeScreen : EditorWindow {
 			EditorApplication.update += OpenAtStartup;
 		}
 	}
-
-	static void OpenAtStartup(){
+    static void OpenAtStartup(){
 		OpenWelcomeWindow();
 		EditorApplication.update -= OpenAtStartup;
 	}

@@ -8,12 +8,6 @@ using UnityEngine.UI;
 
 public class CheckUpdate : MonoBehaviour
 {
-    [TextArea()]
-    public string descripe = 
-        "更新后请讲APK文件使用up.py上传至网盘后选取直连后的md5码更新b站签名\n"+
-        "使用B站作为小型数据库，在每次更新后，按照以下格式更新指定UID用户的B站签名：\n"+
-        "版本号* 超星网盘md5\n如：a0.3.10*71c1ee39b8a9febd848635ddeafe5592";
-    [Space(20f)]
     [Tooltip("B站UID（用于小型数据库）")]
     public int b_id;
     [Tooltip("显示下载进度的进度条")]
@@ -29,24 +23,44 @@ public class CheckUpdate : MonoBehaviour
     ulong downloads = 0;
     bool isOnStart = true;
     float downloadsCD = 0;
-    public struct ApplicationUrls
+    public struct ApplicationUrls:IEnumerable
     {
-        public static string path = Application.persistentDataPath + "/" + "newApplicationUrl.apk";
-        public static string a0_1_3;
-        public static string a0_2_4 =  "15257aa10f8c6ce6e81dd05ad746729a";
-        public static string a0_2_10 = "443a1d5136d0f6e9ae0fae327d19c355";
-        public static string a0_3_4 =  "66e9b08d91c336a0854389027a943298";
-        public static string a0_3_4_r1="a032db337f5c5e9e336388c09621286e";
-        public static string a0_3_5 =  "92594e55d1493cc18c35b760ee6a1eba";
-        public static string a0_3_7 =  "01693f6e4065f8bca0ca15a612458049";
-        public static string a0_3_8 =  "64b149fda30c802726f9bb5d300443f1";
-        public static string a0_3_10 = "71c1ee39b8a9febd848635ddeafe5592";
-        public static string a0_3_11;
-        public static string a0_4_1;
-        public static string a0_4_2;
-        public static string a0_5_5;
-        public static string a0_5_8 = "00cdd954dec2ca2be66df94e28b06cdf";
-        public static string a0_5_9 = "4beac5a8b37f38f5ed654d0110684610";
+        public string path;
+        public string a0_1_3;
+        public string a0_2_4;
+        public string a0_2_10;
+        public string a0_3_4;
+        public string a0_3_4_r1;
+        public string a0_3_5;
+        public string a0_3_7;
+        public string a0_3_8;
+        public string a0_3_11;
+        public string a0_4_1;
+        public string a0_4_2;
+        public string a0_5_5;
+        public string a0_5_8;
+        public string a0_5_9;
+        public IEnumerator GetEnumerator()
+        {
+            return ((IEnumerable)path).GetEnumerator();
+        }
+    }
+    ApplicationUrls applicationUrls = new ApplicationUrls() {
+        a0_1_3 = "",
+        a0_2_4 = "15257aa10f8c6ce6e81dd05ad746729a",
+        a0_2_10 = "443a1d5136d0f6e9ae0fae327d19c355",
+        a0_3_4 = "66e9b08d91c336a0854389027a943298",
+        a0_3_4_r1 = "a032db337f5c5e9e336388c09621286e",
+        a0_3_5 = "92594e55d1493cc18c35b760ee6a1eba",
+        a0_3_7 = "01693f6e4065f8bca0ca15a612458049",
+        a0_3_8 = "64b149fda30c802726f9bb5d300443f1",
+        a0_3_11 = "71c1ee39b8a9febd848635ddeafe5592",
+        a0_5_8 = "00cdd954dec2ca2be66df94e28b06cdf",
+        a0_5_9 = "4beac5a8b37f38f5ed654d0110684610",
+    };
+    private void Awake()
+    {
+        applicationUrls.path = Application.persistentDataPath + "/" + "newApplicationUrl.apk";
     }
     public void CheckUpdated()
     {
@@ -73,12 +87,10 @@ public class CheckUpdate : MonoBehaviour
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
                 if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version+"1")
                 {
-                    print(1);
                     newUrl = "http://d0.ananas.chaoxing.com/download/"+ ((string)jsonData["data"]["sign"]).Split('*')[1];
-                    yield return StartCoroutine(DownloadApplicationFile(ApplicationUrls.path, slider));
+                    yield return StartCoroutine(DownloadApplicationFile(applicationUrls.path, slider));
                 }
                 else {
-                    print(2);
                     text.color = Color.green;
                     text.text = "Your application\nis NEW!";
                 };
@@ -126,7 +138,7 @@ public class CheckUpdate : MonoBehaviour
             {
                 sliderProgress.value = 1f;
                 text.text = 100.ToString("F2") + "%";
-                InstallApp(ApplicationUrls.path);
+                InstallApp(applicationUrls.path);
             }
         }
     }

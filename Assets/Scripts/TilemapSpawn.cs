@@ -20,7 +20,7 @@ public class TilemapSpawn : MonoBehaviour
 
     float timerLoop = 0;
     int tempProgress = 0;
-    int timerTargetCount = 1;
+    [SerializeField]int timerTargetCount = 1;
     float timer = 0f;
 
     private static int progress = 0;
@@ -32,13 +32,12 @@ public class TilemapSpawn : MonoBehaviour
     public static int TargetProgress { get; set; } = 0;
     public static int Progress { get => progress;
         set {
-                progress = value;
-            if (!Application.isPlaying)
+            progress = value;
+            if (Application.isPlaying)
             {
                 staticSlider.value = (float)progress / TargetProgress;
-                print(staticSlider.value);
             }
-                staticTips.text = buildMapStatus.ConvertToString().Replace("#", Progress + "：" + TargetProgress);
+            staticTips.text = buildMapStatus.ConvertToString().Replace("#", Progress + "：" + TargetProgress);
         } 
     }
     private void Awake()
@@ -70,23 +69,24 @@ public class TilemapSpawn : MonoBehaviour
     IEnumerator StartBuildMap()
     {
         yield return StartCoroutine(sbg.BuildLevel());
-        loadingPanel.SetActive(false);
         showSeedText.text += "\n"+catalogue.languageData.RenderShapeCount+":"+cc2d.shapeCount;
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
+        loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()
     {
-        for(int i = 0; i < sbg.boardGenerationProfile.boardHorizontalSize; i++)
+        TargetProgress = sbg.boardGenerationProfile.boardHorizontalSize;
+        Progress = 0;
+        for (int i = 0; i < sbg.boardGenerationProfile.boardHorizontalSize; i++)
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
                 tilemap.SetTile(new Vector3Int(-x + i, -1, 0), catalogue.blockAsset.glass_dirt);
                 Progress++;
-                if (sbg.boardGenerationProfile.boardHorizontalSize % 250 == 0) { yield return null; }
+                if (Progress % 250 == 0) { yield return null; }
             }
         }
-        yield return null;
     }
     public enum BuildMapStatus
     {

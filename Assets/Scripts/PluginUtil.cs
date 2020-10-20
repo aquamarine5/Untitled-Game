@@ -1,8 +1,11 @@
 ﻿using UnityEngine.Tilemaps;
 using UnityEngine;
+using System.Collections.Generic;
 
 public static class TilemapPlugin
 {
+    static Dictionary<string, string> d = new Dictionary<string, string>();
+    static bool isDictionaryDefine = false;
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
@@ -28,16 +31,14 @@ public static class TilemapPlugin
     }
     public static string ConvertToString(this TilemapSpawn.BuildMapStatus buildMapStatus)
     {
-        CatalogueScript catalogueScript = CatalogueScript.ReturnThis();
-        switch (buildMapStatus)
+        BuildmapLanguageData buildmapLanguageData = CatalogueScript.ReturnThis().languageData.buildmapLanguageData;
+        if (!isDictionaryDefine)
         {
-            case TilemapSpawn.BuildMapStatus.StartBuild:
-                return catalogueScript.languageData.Buildmap_StartBuild;
-            case TilemapSpawn.BuildMapStatus.CaveDigging:
-                return catalogueScript.languageData.Buildmap_CaveDigging;
-            case TilemapSpawn.BuildMapStatus.GlassBuilding:
-                return catalogueScript.languageData.Buildmap_PlantGlass;
-            default:return "";
+            d.Add(TilemapSpawn.BuildMapStatus.CaveDigging.ToString(), buildmapLanguageData.CaveDigging);
+            d.Add(TilemapSpawn.BuildMapStatus.GlassBuilding.ToString(), buildmapLanguageData.PlantGlass);
+            d.Add(TilemapSpawn.BuildMapStatus.StartBuild.ToString(), buildmapLanguageData.StartBuild);
+            isDictionaryDefine = true;
         }
+        return d[buildMapStatus.ToString()];
     }
 }
