@@ -1,11 +1,10 @@
-﻿using UnityEngine.Tilemaps;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
 public static class TilemapPlugin
 {
-    static Dictionary<string, string> d = new Dictionary<string, string>();
-    static bool isDictionaryDefine = false;
+    public static TileBase[,] tm;
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
@@ -17,10 +16,32 @@ public static class TilemapPlugin
             for (int y = 0; y < yCols; y++)
             {
                 Vector3Int tilePos = start + new Vector3Int(x * xDir, y * yDir, 0);
-                map.SetTile(tilePos, tile);
+                map.ReSetTile(tilePos, tile);
             }
         }
     }
+    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, vector3Int, tile);
+
+    public static void ReSetTiles(this Tilemap tilemap, Vector3Int[] vector3Ints, TileBase[] tiles) => SetTilemap(tilemap, vector3Ints, tiles);
+
+    static void SetTilemap(Tilemap tilemap,Vector3Int vector3Int, TileBase tile)
+    {
+        tilemap.SetTile(vector3Int, tile);
+        tm[vector3Int.x, vector3Int.y] = tile;
+    }
+
+    static void SetTilemap(Tilemap tilemap,Vector3Int[] vector3Ints,TileBase[] tiles)
+    {
+        tilemap.SetTiles(vector3Ints, tiles);
+        for (int i = 0; i < vector3Ints.Length; i++)
+        {
+            tm[vector3Ints[i].x, vector3Ints[i].y] = tiles[i];
+        }
+    }
+}
+public static class OthersPlugin {
+    static Dictionary<string, string> d = new Dictionary<string, string>();
+    static bool isDictionaryDefine = false;
     public static string ConvertToWebBase(this ulong bytes)
     {
         if (1024 > bytes) return bytes.ToString("F2") + "B";

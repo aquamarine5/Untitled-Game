@@ -82,7 +82,7 @@ public class TilemapSpawn : MonoBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.SetTile(new Vector3Int(-x + i, -1, 0), catalogue.blockAsset.glass_dirt);
+                tilemap.ReSetTile(new Vector3Int(-x + i, -1, 0), catalogue.blockAsset.glass_dirt);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }
