@@ -7,7 +7,7 @@ using static Database;
 public class WeaponChange : MonoBehaviour
 {
     public Sprite[] sprites;
-    public WeaponBase.WeaponType Weapon;
+    public WeaponType Weapon;
     public Image buttonImage;
     public WeaponAsset[] weaponAsset;
     public SpriteRenderer characterImage;
@@ -15,7 +15,7 @@ public class WeaponChange : MonoBehaviour
     {
         if ((int)Weapon == (sprites.Length-1)+100)
         {
-            Weapon = (WeaponBase.WeaponType)100;
+            Weapon = (WeaponType)100;
         }
         else
         {

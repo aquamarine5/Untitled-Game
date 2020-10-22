@@ -6172,6 +6172,8 @@ MonoBehaviour:
   defaultBlackTile: {fileID: 11400000, guid: 0b936d2f11612c14da2e61afdd8be8c2, type: 2}
   showTips: {fileID: 564519599}
   showSpeed: {fileID: 307759593}
+  buildMapSize: 10
+  buildMapScale: 10
   timerTargetCount: 1
 --- !u!1 &2132903015
 GameObject:

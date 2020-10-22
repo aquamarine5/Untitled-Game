@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glass: {fileID: 11400000, guid: 2b4a264f2eda4894da67b264ae3aa89b, type: 2}
   glass_dirt: {fileID: 11400000, guid: b040c7aa7f52d654995b67028031ec47, type: 2}
-  water: {fileID: 0}
+  water: {fileID: 11400000, guid: 666c71261f8dd3343898abf7a20421c2, type: 2}
+  black: {fileID: 11400000, guid: 0b936d2f11612c14da2e61afdd8be8c2, type: 2}

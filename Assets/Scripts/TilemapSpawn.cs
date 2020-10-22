@@ -17,17 +17,21 @@ public class TilemapSpawn : MonoBehaviour
     public Tile defaultBlackTile;
     public Text showTips;
     public Text showSpeed;
+    public float buildMapSize;
+    public float buildMapScale;
 
     float timerLoop = 0;
     int tempProgress = 0;
-    [SerializeField]int timerTargetCount = 1;
+    [SerializeField] int timerTargetCount = 1;
     float timer = 0f;
 
     private static int progress = 0;
     public static Slider staticSlider;
     public static Text staticTips;
     public static BuildMapStatus buildMapStatus;
+    public static Vector2Int offset = new Vector2Int(-250,-500);
     public static int x, y = 0;
+    public static Vector2Int targetSize = new Vector2Int(500, 500);
 
     public static int TargetProgress { get; set; } = 0;
     public static int Progress { get => progress;
@@ -58,12 +62,10 @@ public class TilemapSpawn : MonoBehaviour
     }
     public void BuildMap()
     {
-        int seed = Random.Range(0, 10000000);
-        showSeedText.text = seed.ToString();
-        Random.InitState(seed);
+        showSeedText.text = Random.Range(10000, 10000000).SetSeed().ToString();
         loadingPanel.SetActive(true);
         x = 250; y = 500;
-        StartCoroutine(StartBuildMap());
+        StartCoroutine(BuildMap_v2());
         
     }
     IEnumerator StartBuildMap()
@@ -72,6 +74,31 @@ public class TilemapSpawn : MonoBehaviour
         showSeedText.text += "\n"+catalogue.languageData.RenderShapeCount+":"+cc2d.shapeCount;
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
+        loadingPanel.SetActive(false);
+    }
+    IEnumerator BuildMap_v2()
+    {
+        buildMapStatus = BuildMapStatus.CaveDigging;
+        TargetProgress = targetSize.x * targetSize.y;
+        for (int x = 0; x < targetSize.x; x++)
+        {
+            for (int y = 0; y < targetSize.y; y++)
+            {
+                tilemap.ReSetTile(new Vector3Int(x, y, 0), Mathf.PerlinNoise(
+                    RandomSeedPlugin.randomSeed / buildMapScale + x / buildMapSize,
+                    RandomSeedPlugin.randomSeed / buildMapScale + y / buildMapSize)
+                    >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black, offset);
+
+            }
+            if (x % 2 == 0)
+            {
+                Progress += targetSize.y * 2;
+                yield return null;
+            }
+        }
+        buildMapStatus = BuildMapStatus.GlassBuilding;
+        yield return StartCoroutine(PlantGlass());
+        showSeedText.text += "\n" + catalogue.languageData.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()

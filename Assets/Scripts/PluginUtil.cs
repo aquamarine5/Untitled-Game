@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public static class TilemapPlugin
 {
-    public static TileBase[,] tm;
+    public static TileBase[,] tm = new TileBase[TilemapSpawn.targetSize.x, TilemapSpawn.targetSize.y];
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
@@ -24,12 +24,18 @@ public static class TilemapPlugin
 
     public static void ReSetTiles(this Tilemap tilemap, Vector3Int[] vector3Ints, TileBase[] tiles) => SetTilemap(tilemap, vector3Ints, tiles);
 
+    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Ints, TileBase tiles, Vector2Int offset) => SetTilemap(tilemap, vector3Ints, tiles, offset);
+
     static void SetTilemap(Tilemap tilemap,Vector3Int vector3Int, TileBase tile)
     {
         tilemap.SetTile(vector3Int, tile);
         tm[vector3Int.x, vector3Int.y] = tile;
     }
-
+    static void SetTilemap(Tilemap tilemap, Vector3Int vector3Int, TileBase tile,Vector2Int offset)
+    {
+        tilemap.SetTile(new Vector3Int(vector3Int.x + offset.x, vector3Int.y + offset.y, vector3Int.z), tile);
+        tm[vector3Int.x, vector3Int.y] = tile;
+    }
     static void SetTilemap(Tilemap tilemap,Vector3Int[] vector3Ints,TileBase[] tiles)
     {
         tilemap.SetTiles(vector3Ints, tiles);
@@ -61,5 +67,16 @@ public static class OthersPlugin {
             isDictionaryDefine = true;
         }
         return d[buildMapStatus.ToString()];
+    }
+}
+public static class RandomSeedPlugin
+{
+    public static int randomSeed;
+    public static int SetSeed(this int seed)
+    {
+        Debug.Log(seed);
+        Random.InitState(seed);
+        randomSeed = seed;
+        return seed;
     }
 }

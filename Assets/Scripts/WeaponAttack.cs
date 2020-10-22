@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponAttack : MonoBehaviour
 {
-    public WeaponBase.AttackType at;
+    public AttackType at;
     public RectTransform SpriteTf;
     
     public void OnButtonClick()

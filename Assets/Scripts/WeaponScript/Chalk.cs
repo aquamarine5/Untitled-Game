@@ -3,21 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chalk : WeaponBase.IWeapon
+public class Chalk : WeaponInterface
 {
-    public WeaponBase.AttackType attackType { get; set; }
-    public void OnAttack()
+    public new AttackType attackType = AttackType.Melee;
+    public override void OnAttack()
     {
-        
+        throw new NotImplementedException();
     }
 
-    public void OnChange()
+    public override void OnChange()
     {
-        
+        throw new NotImplementedException();
     }
 
-    public void OnUpdate()
+    public override void OnUpdate()
     {
-        
+        throw new NotImplementedException();
     }
 }
