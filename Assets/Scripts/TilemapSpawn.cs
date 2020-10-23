@@ -8,7 +8,9 @@ public class TilemapSpawn : MonoBehaviour
 {
     public CatalogueScript catalogue;
     public Strata.BoardGenerator sbg;
+    public TilemapCollider2D tilemapCollider;
     public CompositeCollider2D cc2d;
+    public Rigidbody2D rigidbody2d;
     public Text showSeedText;
     public GameObject loadingPanel;
     public SliderData[] sliderDatas;
@@ -19,6 +21,8 @@ public class TilemapSpawn : MonoBehaviour
     public Text showSpeed;
     public float buildMapSize;
     public float buildMapScale;
+    public Vector2Int targetSize = new Vector2Int(500, 500);
+    public Vector2Int offset = new Vector2Int(-250, -500);
 
     float timerLoop = 0;
     int tempProgress = 0;
@@ -29,10 +33,10 @@ public class TilemapSpawn : MonoBehaviour
     public static Slider staticSlider;
     public static Text staticTips;
     public static BuildMapStatus buildMapStatus;
-    public static Vector2Int offset = new Vector2Int(-250,-500);
+    
     public static int x, y = 0;
-    public static Vector2Int targetSize = new Vector2Int(500, 500);
-
+    public static Vector2Int _targetSize;
+    //public static Vector2Int _offset;
     public static int TargetProgress { get; set; } = 0;
     public static int Progress { get => progress;
         set {
@@ -48,6 +52,7 @@ public class TilemapSpawn : MonoBehaviour
     {
         staticSlider = slider;
         staticTips = showTips;
+        _targetSize = targetSize;
     }
     private void FixedUpdate()
     {
@@ -78,17 +83,18 @@ public class TilemapSpawn : MonoBehaviour
     }
     IEnumerator BuildMap_v2()
     {
+        tilemapCollider.enabled = false;
+        rigidbody2d.bodyType = RigidbodyType2D.Static;
         buildMapStatus = BuildMapStatus.CaveDigging;
+        float mapScale = RandomSeedPlugin.randomSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
             {
                 tilemap.ReSetTile(new Vector3Int(x, y, 0), Mathf.PerlinNoise(
-                    RandomSeedPlugin.randomSeed / buildMapScale + x / buildMapSize,
-                    RandomSeedPlugin.randomSeed / buildMapScale + y / buildMapSize)
+                    mapScale + x / buildMapSize, mapScale + y / buildMapSize)
                     >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black, offset);
-
             }
             if (x % 2 == 0)
             {
@@ -96,16 +102,18 @@ public class TilemapSpawn : MonoBehaviour
                 yield return null;
             }
         }
-        buildMapStatus = BuildMapStatus.GlassBuilding;
-        yield return StartCoroutine(PlantGlass());
+        tilemapCollider.enabled = true;
+        rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
+        //buildMapStatus = BuildMapStatus.GlassBuilding;
+        //yield return StartCoroutine(PlantGlass());
         showSeedText.text += "\n" + catalogue.languageData.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()
     {
-        TargetProgress = sbg.boardGenerationProfile.boardHorizontalSize;
+        TargetProgress = targetSize.x;
         Progress = 0;
-        for (int i = 0; i < sbg.boardGenerationProfile.boardHorizontalSize; i++)
+        for (int i = 0; i < targetSize.x; i++)
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {

@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public static class TilemapPlugin
 {
-    public static TileBase[,] tm = new TileBase[TilemapSpawn.targetSize.x, TilemapSpawn.targetSize.y];
+    public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
