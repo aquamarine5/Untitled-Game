@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -71,7 +72,6 @@ public class TilemapSpawn : MonoBehaviour
         loadingPanel.SetActive(true);
         x = 250; y = 500;
         StartCoroutine(BuildMap_v2());
-        
     }
     IEnumerator StartBuildMap()
     {
@@ -86,15 +86,15 @@ public class TilemapSpawn : MonoBehaviour
         tilemapCollider.enabled = false;
         rigidbody2d.bodyType = RigidbodyType2D.Static;
         buildMapStatus = BuildMapStatus.CaveDigging;
-        float mapScale = RandomSeedPlugin.randomSeed / buildMapScale;
+        float mapScale = RandomSeedPlugin.NowSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
             {
-                tilemap.ReSetTile(new Vector3Int(x, y, 0), Mathf.PerlinNoise(
+                tilemap.ReSetTile(new Vector2Int(x, y)+offset, Mathf.PerlinNoise(
                     mapScale + x / buildMapSize, mapScale + y / buildMapSize)
-                    >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black, offset);
+                    >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
             }
             if (x % 2 == 0)
             {
@@ -106,6 +106,7 @@ public class TilemapSpawn : MonoBehaviour
         rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
         //buildMapStatus = BuildMapStatus.GlassBuilding;
         //yield return StartCoroutine(PlantGlass());
+        TargetProgress = 0;
         showSeedText.text += "\n" + catalogue.languageData.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
@@ -117,7 +118,7 @@ public class TilemapSpawn : MonoBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.ReSetTile(new Vector3Int(-x + i, -1, 0), catalogue.blockAsset.glass_dirt);
+                tilemap.ReSetTile(new Vector2Int(-x + i, -1), catalogue.blockAsset.glass_dirt);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }

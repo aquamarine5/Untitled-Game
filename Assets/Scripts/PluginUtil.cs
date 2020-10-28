@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 public static class TilemapPlugin
 {
     public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
+    public static Dictionary<Vector2Int, TileBase> tmDictionary = new Dictionary<Vector2Int, TileBase>();
     public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
@@ -16,25 +17,21 @@ public static class TilemapPlugin
             for (int y = 0; y < yCols; y++)
             {
                 Vector3Int tilePos = start + new Vector3Int(x * xDir, y * yDir, 0);
-                map.ReSetTile(tilePos, tile);
+                map.ReSetTile((Vector2Int)tilePos,tile);
             }
         }
     }
-    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, vector3Int, tile);
-
+    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => SetTilemap(tilemap, vector2Int, tile);
+    [System.Obsolete]
+    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, (Vector2Int)vector3Int, tile);
+    [System.Obsolete]
     public static void ReSetTiles(this Tilemap tilemap, Vector3Int[] vector3Ints, TileBase[] tiles) => SetTilemap(tilemap, vector3Ints, tiles);
 
-    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Ints, TileBase tiles, Vector2Int offset) => SetTilemap(tilemap, vector3Ints, tiles, offset);
-
-    static void SetTilemap(Tilemap tilemap,Vector3Int vector3Int, TileBase tile)
+    static void SetTilemap(Tilemap tilemap,Vector2Int vector2Int, TileBase tile)
     {
-        tilemap.SetTile(vector3Int, tile);
-        tm[vector3Int.x, vector3Int.y] = tile;
-    }
-    static void SetTilemap(Tilemap tilemap, Vector3Int vector3Int, TileBase tile,Vector2Int offset)
-    {
-        tilemap.SetTile(new Vector3Int(vector3Int.x + offset.x, vector3Int.y + offset.y, vector3Int.z), tile);
-        tm[vector3Int.x, vector3Int.y] = tile;
+        tilemap.SetTile((Vector3Int)vector2Int, tile);
+        if (tmDictionary.ContainsKey(vector2Int)) tmDictionary[vector2Int] = tile;
+        else tmDictionary.Add(vector2Int, tile);
     }
     static void SetTilemap(Tilemap tilemap,Vector3Int[] vector3Ints,TileBase[] tiles)
     {
@@ -71,12 +68,17 @@ public static class OthersPlugin {
 }
 public static class RandomSeedPlugin
 {
-    public static int randomSeed;
+    static int nowSeed;
+    public static int NowSeed { get => nowSeed;set 
+        {
+            nowSeed = value;
+            Random.InitState(nowSeed);
+        } }
     public static int SetSeed(this int seed)
     {
         Debug.Log(seed);
         Random.InitState(seed);
-        randomSeed = seed;
+        nowSeed = seed;
         return seed;
     }
 }

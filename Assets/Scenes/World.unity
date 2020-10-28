@@ -6157,7 +6157,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   catalogue: {fileID: 1608598716}
   sbg: {fileID: 2099238934}
+  tilemapCollider: {fileID: 1906281718}
   cc2d: {fileID: 1906281716}
+  rigidbody2d: {fileID: 2000716356}
   showSeedText: {fileID: 1326779729}
   loadingPanel: {fileID: 1316836241}
   sliderDatas:
@@ -6174,6 +6176,8 @@ MonoBehaviour:
   showSpeed: {fileID: 307759593}
   buildMapSize: 10
   buildMapScale: 10
+  targetSize: {x: 500, y: 500}
+  offset: {x: -250, y: -500}
   timerTargetCount: 1
 --- !u!1 &2132903015
 GameObject:
