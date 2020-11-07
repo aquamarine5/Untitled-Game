@@ -7,6 +7,7 @@ public class CatalogueScript : MonoBehaviour
     public WeaponBase weaponBaseScript;
     public BlockAsset blockAsset;
     public LanguageData languageData;
+    public XLuaControl xLuaScript;
 
     public static CatalogueScript ReturnThis()
     {

@@ -11,7 +11,7 @@ TrueTypeFontImporter:
   fontNames:
   - Zpix
   fallbackFontReferences: []
-  customCharacters: "\u68C0\u67E5\u66F4\u65B0\u6D4B\u8BD5\u4E2D\uFF0C\u8BBE\u7F6E\u4E3A\u6C38\u8FDC\u751F\u6210\u5730\u56FE"
+  customCharacters: "\u68C0\u67E5\u66F4\u65B0\u6D4B\u8BD5\u4E2D\uFF0C\u8BBE\u7F6E\u4E3A\u6C38\u8FDC\u751F\u6210\u5730\u56FE\u6267\u884C\u6307\u4EE4"
   fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0

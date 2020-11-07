@@ -55,7 +55,7 @@ namespace Strata
             {
                 //BuildLevel is a Coroutine to allow you to wait for it to finish, then for example build a navmesh 
                 //(I recommend Aron Granberg's A* for 2D pathfinding)
-                StartCoroutine(BuildLevel());
+                //StartCoroutine(BuildLevel());
             }
         }
 
@@ -193,7 +193,7 @@ namespace Strata
         public void ClearAndRebuild()
         {
             ClearLevel();
-            StartCoroutine(BuildLevel());
+            //StartCoroutine(BuildLevel());
         }
 
 #if UNITY_EDITOR
