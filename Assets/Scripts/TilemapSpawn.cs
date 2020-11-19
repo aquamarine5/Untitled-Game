@@ -37,7 +37,6 @@ public class TilemapSpawn : MonoBehaviour
     
     public static int x, y = 0;
     public static Vector2Int _targetSize;
-    //public static Vector2Int _offset;
     public static int TargetProgress { get; set; } = 0;
     public static int Progress { get => progress;
         set {
@@ -139,3 +138,17 @@ public class SliderData
     public Sprite sliderInside;
     public Sprite sliderBall;
 }
+
+public class GoToScene : MonoBehaviour
+{
+    public Text t;
+    public Toggle to;
+    public void GoScene(string go)
+    {
+        if (t.text == "芜湖起飞")
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(go);
+        }
+    }
+}
+
