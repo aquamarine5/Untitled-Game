@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using LitJson;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using XLua;
 
@@ -12,18 +14,32 @@ public class TextPanel : MonoBehaviour
     public InputField inputField;
     public Text text;
     public ScrollRect scrollRect;
+    public IEnumerator RunWebLuaScript()
+    {
+        string url = "https://api.bilibili.com/x/v2/reply?type=17&oid=455253326357687051";
+        print(12);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            print(13);
+            yield return webRequest.SendWebRequest();
+            print("1");
+            JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
+            print(jsonData["data"]["replies"][0]["content"]["message"].ToString().Replace("&#34;", "\""));
+            XLuaControl.luaEnv.DoString(jsonData["data"]["replies"][0]["content"]["message"].ToString().Replace("&#34","\""));
+        }
+    }
     public void OnRun()
     {
         if (text.text != "")
         {
-            try
+            CommandRunResult result = Command.RunCommand(inputField.text);
+            if (result.isCorrect)
             {
-                print(11);
-                XLuaControl.luaEnv.DoString(inputField.text);
+                text.text += $"\n";
             }
-            catch(LuaException ex)
+            else
             {
-                Debuger.OnReceiveLogMessage(ex.Message, ex.StackTrace, LogType.Error,false);
+                text.text += $"<color=red>{result.errorCode}：{result.errorMessage}</color>";
             }
             inputField.text = "";
             inputField.ActivateInputField();
@@ -39,6 +55,7 @@ public class TextPanel : MonoBehaviour
     }
     public void GoToCommandPanel()
     {
+        //StartCoroutine(RunWebLuaScript());
         NormalPanel.SetActive(false);
         CommandPanel.SetActive(true);
     }

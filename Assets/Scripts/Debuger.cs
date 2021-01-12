@@ -22,7 +22,7 @@ public class Debuger : MonoBehaviour
             case LogType.Error:color = "<color=red>&</color>";break;
             case LogType.Exception:color = "<color=red>&</color>";break;
         }
-        s_text.text += "\n* "+color.Replace("&", condition + " " + strckTrace);
+        s_text.text += "\n* "+color.Replace("&", condition + "\n" + strckTrace);
     } 
     public static void OnReceiveLogMessage(string condition, string strckTrace, LogType type, bool showStackTrance)
     {

@@ -82,7 +82,6 @@ namespace Strata
             }
 
             generatedObjectsToClear.Clear();
-
             tilemap.ClearAllTiles();
             emptySpaceLists.Clear();
             currentGeneratorIndexIdForEmptySpaceTracking = 0;

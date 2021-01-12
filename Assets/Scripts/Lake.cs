@@ -2,6 +2,7 @@
 using System;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,6 +16,7 @@ class Lake : MonoBehaviour
         Debug.Log(1);
         AssetBundle asb = AssetBundle.LoadFromFile(Application.streamingAssetsPath+"//__data");
         string[] ass = asb.GetAllAssetNames();
+        new Lake().enabled = false;
         print(ass.Length);
         foreach(var s in ass)
         {
@@ -54,6 +56,6 @@ class Lake : MonoBehaviour
         string path = "D:/ScreenShot_ReadPixels.png";
 
         System.IO.File.WriteAllBytes(path, t.EncodeToPNG());
-
+        
     }
 }

@@ -8,10 +8,10 @@ using UnityEngine.UI;
 public class TilemapSpawn : MonoBehaviour
 {
     public CatalogueScript catalogue;
-    public Strata.BoardGenerator sbg;
-    public TilemapCollider2D tilemapCollider;
-    public CompositeCollider2D cc2d;
-    public Rigidbody2D rigidbody2d;
+    [System.Obsolete] public Strata.BoardGenerator sbg;
+    [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
+    [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
+    [Tooltip("Human's rigidbody")] public Rigidbody2D rigidbody2d;
     public Text showSeedText;
     public GameObject loadingPanel;
     public SliderData[] sliderDatas;
@@ -20,8 +20,8 @@ public class TilemapSpawn : MonoBehaviour
     public Tile defaultBlackTile;
     public Text showTips;
     public Text showSpeed;
-    public float buildMapSize;
-    public float buildMapScale;
+    [Tooltip("地图乘积")][Range(1f,20f)] public float buildMapSize;
+    [Tooltip("地图缩放程度")][Range(10,1000)] public float buildMapScale;
     public Vector2Int targetSize = new Vector2Int(500, 500);
     public Vector2Int offset = new Vector2Int(-250, -500);
 
@@ -72,6 +72,7 @@ public class TilemapSpawn : MonoBehaviour
         x = 250; y = 500;
         StartCoroutine(BuildMap_v2());
     }
+    [System.Obsolete("Use Buildmap_v2 to instead")]
     IEnumerator StartBuildMap()
     {
         yield return StartCoroutine(sbg.BuildLevel());
@@ -82,8 +83,11 @@ public class TilemapSpawn : MonoBehaviour
     }
     IEnumerator BuildMap_v2()
     {
-        tilemapCollider.enabled = false;
-        rigidbody2d.bodyType = RigidbodyType2D.Static;
+        TargetProgress = 0;
+        //tilemapCollider.enabled = false;
+        Physics2D.simulationMode = SimulationMode2D.Script;
+        //rigidbody2d.gravityScale = 0f;
+        //rigidbody2d.simulated = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
         float mapScale = RandomSeedPlugin.NowSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
@@ -95,16 +99,19 @@ public class TilemapSpawn : MonoBehaviour
                     mapScale + x / buildMapSize, mapScale + y / buildMapSize)
                     >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
             }
-            if (x % 2 == 0)
+            if (x % 25 == 0)
             {
-                Progress += targetSize.y * 2;
+                Progress += targetSize.y * 25;
+                //rigidbody2d.simulated;
+                Physics2D.Simulate(Time.fixedDeltaTime);
                 yield return null;
             }
         }
-        tilemapCollider.enabled = true;
-        rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-        //buildMapStatus = BuildMapStatus.GlassBuilding;
-        //yield return StartCoroutine(PlantGlass());
+        //tilemapCollider.enabled = true;
+        Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
+        //rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
+        buildMapStatus = BuildMapStatus.GlassBuilding;
+        yield return StartCoroutine(PlantGlass());
         TargetProgress = 0;
         showSeedText.text += "\n" + catalogue.languageData.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
@@ -138,17 +145,3 @@ public class SliderData
     public Sprite sliderInside;
     public Sprite sliderBall;
 }
-
-public class GoToScene : MonoBehaviour
-{
-    public Text t;
-    public Toggle to;
-    public void GoScene(string go)
-    {
-        if (t.text == "芜湖起飞")
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(go);
-        }
-    }
-}
-
