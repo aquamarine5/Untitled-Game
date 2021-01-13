@@ -35,11 +35,11 @@ public class TextPanel : MonoBehaviour
             CommandRunResult result = Command.RunCommand(inputField.text);
             if (result.isCorrect)
             {
-                text.text += $"\n";
+                text.text += $"\n\n{result.resultMessage}";
             }
             else
             {
-                text.text += $"<color=red>{result.errorCode}：{result.errorMessage}</color>";
+                text.text += $"\n\n<color=red>{result.errorCode}：{result.errorMessage}</color>";
             }
             inputField.text = "";
             inputField.ActivateInputField();

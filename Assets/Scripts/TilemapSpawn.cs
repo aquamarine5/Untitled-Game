@@ -20,6 +20,8 @@ public class TilemapSpawn : MonoBehaviour
     public Tile defaultBlackTile;
     public Text showTips;
     public Text showSpeed;
+    public bool isUpdateColliderOnFrame = true;
+    [Range(1,500)]public int spawnMapSpeed = 25;
     [Tooltip("地图乘积")][Range(1f,20f)] public float buildMapSize;
     [Tooltip("地图缩放程度")][Range(10,1000)] public float buildMapScale;
     public Vector2Int targetSize = new Vector2Int(500, 500);
@@ -84,10 +86,8 @@ public class TilemapSpawn : MonoBehaviour
     IEnumerator BuildMap_v2()
     {
         TargetProgress = 0;
-        //tilemapCollider.enabled = false;
         Physics2D.simulationMode = SimulationMode2D.Script;
-        //rigidbody2d.gravityScale = 0f;
-        //rigidbody2d.simulated = false;
+        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
         float mapScale = RandomSeedPlugin.NowSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
@@ -99,17 +99,15 @@ public class TilemapSpawn : MonoBehaviour
                     mapScale + x / buildMapSize, mapScale + y / buildMapSize)
                     >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
             }
-            if (x % 25 == 0)
+            if (x % spawnMapSpeed == 0)
             {
-                Progress += targetSize.y * 25;
-                //rigidbody2d.simulated;
-                Physics2D.Simulate(Time.fixedDeltaTime);
+                Progress += targetSize.y * spawnMapSpeed;
+                if(isUpdateColliderOnFrame) Physics2D.Simulate(Time.fixedDeltaTime);
                 yield return null;
             }
         }
-        //tilemapCollider.enabled = true;
+        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = true;
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
-        //rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
         TargetProgress = 0;
@@ -118,6 +116,7 @@ public class TilemapSpawn : MonoBehaviour
     }
     IEnumerator PlantGlass()
     {
+        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         TargetProgress = targetSize.x;
         Progress = 0;
         for (int i = 0; i < targetSize.x; i++)
@@ -129,6 +128,7 @@ public class TilemapSpawn : MonoBehaviour
                 if (Progress % 250 == 0) { yield return null; }
             }
         }
+        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = true;
     }
     public enum BuildMapStatus
     {
