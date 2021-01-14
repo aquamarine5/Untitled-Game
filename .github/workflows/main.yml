@@ -29,6 +29,3 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: game-ci/unity-builder@c8202c01e7dfe4de0e897b26cb2ca1cc363e4ad4
         uses: game-ci/unity-builder@v2.0-alpha-6
-        with:
-          # Version of unity to use for building the project. Use "auto" to get from your ProjectSettings/ProjectVersion.txt
-          unityVersion: 2020.1.6f1c1 # optional, default is auto
