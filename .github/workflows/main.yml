@@ -23,8 +23,21 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      
       - uses: actions/checkout@v2
-
+      - name: Unity Build Action
+  # You may pin to the exact commit or the version.
+  # uses: yukiarrr/unity-build-action@92522bf02883fc225c86ff0c522c1c8051e83c1e
+        uses: yukiarrr/unity-build-action@v0.6.1
+        with:
+          # For example, 2018.4.16f1
+          unity-version: 2020.1.6f1
+          # Choose Android, iOS, Mac, Windows, or WebGL
+          build-target: Android
+          # Unity project path
+          project-path: Asset
+          # Use by -executeMethod
+          execute-method: UnityBuild.BatchBuild.Build
       - name: Unity - Builder
         # You may pin to the exact commit or the version.
         # uses: game-ci/unity-builder@c8202c01e7dfe4de0e897b26cb2ca1cc363e4ad4
