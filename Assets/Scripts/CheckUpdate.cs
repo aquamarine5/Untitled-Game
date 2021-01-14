@@ -88,7 +88,7 @@ public class CheckUpdate : MonoBehaviour
                 if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version+"1")
                 {
                     newUrl = "http://d0.ananas.chaoxing.com/download/"+ ((string)jsonData["data"]["sign"]).Split('*')[1];
-                    yield return StartCoroutine(DownloadApplicationFile(applicationUrls.path, slider));
+                    yield return StartCoroutine(DownloadApplicationFile(applicationUrls.path));
                 }
                 else {
                     text.color = Color.green;
@@ -103,7 +103,7 @@ public class CheckUpdate : MonoBehaviour
         print(isBackstage);
         panel.SetActive(false);
     }
-    IEnumerator DownloadApplicationFile(string downloadFileName, Slider sliderProgress)
+    public IEnumerator DownloadApplicationFile(string downloadFileName,bool isCommand=false)
     {
         using (UnityWebRequest downloader = UnityWebRequest.Get(newUrl))
         {
@@ -125,18 +125,25 @@ public class CheckUpdate : MonoBehaviour
                     downloads = downloader.downloadedBytes;
                     downloadsCD = 0;
                 }
-                sliderProgress.value = downloader.downloadProgress;
+                slider.value = downloader.downloadProgress;
                 text.text = (downloader.downloadProgress * 100).ToString("F2") + "%";
                 yield return null;
             }
             if (downloader.error != null)
             {
-                text.color = Color.red;
-                text.text=downloader.error;
+                if (isCommand)
+                {
+
+                }
+                else
+                {
+                    text.color = Color.red;
+                    text.text = downloader.error;
+                }
             }
             else
             {
-                sliderProgress.value = 1f;
+                slider.value = 1f;
                 text.text = 100.ToString("F2") + "%";
                 InstallApp(applicationUrls.path);
             }

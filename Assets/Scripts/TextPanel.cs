@@ -32,7 +32,7 @@ public class TextPanel : MonoBehaviour
     {
         if (text.text != "")
         {
-            CommandRunResult result = Command.RunCommand(inputField.text);
+            CommandAssemble.CommandRunResult result = Command.RunCommand(inputField.text);
             if (result.isCorrect)
             {
                 text.text += $"\n\n{result.resultMessage}";

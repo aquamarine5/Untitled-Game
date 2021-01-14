@@ -69,7 +69,7 @@ public class TilemapSpawn : MonoBehaviour
     }
     public void BuildMap()
     {
-        showSeedText.text = Random.Range(10000, 10000000).SetSeed().ToString();
+        Random.Range(10000, 10000000).SetSeed();
         loadingPanel.SetActive(true);
         x = 250; y = 500;
         StartCoroutine(BuildMap_v2());
