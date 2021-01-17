@@ -205,7 +205,7 @@ namespace UnityEngine
 
         public void Override()
         {
-            m_RuntimeTile = m_Tile ? Instantiate(m_Tile) : new RuleTile();
+            m_RuntimeTile = m_Tile ? Instantiate(m_Tile) : CreateInstance<RuleTile>();
             m_RuntimeTile.m_Self = m_OverrideSelf ? this : m_Tile as TileBase;
             if (!m_Advanced)
             {

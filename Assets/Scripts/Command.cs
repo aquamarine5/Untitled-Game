@@ -169,7 +169,7 @@ seed random : 随机生成新种子
             {
                 case "get":
                     {
-                        return new CommandRunResult(true, resultMessage: RandomSeedPlugin.NowSeed.ToString());
+                        return new CommandRunResult(true, resultMessage: RandomUtil.NowSeed.ToString());
                     }
                 case "set":
                     {

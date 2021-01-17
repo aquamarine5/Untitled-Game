@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class TilemapSpawn : MonoBehaviour
 {
     public CatalogueScript catalogue;
-    [System.Obsolete] public Strata.BoardGenerator sbg;
     [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
     [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
     [Tooltip("Human's rigidbody")] public Rigidbody2D rigidbody2d;
     public Text showSeedText;
+    public Tilemap itemTilemap;
     public GameObject loadingPanel;
     public SliderData[] sliderDatas;
     public Slider slider;
@@ -24,6 +24,7 @@ public class TilemapSpawn : MonoBehaviour
     [Range(1,500)]public int spawnMapSpeed = 25;
     [Tooltip("地图乘积")][Range(1f,20f)] public float buildMapSize;
     [Tooltip("地图缩放程度")][Range(10,1000)] public float buildMapScale;
+    [Range(0f, 1f)] [Tooltip("放置方格限制")] public float buildBlockScale = 0.5f;
     public Vector2Int targetSize = new Vector2Int(500, 500);
     public Vector2Int offset = new Vector2Int(-250, -500);
 
@@ -72,16 +73,8 @@ public class TilemapSpawn : MonoBehaviour
         Random.Range(10000, 10000000).SetSeed();
         loadingPanel.SetActive(true);
         x = 250; y = 500;
+        StopCoroutine("Buildmap_v2");
         StartCoroutine(BuildMap_v2());
-    }
-    [System.Obsolete("Use Buildmap_v2 to instead")]
-    IEnumerator StartBuildMap()
-    {
-        yield return StartCoroutine(sbg.BuildLevel());
-        showSeedText.text += "\n"+catalogue.languageData.RenderShapeCount+":"+cc2d.shapeCount;
-        buildMapStatus = BuildMapStatus.GlassBuilding;
-        yield return StartCoroutine(PlantGlass());
-        loadingPanel.SetActive(false);
     }
     IEnumerator BuildMap_v2()
     {
@@ -89,20 +82,23 @@ public class TilemapSpawn : MonoBehaviour
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
-        float mapScale = RandomSeedPlugin.NowSeed / buildMapScale;
+        float mapScale = RandomUtil.NowSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
             {
-                tilemap.ReSetTile(new Vector2Int(x, y)+offset, Mathf.PerlinNoise(
-                    mapScale + x / buildMapSize, mapScale + y / buildMapSize)
-                    >= 0.5f ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
+                float result = Mathf.PerlinNoise(
+                    mapScale + x / buildMapSize, mapScale + y / buildMapSize);
+                tilemap.ReSetTile((x + offset.x, y + offset.y),
+                    result >= buildBlockScale ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
+                if (RandomUtil.RandomRange(0.01f)&result<buildBlockScale) {
+                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), catalogue.blockAsset.torch);
+                }
             }
             if (x % spawnMapSpeed == 0)
             {
                 Progress += targetSize.y * spawnMapSpeed;
-                if(isUpdateColliderOnFrame) Physics2D.Simulate(Time.fixedDeltaTime);
                 yield return null;
             }
         }

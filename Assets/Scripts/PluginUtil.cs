@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 public static class TilemapPlugin
 {
     public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
-    public static Dictionary<Vector2Int, TileBase> tmDictionary = new Dictionary<Vector2Int, TileBase>();
-    public static void Fill(this Tilemap map, TileBase tile, Vector3Int start, Vector3Int end)
+    public static Dictionary<(int, int), TileBase> tmDictionary = new Dictionary<(int, int), TileBase>();
+    public static void Fill(this Tilemap map, TileBase tile, Vector2Int start, Vector2Int end)
     {
         int xDir = start.x < end.x ? 1 : -1;
         int yDir = start.y < end.y ? 1 : -1;
@@ -16,36 +16,53 @@ public static class TilemapPlugin
         {
             for (int y = 0; y < yCols; y++)
             {
-                Vector3Int tilePos = start + new Vector3Int(x * xDir, y * yDir, 0);
-                map.ReSetTile((Vector2Int)tilePos,tile);
+                map.ReSetTile((x * xDir + start.x, y * yDir + start.y), tile);
             }
         }
     }
-    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => SetTilemap(tilemap, vector2Int, tile);
-    [System.Obsolete]
-    public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, (Vector2Int)vector3Int, tile);
-    [System.Obsolete]
-    public static void ReSetTiles(this Tilemap tilemap, Vector3Int[] vector3Ints, TileBase[] tiles) => SetTilemap(tilemap, vector3Ints, tiles);
+    public static void ReSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tile) => SetTilemap(tilemap, vector2Int, tile);
+    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => SetTilemap(tilemap, (vector2Int.x, vector2Int.y), tile);
+    [System.Obsolete] public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, (vector3Int.x, vector3Int.y), tile);
 
-    static void SetTilemap(Tilemap tilemap,Vector2Int vector2Int, TileBase tile)
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase tile) => SetTilemap(tilemap, vector2Ints, tile);
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase[] tiles) => SetTilemap(tilemap, vector2Ints, tiles);
+
+    static void SetTilemap(Tilemap tilemap, (int, int) vector2Int, TileBase tile)
     {
-        tilemap.SetTile((Vector3Int)vector2Int, tile);
+        tilemap.SetTile(new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0), tile);
         if (tmDictionary.ContainsKey(vector2Int)) tmDictionary[vector2Int] = tile;
         else tmDictionary.Add(vector2Int, tile);
     }
-    static void SetTilemap(Tilemap tilemap,Vector3Int[] vector3Ints,TileBase[] tiles)
+    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase tile)
     {
-        tilemap.SetTiles(vector3Ints, tiles);
+        List<Vector3Int> resultVector3s = new List<Vector3Int>();
+        List<TileBase> tileBases = new List<TileBase>();
+        foreach (var i in vector3Ints)
+        {
+            resultVector3s.Add(new Vector3Int(i.Item1, i.Item2, 0));
+            tileBases.Add(tile);
+            tm[i.Item1, i.Item2] = tile;
+        }
+        tilemap.SetTiles(resultVector3s.ToArray(), tileBases.ToArray());
+    }
+    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase[] tiles)
+    {
+        List<Vector3Int> resultVector3s = new List<Vector3Int>();
+        foreach (var i in vector3Ints)
+        {
+            resultVector3s.Add(new Vector3Int(i.Item1, i.Item2, 0));
+        }
+        tilemap.SetTiles(resultVector3s.ToArray(), tiles);
         for (int i = 0; i < vector3Ints.Length; i++)
         {
-            tm[vector3Ints[i].x, vector3Ints[i].y] = tiles[i];
+            tm[vector3Ints[i].Item1, vector3Ints[i].Item2] = tiles[i];
         }
     }
 }
 public static class OthersPlugin
 {
     static BuildmapLanguageData buildmapLanguageData = CatalogueScript.ReturnThis().languageData.buildmapLanguageData;
-    static Dictionary<string, string> d = new Dictionary<string, string>()
+    static readonly Dictionary<string, string> d = new Dictionary<string, string>()
     {
         ["CaveDigging"] = buildmapLanguageData.CaveDigging,
         ["GlassBuilding"] = buildmapLanguageData.PlantGlass,
@@ -60,19 +77,4 @@ public static class OthersPlugin
         else return "Failed";
     }
     public static string ConvertToString(this TilemapSpawn.BuildMapStatus buildMapStatus) => d[buildMapStatus.ToString()];
-}
-public static class RandomSeedPlugin
-{
-    static int nowSeed;
-    public static int NowSeed { get => nowSeed ;set 
-        {
-            nowSeed = value;
-            Random.InitState(nowSeed);
-            CatalogueScript.ReturnThis().seedText.text = $"Seed:{value}";
-        } }
-    public static int SetSeed(this int seed)
-    {
-        NowSeed = seed;
-        return seed;
-    }
 }
