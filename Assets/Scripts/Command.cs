@@ -2,23 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.Networking;
 using CommandAssemble;
 namespace CommandAssemble
 {
     public interface ICommand
     {
         string Name { get; }
-        List<string> secondKeyWord { get; }
+        List<string> SecondKeyWord { get; }
         CommandRunResult Run(string[] args);
     }
     public struct CommandRunResult
     {
-        public CommandRunResult(bool isCorrect, int? errorCode = null, string errorMessage = null, string resultMessage = "")
+        readonly static Dictionary<int, string> errorMessageTable = new Dictionary<int, string>()
+        {
+            [0] = "没有找到函数",
+            [1] = "{TopFunctionName} 内没有 {SecondFunctionName} 这个二级函数",
+            [9] = "只能是在{Range}之间",
+            [10] = "只能是true或者false",
+            [11] = "{Value} 不是数字",
+            [12] = "{Value}不是小数或整数"
+        };
+        static string ReplaceStringFormat(string message,string[] command,string otherData )=> message
+            .Replace("{TopFunctionName}", command[0])
+            .Replace("{SecondFunctionName}", command[1])
+            .Replace("{Value}",otherData)
+            .Replace("{Range}",otherData);
+        /// <summary>
+        /// Command run failed.
+        /// </summary>
+        /// <param name="errorCode">if 11,need input otherData</param>
+        public CommandRunResult(int errorCode,string[] data,string otherData="",bool isCorrect=false)
         {
             this.isCorrect = isCorrect;
             this.errorCode = errorCode;
-            this.errorMessage = errorMessage;
+            resultMessage = null;
+            errorMessage = ReplaceStringFormat(errorMessageTable[errorCode], data, otherData);
+        }
+        public CommandRunResult(bool isCorrect=true,string resultMessage = "")
+        {
+            this.isCorrect = isCorrect;
+            errorMessage = null;
+            errorCode = null;
             this.resultMessage = resultMessage;
         }
         public readonly string resultMessage;
@@ -29,24 +53,24 @@ namespace CommandAssemble
     class Lua : ICommand
     {
         public string Name { get; } = "Lua";
-        public List<string> secondKeyWord { get; } = new List<string>() { "mode" };
+        public List<string> SecondKeyWord { get; } = new List<string>() { "mode" };
         public CommandRunResult Run(string[] args)
         {
-            if (secondKeyWord.Contains(args[1]))
+            if (SecondKeyWord.Contains(args[1]))
             {
 
             }
             else
             {
-                return new CommandRunResult(false, 1, $"{Name} 内没有 {args[1]} 这个二级函数");
+                return new CommandRunResult(1, args);
             }
-            return new CommandRunResult(true, null, "");
+            return new CommandRunResult(true);
         }
     }
     class Help : ICommand
     {
         public string Name { get; } = "help";
-        public List<string> secondKeyWord { get; } = new List<string>() { null };
+        public List<string> SecondKeyWord { get; } = new List<string>() { null };
         public CommandRunResult Run(string[] args)
         {
             return new CommandRunResult(true, resultMessage: @"light [bool] : 是否全局接受2D光照
@@ -62,7 +86,7 @@ seed random : 随机生成新种子
     class Update : MonoBehaviour,ICommand
     {
         public string Name { get; } = "help";
-        public List<string> secondKeyWord { get; } = new List<string>() { null };
+        public List<string> SecondKeyWord { get; } = new List<string>() { null };
         public CommandRunResult Run(string[] args)
         {
             CheckUpdate checkUpdateScript = ((GameObject)Command.s_commandData[0]).GetComponent<CheckUpdate>();
@@ -73,7 +97,7 @@ seed random : 随机生成新种子
     class BaiduApi : ICommand
     {
         public string Name { get; } = "baiduapi";
-        public List<string> secondKeyWord { get; } = new List<string>() { null };
+        public List<string> SecondKeyWord { get; } = new List<string>() { null };
         public CommandRunResult Run(string[] args)
         {
             RunC(args);
@@ -116,7 +140,7 @@ seed random : 随机生成新种子
     class Light : ICommand
     {
         public string Name { get; } = "light";
-        public List<string> secondKeyWord { get; } = new List<string>();
+        public List<string> SecondKeyWord { get; } = new List<string>() { null};
         public CommandRunResult Run(string[] args)
         {
             var material = ((GameObject)Command.s_commandData[0]).GetComponent<TilemapRenderer>();
@@ -130,7 +154,7 @@ seed random : 随机生成新种子
             }
             else
             {
-                return new CommandRunResult(false, 10, "只能是true或者false");
+                return new CommandRunResult(10, args);
             }
             return new CommandRunResult(true);
         }
@@ -138,7 +162,7 @@ seed random : 随机生成新种子
     class Seed : ICommand
     {
         public string Name { get; } = "seed";
-        public List<string> secondKeyWord { get; } = new List<string>() { "set", "get", "random" };
+        public List<string> SecondKeyWord { get; } = new List<string>() { "set", "get", "random" };
         public CommandRunResult Run(string[] args)
         {
             switch (args[1])
@@ -154,21 +178,21 @@ seed random : 随机生成新种子
                             result.SetSeed();
                             return new CommandRunResult(true);
                         }
-                        else { return new CommandRunResult(false, 11, $"{args[2]} 不是数字"); }
+                        else { return new CommandRunResult(11, args, args[2]); }
                     }
                 case "random":
                     {
                         int seed = Random.Range(10000, 10000000).SetSeed();
                         return new CommandRunResult(true, resultMessage: $"{seed} 是新地图种子");
                     }
-                default: return new CommandRunResult(false, 1, $"{Name} 内没有 ${args[2]} 这个二级函数");
+                default: return new CommandRunResult(1, args);
             }
         }
     }
     class TilemapCommand : ICommand
     {
         public string Name { get; } = "tilemap";
-        public List<string> secondKeyWord { get; } = new List<string>() { "speed", "collider" };
+        public List<string> SecondKeyWord { get; } = new List<string>() { "speed", "collider","scale" };
         public CommandRunResult Run(string[] args)
         {
             TilemapSpawn tilemapSpawn = ((GameObject)Command.s_commandData[3]).GetComponent<TilemapSpawn>();
@@ -183,7 +207,26 @@ seed random : 随机生成新种子
                         }
                         else
                         {
-                            return new CommandRunResult(false, 11, $"{args[2]} 不是数字");
+                            return new CommandRunResult(11, args,args[2]);
+                        }
+                    }
+                case "scale":
+                    {
+                        if(float.TryParse(args[2],out float result))
+                        {
+                            if (0f <= result & result <= 1f)
+                            {
+                                tilemapSpawn.buildBlockScale = result;
+                                return new CommandRunResult(true);
+                            }
+                            else
+                            {
+                                return new CommandRunResult(9,args,"0-1");
+                            }
+                        }
+                        else
+                        {
+                            return new CommandRunResult(12, args, args[2]);
                         }
                     }
                 case "collider":
@@ -192,12 +235,12 @@ seed random : 随机生成新种子
                         else if (args[2] == "false") { tilemapSpawn.isUpdateColliderOnFrame = false; return new CommandRunResult(true); }
                         else
                         {
-                            return new CommandRunResult(false, 10, "只能是true或者false");
+                            return new CommandRunResult(10, args);
                         }
                     }
                 default:
                     {
-                        return new CommandRunResult(false, 1, $"{Name} 内没有 {args[1]} 这个二级函数");
+                        return new CommandRunResult(1, args);
                     }
             }
 
@@ -231,7 +274,7 @@ public class Command : MonoBehaviour
         }
         else
         {
-            return new CommandRunResult(false, 0, "没有找到函数");
+            return new CommandRunResult(0, args,"");
         }
     }
 }
