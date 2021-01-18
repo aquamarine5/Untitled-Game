@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 
 namespace HedgehogTeam.EasyTouch{
 /// <summary>
@@ -19,7 +20,7 @@ namespace HedgehogTeam.EasyTouch{
 /// For add Easy Touch to your scene
 /// It is a fake singleton, so you can simply access their settings via a script with all static methods or with the inspector.<br>
 /// </summary>
-public class EasyTouch : MonoBehaviour {
+public class EasyTouch : NetworkBehaviour {
 
 	#region private classes
 	[System.Serializable]
@@ -411,7 +412,7 @@ public class EasyTouch : MonoBehaviour {
 	}
 	#endregion
 	
-	#region MonoBehaviour Callback
+	#region NetworkBehaviour Callback
 	void OnEnable(){
 		if (Application.isPlaying && Application.isEditor){
 			Init();	

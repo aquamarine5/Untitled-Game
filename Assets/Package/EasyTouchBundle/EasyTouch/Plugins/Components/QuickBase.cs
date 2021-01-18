@@ -8,9 +8,10 @@
 **********************************************/
 using UnityEngine;
 using System.Collections;
+using Mirror;
 
 namespace HedgehogTeam.EasyTouch{
-public class QuickBase : MonoBehaviour {
+public class QuickBase : NetworkBehaviour {
 
 	#region enumeration
 	protected enum GameObjectType { Auto,Obj_3D,Obj_2D,UI};

@@ -105,7 +105,7 @@ public class ETCDPad : ETCBase, IDragHandler,  IPointerDownHandler, IPointerUpHa
 	}
 	#endregion
 
-	#region Monobehaviour Callback
+	#region NetworkBehaviour Callback
 	public override void Start(){
 
 		base.Start();

@@ -66,7 +66,7 @@ public class ETCButton : ETCBase, IPointerEnterHandler, IPointerDownHandler, IPo
 	}
 	#endregion
 
-	#region Monobehaviour Callback
+	#region NetworkBehaviour Callback
 	protected override void Awake (){
 		base.Awake ();
 

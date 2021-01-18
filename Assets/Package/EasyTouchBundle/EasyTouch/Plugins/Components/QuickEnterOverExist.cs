@@ -32,7 +32,7 @@ public class QuickEnterOverExist : QuickBase {
 	private bool[] fingerOver = new bool[100];
 	#endregion
 
-	#region MonoBehaviour callback
+	#region NetworkBehaviour callback
 	public QuickEnterOverExist(){
 			quickActionName = "QuickEnterOverExit"+ System.Guid.NewGuid().ToString().Substring(0,7);
 	}

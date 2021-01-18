@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace PennyPixel
 {
-    public class PlayerStartPoint : MonoBehaviour
+    public class PlayerStartPoint : NetworkBehaviour
     {
         Transform playerTransform;
 

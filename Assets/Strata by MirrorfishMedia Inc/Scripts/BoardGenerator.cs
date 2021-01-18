@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Mirror;
 
 namespace Strata
 {
-    //This is the main Monobehaviour class that will be placed on an object in your scene and used to generate your levels
-    public class BoardGenerator : MonoBehaviour
+    //This is the main NetworkBehaviour class that will be placed on an object in your scene and used to generate your levels
+    public class BoardGenerator : NetworkBehaviour
     {
         [Tooltip("If true, will automatically build the level when the scene is initialized, otherwise you can call BuildLevel from your own game manager script.")]
         public bool buildOnStart;

@@ -35,7 +35,7 @@ public class QuickTwist : QuickBase {
 	public bool enableSimpleAction = false;
 	#endregion
 
-	#region MonoBehaviour callback
+	#region NetworkBehaviour callback
 	public QuickTwist(){
 			quickActionName = "QuickTwist"+ System.Guid.NewGuid().ToString().Substring(0,7);
 	}

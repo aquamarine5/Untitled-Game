@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using XLua;
+using Mirror;
 
-public class TextPanel : MonoBehaviour
+public class TextPanel : NetworkBehaviour
 {
     public GameObject NormalPanel;
     public GameObject CommandPanel;

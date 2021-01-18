@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 
 namespace UnityEngine.Tilemaps
 {
@@ -18,7 +19,7 @@ namespace UnityEngine.Tilemaps
 
     [Serializable]
     [AddComponentMenu("Tilemap/Grid Information")]
-    public class GridInformation : MonoBehaviour, ISerializationCallbackReceiver
+    public class GridInformation : NetworkBehaviour, ISerializationCallbackReceiver
     {
         internal struct GridInformationValue
         {

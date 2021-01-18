@@ -12,9 +12,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using Mirror;
 
 //ETCSingleton<ETCInput>
-public class ETCInput : MonoBehaviour{
+public class ETCInput : NetworkBehaviour{
 
 	public static ETCInput _instance = null;
 	public static ETCInput instance{

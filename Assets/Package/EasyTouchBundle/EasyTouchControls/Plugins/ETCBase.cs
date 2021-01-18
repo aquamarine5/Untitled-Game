@@ -11,10 +11,11 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections;
+using Mirror;
 using System.Collections.Generic;
 
 [System.Serializable]
-public abstract class ETCBase : MonoBehaviour {
+public abstract class ETCBase : NetworkBehaviour {
 
 	#region Enumeration
 	public enum ControlType {Joystick, TouchPad, DPad, Button};
@@ -147,7 +148,7 @@ public abstract class ETCBase : MonoBehaviour {
 
 	#endregion
 
-	#region Monobehaviour callback
+	#region NetworkBehaviour callback
 	protected virtual void Awake(){
 		cachedRectTransform = transform as RectTransform;
 		cachedRootCanvas = transform.parent.GetComponent<Canvas>();

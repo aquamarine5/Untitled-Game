@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Mirror;
 
-public class WeaponBase : MonoBehaviour
+public class WeaponBase : NetworkBehaviour
 {
     public Sprite[] WeaponScripts;
     public WeaponAsset[] weaponAsset;

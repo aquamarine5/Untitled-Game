@@ -4,33 +4,43 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Mirror;
 
-public class TilemapSpawn : MonoBehaviour
+public class TilemapSpawn : NetworkBehaviour
 {
+
+    [Header("GameObject")]
     public CatalogueScript catalogue;
     [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
     [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
     [Tooltip("Human's rigidbody")] public Rigidbody2D rigidbody2d;
-    public Text showSeedText;
+    public Tilemap tilemap;
+    public Tile defaultBlackTile;
     public Tilemap itemTilemap;
+
+    [Header("UI")]
+    public Text showSeedText;
     public GameObject loadingPanel;
     public SliderData[] sliderDatas;
     public Slider slider;
-    public Tilemap tilemap;
-    public Tile defaultBlackTile;
     public Text showTips;
     public Text showSpeed;
-    public bool isUpdateColliderOnFrame = true;
+    
+    [Header("Build map information")]
     [Range(1,500)]public int spawnMapSpeed = 25;
-    [Tooltip("地图乘积")][Range(1f,20f)] public float buildMapSize;
-    [Tooltip("地图缩放程度")][Range(10,1000)] public float buildMapScale;
+    [Tooltip("地图缩放程度")][Range(0f,1f)] public float buildMapScale;
     [Range(0f, 1f)] [Tooltip("放置方格限制")] public float buildBlockScale = 0.5f;
+
+    [Header("Build map area")]
     public Vector2Int targetSize = new Vector2Int(500, 500);
     public Vector2Int offset = new Vector2Int(-250, -500);
 
+    [Space(10)]
+    [Tooltip("whether update the collider when render a frame?")] public bool isUpdateColliderOnFrame = true;
+
     float timerLoop = 0;
     int tempProgress = 0;
-    [SerializeField] int timerTargetCount = 1;
+    int timerTargetCount = 1;
     float timer = 0f;
 
     private static int progress = 0;
@@ -82,14 +92,13 @@ public class TilemapSpawn : MonoBehaviour
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
-        float mapScale = RandomUtil.NowSeed / buildMapScale;
         TargetProgress = targetSize.x * targetSize.y;
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
             {
                 float result = Mathf.PerlinNoise(
-                    mapScale + x / buildMapSize, mapScale + y / buildMapSize);
+                    buildMapScale + x *buildMapScale, buildMapScale + y *buildMapScale);
                 tilemap.ReSetTile((x + offset.x, y + offset.y),
                     result >= buildBlockScale ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
                 if (RandomUtil.RandomRange(0.01f)&result<buildBlockScale) {

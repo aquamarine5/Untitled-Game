@@ -35,7 +35,7 @@ public class QuickPinch : QuickBase {
 	public bool enableSimpleAction = false;
 	#endregion
 	
-	#region MonoBehaviour callback
+	#region NetworkBehaviour callback
 	public QuickPinch(){
 			quickActionName = "QuickPinch"+ System.Guid.NewGuid().ToString().Substring(0,7);
 	}

@@ -35,7 +35,7 @@ public class QuickSwipe : QuickBase {
 	public bool enableSimpleAction = false;
 	#endregion
 
-	#region MonoBehaviour callback
+	#region NetworkBehaviour callback
 	public QuickSwipe(){
 		quickActionName = "QuickSwipe" + System.Guid.NewGuid().ToString().Substring(0,7);
 	}

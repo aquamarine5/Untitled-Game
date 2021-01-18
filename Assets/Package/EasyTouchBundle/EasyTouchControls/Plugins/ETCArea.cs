@@ -10,9 +10,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using Mirror;
 
 [System.Serializable]
-public class ETCArea : MonoBehaviour {
+public class ETCArea : NetworkBehaviour {
 
 	public enum AreaPreset { Choose, TopLeft, TopRight, BottomLeft, BottomRight};
 
@@ -24,7 +25,7 @@ public class ETCArea : MonoBehaviour {
 	}
 	#endregion
 
-	#region MonoBehaviour Callback
+	#region NetworkBehaviour Callback
 	public void Awake(){
 		GetComponent<Image>().enabled = show;
 	}

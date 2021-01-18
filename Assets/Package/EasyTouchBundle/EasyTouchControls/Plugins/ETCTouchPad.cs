@@ -116,7 +116,7 @@ public class ETCTouchPad : ETCBase,IBeginDragHandler, IDragHandler,IPointerEnter
 	}
 	#endregion
 
-	#region Monobehaviour Callback
+	#region NetworkBehaviour Callback
 	protected override void Awake (){
 		base.Awake ();
 		cachedVisible = _visible;

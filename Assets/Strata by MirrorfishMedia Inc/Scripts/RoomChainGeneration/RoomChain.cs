@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-
+using Mirror;
 
 namespace Strata
 {
-    public class RoomChain : MonoBehaviour
+    public class RoomChain : NetworkBehaviour
     {
         //Variables used by RoomChain generators
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
+using Mirror;
 
-public class XLuaControl : MonoBehaviour
+public class XLuaControl : NetworkBehaviour
 {
     public static LuaEnv luaEnv;
     void Awake()

@@ -159,7 +159,7 @@ public class ETCJoystick : ETCBase,IPointerEnterHandler,IDragHandler, IBeginDrag
 	}
 	#endregion
 
-	#region Monobehaviours Callback
+	#region NetworkBehaviours Callback
 	protected override void Awake (){
 
 		base.Awake ();

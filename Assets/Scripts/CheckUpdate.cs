@@ -5,8 +5,9 @@ using UnityEngine;
 using LitJson;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Mirror;
 
-public class CheckUpdate : MonoBehaviour
+public class CheckUpdate : NetworkBehaviour
 {
     [Tooltip("B站UID（用于小型数据库）")]
     public int b_id;

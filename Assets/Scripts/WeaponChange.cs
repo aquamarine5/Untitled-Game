@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class WeaponChange : MonoBehaviour
+public class WeaponChange : NetworkBehaviour
 {
     public Sprite[] sprites;
     public WeaponType Weapon;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using CommandAssemble;
+using Mirror;
 namespace CommandAssemble
 {
     public interface ICommand
@@ -83,7 +84,7 @@ seed random : 随机生成新种子
         }
 
     }
-    class Update : MonoBehaviour,ICommand
+    class Update : NetworkBehaviour,ICommand
     {
         public string Name { get; } = "help";
         public List<string> SecondKeyWord { get; } = new List<string>() { null };
@@ -247,7 +248,7 @@ seed random : 随机生成新种子
         }
     }
 }
-public class Command : MonoBehaviour
+public class Command : NetworkBehaviour
 {
     public static Dictionary<int, Object> commandDictData = new Dictionary<int, Object>();
     public List<Object> commandData = new List<Object>();

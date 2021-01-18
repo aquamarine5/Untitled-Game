@@ -37,7 +37,7 @@ public class QuickDrag: QuickBase {
 	private Gesture lastGesture;
 	#endregion
 	
-	#region Monobehaviour CallBack
+	#region NetworkBehaviour CallBack
 	public QuickDrag(){
 			quickActionName = "QuickDrag"+ System.Guid.NewGuid().ToString().Substring(0,7);
 		axesAction = AffectedAxesAction.XY;

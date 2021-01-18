@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Mirror;
 
 namespace PennyPixel
 {
-    public class PhysicsObject : MonoBehaviour
+    public class PhysicsObject : NetworkBehaviour
     {
 
         public float minGroundNormalY = .65f;

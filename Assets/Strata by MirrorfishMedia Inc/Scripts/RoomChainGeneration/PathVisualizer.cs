@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,7 +8,7 @@ using UnityEditor;
 
 namespace Strata
 {
-    public class PathVisualizer : MonoBehaviour
+    public class PathVisualizer : NetworkBehaviour
     {
         public bool visualizePath = true;
 

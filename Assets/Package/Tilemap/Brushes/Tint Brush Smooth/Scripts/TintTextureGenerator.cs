@@ -1,8 +1,10 @@
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Mirror;
+
 [ExecuteInEditMode]
-public class TintTextureGenerator : MonoBehaviour
+public class TintTextureGenerator : NetworkBehaviour
 {
 	public int k_TintMapSize = 256;
 
