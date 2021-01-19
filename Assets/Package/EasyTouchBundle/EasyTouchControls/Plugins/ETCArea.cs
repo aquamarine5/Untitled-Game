@@ -13,7 +13,7 @@ using System.Collections;
 using Mirror;
 
 [System.Serializable]
-public class ETCArea : NetworkBehaviour {
+public class ETCArea : MonoBehaviour {
 
 	public enum AreaPreset { Choose, TopLeft, TopRight, BottomLeft, BottomRight};
 

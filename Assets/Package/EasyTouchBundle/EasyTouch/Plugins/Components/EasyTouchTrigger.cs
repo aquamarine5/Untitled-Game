@@ -14,7 +14,7 @@ using Mirror;
 namespace HedgehogTeam.EasyTouch{
 [AddComponentMenu("EasyTouch/Trigger")]
 [System.Serializable]
-public class EasyTouchTrigger : NetworkBehaviour {
+public class EasyTouchTrigger : MonoBehaviour {
 
 	public enum ETTParameter{ None,Gesture, Finger_Id,Touch_Count, Start_Position, Position, Delta_Position, Swipe_Type, Swipe_Length, Swipe_Vector,Delta_Pinch, Twist_Anlge, ActionTime, DeltaTime, PickedObject, PickedUIElement }
 	public enum ETTType {Object3D,UI};
@@ -36,7 +36,7 @@ public class EasyTouchTrigger : NetworkBehaviour {
 	[SerializeField]
 	public List<EasyTouchReceiver> receivers = new List<EasyTouchReceiver>();
 
-	#region NetworkBehaviour Callback
+	#region MonoBehaviour Callback
 	void Start(){
 		EasyTouch.SetEnableAutoSelect( true);
 

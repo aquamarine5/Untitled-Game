@@ -5,7 +5,7 @@ using Mirror;
 
 namespace Strata
 {
-    public class RoomChain : NetworkBehaviour
+    public class RoomChain : MonoBehaviour
     {
         //Variables used by RoomChain generators
 

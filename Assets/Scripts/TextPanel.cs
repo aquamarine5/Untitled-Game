@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using Mirror;
 
-public class TextPanel : NetworkBehaviour
+public class TextPanel : MonoBehaviour
 {
     public GameObject NormalPanel;
     public GameObject CommandPanel;

@@ -4,7 +4,7 @@ using UnityEngine;
 using XLua;
 using Mirror;
 
-public class XLuaControl : NetworkBehaviour
+public class XLuaControl : MonoBehaviour
 {
     public static LuaEnv luaEnv;
     void Awake()

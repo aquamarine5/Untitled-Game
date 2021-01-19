@@ -5,7 +5,7 @@ using Mirror;
 
 namespace PennyPixel
 {
-    public class PlayerStartPoint : NetworkBehaviour
+    public class PlayerStartPoint : MonoBehaviour
     {
         Transform playerTransform;
 

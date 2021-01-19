@@ -4,8 +4,7 @@ using UnityEngine.Tilemaps;
 using Mirror;
 
 [ExecuteInEditMode]
-public class TintTextureGenerator : NetworkBehaviour
-{
+public class TintTextureGenerator : MonoBehaviour{
 	public int k_TintMapSize = 256;
 
 	public void Start()

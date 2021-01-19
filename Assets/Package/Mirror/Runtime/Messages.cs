@@ -218,6 +218,7 @@ namespace Mirror
 
         public void Deserialize(NetworkReader reader)
         {
+            
             netId = reader.ReadPackedUInt32();
             isLocalPlayer = reader.ReadBoolean();
             isOwner = reader.ReadBoolean();

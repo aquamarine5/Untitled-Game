@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
-public class FpsShow : NetworkBehaviour
+
+public class FpsShow : MonoBehaviour
 {
     public CatalogueScript cs;
     public Text FpsText;

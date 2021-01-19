@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using LitJson;
+using System.Collections;
 using UnityEngine;
-using LitJson;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Mirror;
 
-public class CheckUpdate : NetworkBehaviour
+public class CheckUpdate : MonoBehaviour
 {
     [Tooltip("B站UID（用于小型数据库）")]
     public int b_id;
@@ -29,12 +26,20 @@ public class CheckUpdate : NetworkBehaviour
     {
         downloadPath = Application.persistentDataPath + "/" + "newApplicationUrl.apk";
     }
+    public static string ConvertToWebByte(ulong bytes)
+    {
+        if (1024 > bytes) return bytes.ToString("F2") + "B";
+        else if ((bytes == Mathf.Pow(1024, 1)) || (Mathf.Pow(1024, 2) > bytes)) return (bytes / 1024).ToString("F2") + "KB";
+        else if ((bytes == Mathf.Pow(1024, 2)) || (Mathf.Pow(1024, 3) > bytes)) return (bytes / Mathf.Pow(1024, 2)).ToString("F2") + "MB";
+        else if ((bytes == Mathf.Pow(1024, 3)) || (Mathf.Pow(1024, 4) > bytes)) return (bytes / Mathf.Pow(1024, 3)).ToString("F2") + "GB";
+        else return "Failed";
+    }
     public void CheckUpdated()
     {
         panel.SetActive(true);
         if (isBackstage == false)
         {
-            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid="+b_id+"&jsonp=jsonp"));
+            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid=" + b_id + "&jsonp=jsonp"));
         }
     }
     IEnumerator WebRequests(string url)
@@ -45,7 +50,7 @@ public class CheckUpdate : NetworkBehaviour
 
             if (webRequest.isHttpError || webRequest.isNetworkError)
             {
-                text.text=webRequest.error + "\n" + webRequest.downloadHandler.text;
+                text.text = webRequest.error + "\n" + webRequest.downloadHandler.text;
                 text.color = Color.red;
             }
             else
@@ -54,10 +59,11 @@ public class CheckUpdate : NetworkBehaviour
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
                 if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version)
                 {
-                    newUrl = "http://d0.ananas.chaoxing.com/download/"+ ((string)jsonData["data"]["sign"]).Split('*')[1];
+                    newUrl = "http://d0.ananas.chaoxing.com/download/" + ((string)jsonData["data"]["sign"]).Split('*')[1];
                     yield return StartCoroutine(DownloadApplicationFile(downloadPath));
                 }
-                else {
+                else
+                {
                     text.color = Color.green;
                     text.text = "Your application\nis NEW!";
                 };
@@ -70,25 +76,25 @@ public class CheckUpdate : NetworkBehaviour
         print(isBackstage);
         panel.SetActive(false);
     }
-    public IEnumerator DownloadApplicationFile(string downloadFileName,bool isCommand=false)
+    public IEnumerator DownloadApplicationFile(string downloadFileName, bool isCommand = false)
     {
         using (UnityWebRequest downloader = UnityWebRequest.Get(newUrl))
         {
             downloader.SetRequestHeader(
-                "User-Agent", 
+                "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36 Edg/85.0.564.51");
             downloader.downloadHandler = new DownloadHandlerFile(downloadFileName);
             downloader.SendWebRequest();
-            ulong size= downloader.downloadedBytes;
+            ulong size = downloader.downloadedBytes;
             while (!downloader.isDone)
             {
-                
+
                 downloadsCD += Time.deltaTime;
-                if (isOnStart && downloadsCD >= 0.1) speed.text = (downloader.downloadedBytes * 10 - 0).ConvertToWebBase() + "/s";
-                if (isOnStart && downloadsCD >= 0.5) speed.text = (downloader.downloadedBytes * 2 - 0).ConvertToWebBase() + "/s"; isOnStart = false;
+                if (isOnStart && downloadsCD >= 0.1) speed.text = ConvertToWebByte(downloader.downloadedBytes * 10 - 0) + "/s";
+                if (isOnStart && downloadsCD >= 0.5) speed.text = ConvertToWebByte(downloader.downloadedBytes * 2 - 0) + "/s"; isOnStart = false;
                 if (downloadsCD >= 1)
                 {
-                    speed.text = (downloader.downloadedBytes - downloads).ConvertToWebBase() + "/s";
+                    speed.text = ConvertToWebByte(downloader.downloadedBytes - downloads) + "/s";
                     downloads = downloader.downloadedBytes;
                     downloadsCD = 0;
                 }
@@ -119,9 +125,10 @@ public class CheckUpdate : NetworkBehaviour
     void InstallApp(string apkPath)
     {
 #if UNITY_ANDROID
-        
+
         AndroidJavaObject jo = new AndroidJavaObject("com.syz.unitygame.AndroidPlugin");
         jo.Call("installApk", apkPath);
 #endif
     }
+
 }

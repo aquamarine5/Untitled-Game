@@ -5,7 +5,7 @@ using Mirror;
 
 namespace PennyPixel
 {
-    public class PhysicsObject : NetworkBehaviour
+    public class PhysicsObject : MonoBehaviour
     {
 
         public float minGroundNormalY = .65f;

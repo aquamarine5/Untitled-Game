@@ -1,4 +1,6 @@
-﻿namespace UnityEngine.Tilemaps
+﻿using Mirror;
+
+namespace UnityEngine.Tilemaps
 {
     [System.Serializable]
     [CreateAssetMenu(fileName = "New Prefab Tile", menuName = "Tiles/Prefab Tile")]
@@ -14,9 +16,21 @@
             tileData.gameObject = prefab;
             base.GetTileData(location, tileMap,ref tileData);
         }
-        public void Instantiate(Transform parent) => Instantiate(prefab, parent);
-        public void Instantiate(Vector3 position, Quaternion rotate) => Instantiate(prefab, position, rotate);
-        public void Instantiate(Vector3 position, Quaternion rotate, Transform parent) => Instantiate(prefab, position, rotate, parent);
-        
+        public void Instantiate(Transform parent)
+        {
+            GameObject gameObject =Instantiate(prefab, parent);
+            NetworkServer.Spawn(gameObject);
+        }
+        public void Instantiate(Vector3 position, Quaternion rotate)
+        {
+            GameObject gameObject = Instantiate(prefab, position, rotate);
+            NetworkServer.Spawn(gameObject);
+        }
+
+        public void Instantiate(Vector3 position, Quaternion rotate, Transform parent)
+        {
+            GameObject gameObject = Instantiate(prefab, position, rotate, parent);
+            NetworkServer.Spawn(gameObject);
+        }
     }
 }

@@ -15,7 +15,7 @@ using UnityEngine.EventSystems;
 using Mirror;
 
 //ETCSingleton<ETCInput>
-public class ETCInput : NetworkBehaviour{
+public class ETCInput : MonoBehaviour{
 
 	public static ETCInput _instance = null;
 	public static ETCInput instance{

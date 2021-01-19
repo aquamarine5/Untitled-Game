@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
-using UnityEngine.Experimental.Rendering.Universal;
 
-public class PlayerMove : NetworkBehaviour
+public class PlayerMove : MonoBehaviour
 {
     public Rigidbody2D rd2d;
     public float speed;

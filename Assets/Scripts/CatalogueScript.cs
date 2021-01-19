@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class CatalogueScript : NetworkBehaviour
+public class CatalogueScript : MonoBehaviour
 {
     public static CatalogueScript S;
     [Tooltip("显示Seed的UI.Text")] public Text seedText;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class WeaponChange : NetworkBehaviour
+public class WeaponChange : MonoBehaviour
 {
     public Sprite[] sprites;
     public WeaponType Weapon;

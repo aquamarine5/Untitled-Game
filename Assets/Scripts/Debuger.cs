@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using Mirror;
 
-public class Debuger : NetworkBehaviour
+public class Debuger : MonoBehaviour
 {
     public static Text s_text;
     public Text text;
@@ -16,6 +16,7 @@ public class Debuger : NetworkBehaviour
 
     public static void OnReceiveLogMessage(string condition,string strckTrace,LogType type)
     {
+        /*
         string color = "";
         switch (type)
         {
@@ -24,7 +25,7 @@ public class Debuger : NetworkBehaviour
             case LogType.Error:color = "<color=red>&</color>";break;
             case LogType.Exception:color = "<color=red>&</color>";break;
         }
-        //s_text.text += "\n* "+color.Replace("&", condition + "\n" + strckTrace);
+        //s_text.text += "\n* "+color.Replace("&", condition + "\n" + strckTrace);*/
     } 
     public static void OnReceiveLogMessage(string condition, string strckTrace, LogType type, bool showStackTrance)
     {

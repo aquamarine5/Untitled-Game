@@ -15,7 +15,7 @@ using Mirror;
 using System.Collections.Generic;
 
 [System.Serializable]
-public abstract class ETCBase : NetworkBehaviour {
+public abstract class ETCBase : MonoBehaviour {
 
 	#region Enumeration
 	public enum ControlType {Joystick, TouchPad, DPad, Button};

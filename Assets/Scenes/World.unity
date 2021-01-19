@@ -2150,8 +2150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc670a4ad12868e41967682a2dc32d6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!4 &522178137
 Transform:
   m_ObjectHideFlags: 0
@@ -2433,8 +2431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ece4a9d9c9596d43ba9fe62c180642e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   b_id: 474085001
   slider: {fileID: 1310298852}
   panel: {fileID: 2013508444}
@@ -2468,13 +2464,13 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb,
+    m_HighlightedSprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_PressedSprite: {fileID: -9000188618666376746, guid: d348288fd70329947a3822ecc230edeb,
+    m_PressedSprite: {fileID: -9136572144232859775, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_SelectedSprite: {fileID: -9000188618666376746, guid: d348288fd70329947a3822ecc230edeb,
+    m_SelectedSprite: {fileID: -9136572144232859775, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_DisabledSprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb,
+    m_DisabledSprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2519,7 +2515,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb, type: 3}
+  m_Sprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2586,8 +2583,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f9776f6991e5943b87f4ceb20670ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   NormalPanel: {fileID: 1010298101}
   CommandPanel: {fileID: 220645682}
   catalogueScript: {fileID: 1608598716}
@@ -3127,6 +3122,7 @@ GameObject:
   - component: {fileID: 990449411}
   - component: {fileID: 990449414}
   - component: {fileID: 990449415}
+  - component: {fileID: 990449416}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3264,6 +3260,26 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &990449416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990449410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AssetsPPU: 16
+  m_RefResolutionX: 320
+  m_RefResolutionY: 180
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &1010102064
 GameObject:
   m_ObjectHideFlags: 0
@@ -3716,8 +3732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd0c0ca9f1d8864d8ddeb0544b6717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   sprites:
   - {fileID: 21300000, guid: d2c66c55d7fba9442ab9c11fdcb95c92, type: 3}
   - {fileID: 21300000, guid: 0c53b8ed5210fe848a5ecbef7d2e315d, type: 3}
@@ -3761,8 +3775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26c7a0dcd8138d4194e0a4435a4740c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   isUnregisterAtDisable: 0
   _anchor: 0
   _anchorOffet: {x: 0, y: 0}
@@ -4936,8 +4948,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6ff7e4d4280db45be9b0c71af29c80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   cs: {fileID: 1608598716}
   FpsText: {fileID: 1521788390}
 --- !u!114 &1521788390
@@ -5301,8 +5311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec95375f88d97044ad6b882f72a2606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   seedText: {fileID: 1326779729}
   weaponBaseScript: {fileID: 0}
   blockAsset: {fileID: 11400000, guid: 12226eede14b5e3448ff836e0322231e, type: 2}
@@ -5334,8 +5342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9dde0f1d3f69446a71d83f78fca911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &1608598719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5348,8 +5354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae021f39cd468214da56f85c774b0e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   text: {fileID: 474045248}
 --- !u!114 &1608598721
 MonoBehaviour:
@@ -5363,8 +5367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1de3e48d6aa20d4ca4c53cf66530be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   commandData:
   - {fileID: 1906281711}
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -5538,7 +5540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showGUI: 1
-  offsetX: 0
+  offsetX: 404
   offsetY: 0
 --- !u!1 &1658508741
 GameObject:
@@ -5721,7 +5723,6 @@ GameObject:
   - component: {fileID: 1833789232}
   - component: {fileID: 1833789231}
   - component: {fileID: 1833789230}
-  - component: {fileID: 1833789235}
   m_Layer: 0
   m_Name: Direction
   m_TagString: Untagged
@@ -5811,8 +5812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26c7a0dcd8138d4194e0a4435a4740c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   isUnregisterAtDisable: 0
   _anchor: 0
   _anchorOffet: {x: 0, y: 0}
@@ -6098,26 +6097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4d0ac4df2e57040a98ad09ac1cca4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   rd2d: {fileID: 0}
   speed: 10
---- !u!114 &1833789235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1833789228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 4054474542
-  serverOnly: 0
-  m_AssetId: 
-  hasSpawned: 0
 --- !u!1 &1845150339
 GameObject:
   m_ObjectHideFlags: 0
@@ -7235,8 +7216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ece4a9d9c9596d43ba9fe62c180642e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   b_id: 474085001
   slider: {fileID: 1310298852}
   panel: {fileID: 2013508444}
@@ -7270,13 +7249,13 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb,
+    m_HighlightedSprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_PressedSprite: {fileID: -9000188618666376746, guid: d348288fd70329947a3822ecc230edeb,
+    m_PressedSprite: {fileID: -9136572144232859775, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_SelectedSprite: {fileID: -9000188618666376746, guid: d348288fd70329947a3822ecc230edeb,
+    m_SelectedSprite: {fileID: -9136572144232859775, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_DisabledSprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb,
+    m_DisabledSprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -7321,7 +7300,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: d348288fd70329947a3822ecc230edeb, type: 3}
+  m_Sprite: {fileID: 1080825480604336155, guid: 414e068391c83cc4b828c40fb7b7dada,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7576,12 +7556,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4573b7823494704183d98feeb93d3b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   catalogue: {fileID: 1608598716}
   tilemapCollider: {fileID: 1906281718}
   cc2d: {fileID: 1906281716}
-  rigidbody2d: {fileID: 0}
   tilemap: {fileID: 1906281714}
   defaultBlackTile: {fileID: 11400000, guid: 0b936d2f11612c14da2e61afdd8be8c2, type: 2}
   itemTilemap: {fileID: 80584612}
@@ -7598,7 +7575,7 @@ MonoBehaviour:
   showTips: {fileID: 564519599}
   showSpeed: {fileID: 307759593}
   spawnMapSpeed: 25
-  buildMapScale: 1000
+  buildMapScale: 0.089
   buildBlockScale: 0.5
   targetSize: {x: 500, y: 500}
   offset: {x: -250, y: -500}
@@ -7669,13 +7646,13 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 6459732615962003827, guid: de72814f35c7e2c42939dc9572a514d5,
+    m_HighlightedSprite: {fileID: 8586885197115800619, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_PressedSprite: {fileID: -6175692792862349725, guid: de72814f35c7e2c42939dc9572a514d5,
+    m_PressedSprite: {fileID: 8160775752198118580, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_SelectedSprite: {fileID: -6175692792862349725, guid: de72814f35c7e2c42939dc9572a514d5,
+    m_SelectedSprite: {fileID: 8160775752198118580, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
-    m_DisabledSprite: {fileID: 6459732615962003827, guid: de72814f35c7e2c42939dc9572a514d5,
+    m_DisabledSprite: {fileID: 8586885197115800619, guid: 414e068391c83cc4b828c40fb7b7dada,
       type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -7720,7 +7697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6459732615962003827, guid: de72814f35c7e2c42939dc9572a514d5,
+  m_Sprite: {fileID: 8586885197115800619, guid: 414e068391c83cc4b828c40fb7b7dada,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0

@@ -1,13 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Mirror;
 
 public static class TilemapPlugin
 {
+    public struct TilemapMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+    public struct Chunk
+    {
+        public const int size = 100;
+        public int offsetX;
+        public int offsetY;
+        /// <summary>
+        /// Notice: 必须是100的倍数
+        /// </summary>
+        public (int, int) Offset
+        {
+            get => (offsetX, offsetY);
+            set
+            {
+                offsetX = value.Item1;
+                offsetY = value.Item2;
+            }
+        }
+    }
     public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
     public static Dictionary<(int, int), TileBase> tmDictionary = new Dictionary<(int, int), TileBase>();
+    public static Dictionary<(int, int), TileBase> itemDictionary = new Dictionary<(int, int), TileBase>();
     public static void Fill(this Tilemap map, TileBase tile, Vector2Int start, Vector2Int end)
     {
+        
         int xDir = start.x < end.x ? 1 : -1;
         int yDir = start.y < end.y ? 1 : -1;
         int xCols = 1 + Mathf.Abs(start.x - end.x);
@@ -58,23 +92,4 @@ public static class TilemapPlugin
             tm[vector3Ints[i].Item1, vector3Ints[i].Item2] = tiles[i];
         }
     }
-}
-public static class OthersPlugin
-{
-    static BuildmapLanguageData buildmapLanguageData = CatalogueScript.ReturnThis().languageData.buildmapLanguageData;
-    static readonly Dictionary<string, string> d = new Dictionary<string, string>()
-    {
-        ["CaveDigging"] = buildmapLanguageData.CaveDigging,
-        ["GlassBuilding"] = buildmapLanguageData.PlantGlass,
-        ["StartBuild"] = buildmapLanguageData.StartBuild
-    };
-    public static string ConvertToWebBase(this ulong bytes)
-    {
-        if (1024 > bytes) return bytes.ToString("F2") + "B";
-        else if ((bytes == Mathf.Pow(1024, 1)) || (Mathf.Pow(1024, 2) > bytes)) return (bytes / 1024).ToString("F2") + "KB";
-        else if ((bytes == Mathf.Pow(1024, 2)) || (Mathf.Pow(1024, 3) > bytes)) return (bytes / Mathf.Pow(1024, 2)).ToString("F2") + "MB";
-        else if ((bytes == Mathf.Pow(1024, 3)) || (Mathf.Pow(1024, 4) > bytes)) return (bytes / Mathf.Pow(1024, 3)).ToString("F2") + "GB";
-        else return "Failed";
-    }
-    public static string ConvertToString(this TilemapSpawn.BuildMapStatus buildMapStatus) => d[buildMapStatus.ToString()];
 }

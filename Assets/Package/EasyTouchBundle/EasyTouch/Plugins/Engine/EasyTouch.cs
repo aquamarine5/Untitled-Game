@@ -20,7 +20,7 @@ namespace HedgehogTeam.EasyTouch{
 /// For add Easy Touch to your scene
 /// It is a fake singleton, so you can simply access their settings via a script with all static methods or with the inspector.<br>
 /// </summary>
-public class EasyTouch : NetworkBehaviour {
+public class EasyTouch : MonoBehaviour {
 
 	#region private classes
 	[System.Serializable]

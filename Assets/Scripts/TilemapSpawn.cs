@@ -6,14 +6,13 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Mirror;
 
-public class TilemapSpawn : NetworkBehaviour
+public class TilemapSpawn : MonoBehaviour
 {
 
     [Header("GameObject")]
     public CatalogueScript catalogue;
     [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
     [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
-    [Tooltip("Human's rigidbody")] public Rigidbody2D rigidbody2d;
     public Tilemap tilemap;
     public Tile defaultBlackTile;
     public Tilemap itemTilemap;
@@ -29,7 +28,7 @@ public class TilemapSpawn : NetworkBehaviour
     [Header("Build map information")]
     [Range(1,500)]public int spawnMapSpeed = 25;
     [Tooltip("地图缩放程度")][Range(0f,1f)] public float buildMapScale;
-    [Range(0f, 1f)] [Tooltip("放置方格限制")] public float buildBlockScale = 0.5f;
+    [Range(0f, 1f)] [Tooltip("超过此数的方格将为空")] public float buildBlockScale = 0.5f;
 
     [Header("Build map area")]
     public Vector2Int targetSize = new Vector2Int(500, 500);
@@ -40,7 +39,7 @@ public class TilemapSpawn : NetworkBehaviour
 
     float timerLoop = 0;
     int tempProgress = 0;
-    int timerTargetCount = 1;
+    readonly int timerTargetCount = 1;
     float timer = 0f;
 
     private static int progress = 0;

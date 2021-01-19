@@ -11,7 +11,7 @@ using System.Collections;
 using Mirror;
 
 namespace HedgehogTeam.EasyTouch{
-public class QuickBase : NetworkBehaviour {
+public class QuickBase : MonoBehaviour {
 
 	#region enumeration
 	protected enum GameObjectType { Auto,Obj_3D,Obj_2D,UI};

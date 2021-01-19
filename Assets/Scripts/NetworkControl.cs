@@ -5,7 +5,7 @@ using Mirror;
 
 public class NetworkControl : NetworkManager
 {
-    [Header("Player require argument")]
+    [Header("Player Require Argument")]
     public Cinemachine.CinemachineVirtualCamera cinemachineVirtualCamera;
     public PlayerMove playerMove;
     [Space(10)]
@@ -14,14 +14,10 @@ public class NetworkControl : NetworkManager
     {
         GameObject player = Instantiate(playerPrefab, GetStartPosition().position, new Quaternion());
         NetworkServer.AddPlayerForConnection(conn, player);
-        if (numPlayers == 1) { 
+        if (conn.identity.isLocalPlayer) { 
             localPlayer = player;
             cinemachineVirtualCamera.Follow = localPlayer.transform;
             playerMove.rd2d = localPlayer.GetComponent<Rigidbody2D>();
         }
-    }
-    public override void OnClientConnect(NetworkConnection conn)
-    {
-        base.OnClientConnect(conn);
     }
 }

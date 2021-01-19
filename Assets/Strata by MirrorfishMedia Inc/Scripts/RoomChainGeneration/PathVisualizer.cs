@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace Strata
 {
-    public class PathVisualizer : NetworkBehaviour
+    public class PathVisualizer : MonoBehaviour
     {
         public bool visualizePath = true;
 
