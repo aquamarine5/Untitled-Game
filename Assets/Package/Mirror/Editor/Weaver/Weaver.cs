@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mono.CecilX;
-using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
@@ -14,16 +13,10 @@ namespace Mirror.Weaver
         // getter functions that replace [SyncVar] member variable references. dict<field, replacement>
         public Dictionary<FieldDefinition, MethodDefinition> replacementGetterProperties = new Dictionary<FieldDefinition, MethodDefinition>();
 
-        public List<MethodDefinition> generatedReadFunctions = new List<MethodDefinition>();
-        public List<MethodDefinition> generatedWriteFunctions = new List<MethodDefinition>();
-
         public TypeDefinition generateContainerClass;
 
         // amount of SyncVars per class. dict<className, amount>
         public Dictionary<string, int> numSyncVars = new Dictionary<string, int>();
-
-        public HashSet<string> ProcessedMessages = new HashSet<string>();
-
 
         public int GetSyncVarStart(string className)
         {
@@ -37,22 +30,11 @@ namespace Mirror.Weaver
             numSyncVars[className] = num;
         }
 
-        public void ConfirmGeneratedCodeClass()
+        public WeaverLists()
         {
-            if (generateContainerClass == null)
-            {
-                generateContainerClass = new TypeDefinition("Mirror", "GeneratedNetworkCode",
-                        TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.AnsiClass | TypeAttributes.Public | TypeAttributes.AutoClass,
-                        WeaverTypes.Import<object>());
-
-                const MethodAttributes methodAttributes = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
-                MethodDefinition method = new MethodDefinition(".ctor", methodAttributes, WeaverTypes.Import(typeof(void)));
-                method.Body.Instructions.Add(Instruction.Create(OpCodes.Ldarg_0));
-                method.Body.Instructions.Add(Instruction.Create(OpCodes.Call, Resolvers.ResolveMethod(WeaverTypes.Import<object>(), Weaver.CurrentAssembly, ".ctor")));
-                method.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
-
-                generateContainerClass.Methods.Add(method);
-            }
+            generateContainerClass = new TypeDefinition("Mirror", "GeneratedNetworkCode",
+                    TypeAttributes.BeforeFieldInit | TypeAttributes.Class | TypeAttributes.AnsiClass | TypeAttributes.Public | TypeAttributes.AutoClass | TypeAttributes.Abstract | TypeAttributes.Sealed,
+                    WeaverTypes.Import<object>());
         }
     }
 
@@ -148,109 +130,13 @@ namespace Mirror.Weaver
             return modified;
         }
 
-        static bool WeaveMessage(TypeDefinition td)
-        {
-            if (!td.IsClass)
-                return false;
-
-            // already processed
-            if (WeaveLists.ProcessedMessages.Contains(td.FullName))
-                return false;
-
-            bool modified = false;
-
-            if (td.ImplementsInterface<IMessageBase>())
-            {
-                // process this and base classes from parent to child order
-                try
-                {
-                    TypeDefinition parent = td.BaseType.Resolve();
-                    // process parent
-                    WeaveMessage(parent);
-                }
-                catch (AssemblyResolutionException)
-                {
-                    // this can happen for plugins.
-                    //Console.WriteLine("AssemblyResolutionException: "+ ex.ToString());
-                }
-
-                // process this
-                MessageClassProcessor.Process(td);
-                WeaveLists.ProcessedMessages.Add(td.FullName);
-                modified = true;
-            }
-
-            // check for embedded types
-            // inner classes should be processed after outter class to avoid StackOverflowException
-            foreach (TypeDefinition embedded in td.NestedTypes)
-            {
-                modified |= WeaveMessage(embedded);
-            }
-
-            return modified;
-        }
-
-        static bool WeaveSyncObject(TypeDefinition td)
-        {
-            bool modified = false;
-
-            // ignore generic classes
-            // we can not process generic classes
-            // we give error if a generic syncObject is used in NetworkBehaviour
-            if (td.HasGenericParameters)
-                return false;
-
-            // ignore abstract classes
-            // we dont need to process abstract classes because classes that
-            // inherit from them will be processed instead
-
-            // We cant early return with non classes or Abstract classes
-            // because we still need to check for embeded types
-            if (td.IsClass || !td.IsAbstract)
-            {
-                if (td.IsDerivedFrom(typeof(SyncList<>)))
-                {
-                    SyncListProcessor.Process(td, WeaverTypes.Import(typeof(SyncList<>)));
-                    modified = true;
-                }
-                else if (td.IsDerivedFrom(typeof(SyncSet<>)))
-                {
-                    SyncListProcessor.Process(td, WeaverTypes.Import(typeof(SyncSet<>)));
-                    modified = true;
-                }
-                else if (td.IsDerivedFrom(typeof(SyncDictionary<,>)))
-                {
-                    SyncDictionaryProcessor.Process(td);
-                    modified = true;
-                }
-            }
-
-            // check for embedded types
-            foreach (TypeDefinition embedded in td.NestedTypes)
-            {
-                modified |= WeaveSyncObject(embedded);
-            }
-
-            return modified;
-        }
-
         static bool WeaveModule(ModuleDefinition moduleDefinition)
         {
             try
             {
                 bool modified = false;
 
-                // We need to do 2 passes, because SyncListStructs might be referenced from other modules, so we must make sure we generate them first.
                 System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-                foreach (TypeDefinition td in moduleDefinition.Types)
-                {
-                    if (td.IsClass && td.BaseType.CanBeResolved())
-                    {
-                        modified |= WeaveSyncObject(td);
-                    }
-                }
-                watch.Stop();
-                Console.WriteLine("Weave sync objects took " + watch.ElapsedMilliseconds + " milliseconds");
 
                 watch.Start();
                 foreach (TypeDefinition td in moduleDefinition.Types)
@@ -258,16 +144,11 @@ namespace Mirror.Weaver
                     if (td.IsClass && td.BaseType.CanBeResolved())
                     {
                         modified |= WeaveNetworkBehavior(td);
-                        modified |= WeaveMessage(td);
                         modified |= ServerClientAttributeProcessor.Process(td);
                     }
                 }
                 watch.Stop();
                 Console.WriteLine("Weave behaviours and messages took" + watch.ElapsedMilliseconds + " milliseconds");
-
-
-                if (modified)
-                    PropertySiteProcessor.Process(moduleDefinition);
 
                 return modified;
             }
@@ -294,15 +175,20 @@ namespace Mirror.Weaver
                 }
 
                 WeaverTypes.SetupTargetTypes(CurrentAssembly);
+                // WeaverList depends on WeaverTypes setup because it uses Import
+                WeaveLists = new WeaverLists();
+
+
                 System.Diagnostics.Stopwatch rwstopwatch = System.Diagnostics.Stopwatch.StartNew();
-                ReaderWriterProcessor.Process(CurrentAssembly);
+                // Need to track modified from ReaderWriterProcessor too because it could find custom read/write functions or create functions for NetworkMessages
+                bool modified = ReaderWriterProcessor.Process(CurrentAssembly);
                 rwstopwatch.Stop();
                 Console.WriteLine($"Find all reader and writers took {rwstopwatch.ElapsedMilliseconds} milliseconds");
 
                 ModuleDefinition moduleDefinition = CurrentAssembly.MainModule;
                 Console.WriteLine($"Script Module: {moduleDefinition.Name}");
 
-                bool modified = WeaveModule(moduleDefinition);
+                modified |= WeaveModule(moduleDefinition);
 
                 if (WeavingFailed)
                 {
@@ -311,6 +197,13 @@ namespace Mirror.Weaver
 
                 if (modified)
                 {
+                    PropertySiteProcessor.Process(moduleDefinition);
+
+                    // add class that holds read/write functions
+                    moduleDefinition.Types.Add(WeaveLists.generateContainerClass);
+
+                    ReaderWriterProcessor.InitializeReaderAndWriters(CurrentAssembly);
+
                     // write to outputDir if specified, otherwise perform in-place write
                     WriterParameters writeParams = new WriterParameters { WriteSymbols = true };
                     CurrentAssembly.Write(writeParams);
@@ -323,7 +216,6 @@ namespace Mirror.Weaver
         public static bool WeaveAssembly(string assembly, IEnumerable<string> dependencies)
         {
             WeavingFailed = false;
-            WeaveLists = new WeaverLists();
 
             try
             {

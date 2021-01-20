@@ -6,20 +6,14 @@ namespace Mirror.Examples.Pong
     {
         public float speed = 30;
         public Rigidbody2D rigidbody2d;
-        public float move = 0f;
-        public void OnMove(Vector2 v)
-        {
-            if (GameObject.FindGameObjectsWithTag("Player") != GameObject.FindGameObjectsWithTag("Finish"))
-            {
-                GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>().move=v.y;
-            }
-        }
+
+        // need to use FixedUpdate for rigidbody
         void FixedUpdate()
         {
             // only let the local player control the racket.
             // don't control other player's rackets
             if (isLocalPlayer)
-                rigidbody2d.velocity = new Vector2(0, move) * speed * Time.fixedDeltaTime;
+                rigidbody2d.velocity = new Vector2(0, Input.GetAxisRaw("Vertical")) * speed * Time.fixedDeltaTime;
         }
     }
 }

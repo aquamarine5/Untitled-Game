@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using Guid = System.Guid;
@@ -122,11 +121,10 @@ namespace Mirror
         }
 
         /// <summary>
-        /// This adds a player GameObject for this client. This causes an AddPlayer message to be sent to the server, and NetworkManager.OnServerAddPlayer is called. If an extra message was passed to AddPlayer, then OnServerAddPlayer will be called with a NetworkReader that contains the contents of the message.
-        /// <para>extraMessage can contain character selection, etc.</para>
+        /// This adds a player GameObject for this client. This causes an AddPlayer message to be sent to the server, and NetworkManager.OnServerAddPlayer is called.
         /// </summary>
         /// <param name="readyConn">The connection to become ready for this client.</param>
-        /// <returns>True if player was added.</returns>
+        /// <returns>True if AddPlayer message was sent</returns>
         public static bool AddPlayer(NetworkConnection readyConn)
         {
             // ensure valid ready connection
@@ -153,13 +151,6 @@ namespace Mirror
             readyConnection.Send(new AddPlayerMessage());
             return true;
         }
-
-        // Deprecated 5/2/2020
-        /// <summary>
-        /// Obsolete: Removed as a security risk. Use <see cref="NetworkServer.RemovePlayerForConnection(NetworkConnection, bool)">NetworkServer.RemovePlayerForConnection</see> instead.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Removed as a security risk. Use NetworkServer.RemovePlayerForConnection(NetworkConnection conn, bool keepAuthority = false) instead", true)]
-        public static bool RemovePlayer() { return false; }
 
         /// <summary>
         /// Signal that the client connection is ready to enter the game.
@@ -715,6 +706,7 @@ namespace Mirror
                 {
                     if (identity != null && identity.gameObject != null)
                     {
+                        identity.OnStopClient();
                         bool wasUnspawned = InvokeUnSpawnHandler(identity.assetId, identity.gameObject);
                         if (!wasUnspawned)
                         {
@@ -959,22 +951,29 @@ namespace Mirror
             {
                 localObject.OnStopClient();
 
-                if (!InvokeUnSpawnHandler(localObject.assetId, localObject.gameObject))
+                // user handling
+                if (InvokeUnSpawnHandler(localObject.assetId, localObject.gameObject))
                 {
-                    // default handling
-                    if (localObject.sceneId == 0)
-                    {
-                        Object.Destroy(localObject.gameObject);
-                    }
-                    else
-                    {
-                        // scene object.. disable it in scene instead of destroying
-                        localObject.gameObject.SetActive(false);
-                        spawnableObjects[localObject.sceneId] = localObject;
-                    }
+                    // reset object after user's handler
+                    localObject.Reset();
                 }
+                // default handling
+                else if (localObject.sceneId == 0)
+                {
+                    // dont call reset before destroy so that values are still set in OnDestroy
+                    Object.Destroy(localObject.gameObject);
+                }
+                // scene object.. disable it in scene instead of destroying
+                else
+                {
+                    localObject.gameObject.SetActive(false);
+                    spawnableObjects[localObject.sceneId] = localObject;
+                    // reset for scene objects
+                    localObject.Reset();
+                }
+
+                // remove from dictionary no matter how it is unspawned
                 NetworkIdentity.spawned.Remove(netId);
-                localObject.Reset();
             }
             else
             {
