@@ -59,7 +59,7 @@ public class CheckUpdate : MonoBehaviour
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
                 if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version)
                 {
-                    newUrl = "http://d0.ananas.chaoxing.com/download/" + ((string)jsonData["data"]["sign"]).Split('*')[1];
+                    newUrl = "http://cloud.ananas.chaoxing.com/view/fileviewDownload?objectId=" + ((string)jsonData["data"]["sign"]).Split('*')[1];
                     yield return StartCoroutine(DownloadApplicationFile(downloadPath));
                 }
                 else

@@ -6,17 +6,9 @@ using Mirror;
 
 public static class TilemapPlugin
 {
-    public struct TilemapMessage : IMessageBase
+    public struct TilemapMessage : NetworkMessage
     {
-        public void Deserialize(NetworkReader reader)
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public void Serialize(NetworkWriter writer)
-        {
-            throw new System.NotImplementedException();
-        }
     }
     public struct Chunk
     {
