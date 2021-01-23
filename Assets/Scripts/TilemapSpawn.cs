@@ -36,6 +36,7 @@ public class TilemapSpawn : MonoBehaviour
 
     [Space(10)]
     [Tooltip("whether update the collider when render a frame?")] public bool isUpdateColliderOnFrame = true;
+    [Tooltip("WARNING: the value don't more than 0.5f")][Range(0f, 1f)] public float spawnTorch = 0.005f;
 
     float timerLoop = 0;
     int tempProgress = 0;
@@ -98,9 +99,9 @@ public class TilemapSpawn : MonoBehaviour
             {
                 float result = Mathf.PerlinNoise(
                     buildMapScale + x *buildMapScale, buildMapScale + y *buildMapScale);
-                tilemap.ReSetTile((x + offset.x, y + offset.y),
+                tilemap.DefaultSetTile((x + offset.x, y + offset.y),
                     result >= buildBlockScale ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
-                if (RandomUtil.RandomRange(0.01f)&result<buildBlockScale) {
+                if (RandomUtil.RandomRange(spawnTorch)&result<buildBlockScale) {
                     itemTilemap.ReSetTile((x + offset.x, y + offset.y), catalogue.blockAsset.torch);
                 }
             }
@@ -127,7 +128,7 @@ public class TilemapSpawn : MonoBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.ReSetTile(new Vector2Int(-x + i, -1), catalogue.blockAsset.glass_dirt);
+                tilemap.DefaultSetTile((-x + i, -1), catalogue.blockAsset.glass_dirt);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }

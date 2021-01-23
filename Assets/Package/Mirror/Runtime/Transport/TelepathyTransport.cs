@@ -42,9 +42,7 @@ namespace Mirror
         void Awake()
         {
             // tell Telepathy to use Unity's Debug.Log
-            Telepathy.Logger.Log = Debug.Log;
-            Telepathy.Logger.LogWarning = Debug.LogWarning;
-            Telepathy.Logger.LogError = Debug.LogError;
+            //Telepathy.Logger.isUseUnityDebug = true;
 
             // configure
             client.NoDelay = NoDelay;

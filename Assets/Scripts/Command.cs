@@ -32,12 +32,13 @@ namespace CommandAssemble
         /// <summary>
         /// Command run failed.
         /// </summary>
-        /// <param name="errorCode">if 11,need input otherData</param>
+        /// <param name="errorCode">if 11,12 ,need input otherData</param>
         public CommandRunResult(int errorCode,string[] data,string otherData="",bool isCorrect=false)
         {
             this.isCorrect = isCorrect;
             this.errorCode = errorCode;
             resultMessage = null;
+            if (data.Length == 1) data[1] = "";
             errorMessage = ReplaceStringFormat(errorMessageTable[errorCode], data, otherData);
         }
         public CommandRunResult(bool isCorrect=true,string resultMessage = "")
@@ -51,6 +52,35 @@ namespace CommandAssemble
         public readonly bool isCorrect;
         public readonly int? errorCode;
         public readonly string errorMessage;
+    }
+    class Spawn : ICommand
+    {
+        public string Name { get; } = "spawn";
+        public List<string> SecondKeyWord { get; } = new List<string>() { "item"};
+        public CommandRunResult Run(string[] args)
+        {
+            TilemapSpawn tilemapSpawn = ((GameObject)Command.s_commandData[3]).GetComponent<TilemapSpawn>();
+            switch (args[1])
+            {
+                case "item":
+                    {
+                        switch (args[2])
+                        {
+                            case "torch":
+                                {
+                                    if (float.TryParse(args[3], out float result))
+                                    {
+                                        tilemapSpawn.spawnTorch = result;
+                                        return new CommandRunResult(true);
+                                    }
+                                    else return new CommandRunResult(9, args, "0-1");
+                                }
+                            default: return new CommandRunResult(0, args);
+                        }
+                    }
+                default:return new CommandRunResult(1, args);
+            }
+        }
     }
     class Lua : ICommand
     {
@@ -78,9 +108,13 @@ namespace CommandAssemble
             return new CommandRunResult(true, resultMessage: @"light [bool] : 是否全局接受2D光照
 tilemap speed [int] : 设置生成多少方格更新一帧
 tilemap collider [bool] : 设置生成方格时是否取消碰撞体碰撞
+tilemap scale [float] : 设置地图缩放比例
 seed get : 获取当前随机数种子
 seed set [int] : 设置新种子
 seed random : 随机生成新种子
+spawn item [ItemName] [float] : 设置物品生成概率
+### 测试命令 :
+update [string(md5)] : 更新此md5对应的版本
 ");
         }
 
@@ -92,7 +126,7 @@ seed random : 随机生成新种子
         public CommandRunResult Run(string[] args)
         {
             CheckUpdate checkUpdateScript = ((GameObject)Command.s_commandData[0]).GetComponent<CheckUpdate>();
-            StartCoroutine(checkUpdateScript.DownloadApplicationFile($@"http://d0.ananas.chaoxing.com/download/{args[1]}"));
+            StartCoroutine(checkUpdateScript.DownloadApplicationFile($@"http://cloud.ananas.chaoxing.com/view/fileviewDownload?objectId={args[1]}"));
             return new CommandRunResult();
         }
     }
@@ -261,6 +295,7 @@ public class Command : MonoBehaviour
         ["help"]=new Help(),
         ["seed"]=new Seed(),
         ["update"]=new Update(),
+        ["spawn"]=new Spawn(),
         ["baiduapi"]=new BaiduApi()
     };
     private void Awake()

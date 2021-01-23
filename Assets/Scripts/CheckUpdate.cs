@@ -16,6 +16,7 @@ public class CheckUpdate : MonoBehaviour
     public Text text;
     [Tooltip("显示下载速度的Text")]
     public Text speed;
+    public Text version;
     static string downloadPath;
     bool isBackstage = false;
     string newUrl;
@@ -39,10 +40,15 @@ public class CheckUpdate : MonoBehaviour
         panel.SetActive(true);
         if (isBackstage == false)
         {
-            StartCoroutine(WebRequests("https://api.bilibili.com/x/space/acc/info?mid=" + b_id + "&jsonp=jsonp"));
+            StartCoroutine(WebRequests($"https://api.bilibili.com/x/space/acc/info?mid={b_id}&jsonp=jsonp"));
         }
     }
-    IEnumerator WebRequests(string url)
+    private void Start()
+    {
+        version.text = Application.version;
+        StartCoroutine(WebRequests($"https://api.bilibili.com/x/space/acc/info?mid={b_id}&jsonp=jsonp",false));
+    }
+    IEnumerator WebRequests(string url,bool isUpdate=true)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -55,17 +61,22 @@ public class CheckUpdate : MonoBehaviour
             }
             else
             {
-                Debug.Log(webRequest.downloadHandler.text);
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
-                if (((string)jsonData["data"]["sign"]).Split('*')[0] != Application.version)
+                string newVersion= ((string)jsonData["data"]["sign"]).Split('*')[0];
+                if (newVersion!= Application.version)
                 {
                     newUrl = "http://cloud.ananas.chaoxing.com/view/fileviewDownload?objectId=" + ((string)jsonData["data"]["sign"]).Split('*')[1];
-                    yield return StartCoroutine(DownloadApplicationFile(downloadPath));
+                    if (isUpdate) { yield return StartCoroutine(DownloadApplicationFile(downloadPath)); }
+                    else
+                    {
+                        version.text = $"<color=red>{Application.version}(NEW:{newVersion})</color>";
+                    }
                 }
                 else
                 {
                     text.color = Color.green;
                     text.text = "Your application\nis NEW!";
+                    version.text = $"<color=green>{Application.version}</color>";
                 };
             }
         }
@@ -126,7 +137,7 @@ public class CheckUpdate : MonoBehaviour
     {
 #if UNITY_ANDROID
 
-        AndroidJavaObject jo = new AndroidJavaObject("com.syz.unitygame.AndroidPlugin");
+        AndroidJavaObject jo = new AndroidJavaObject("com.syz.unitygamePlugin.Main");
         jo.Call("installApk", apkPath);
 #endif
     }

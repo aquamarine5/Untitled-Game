@@ -6,34 +6,44 @@ using Mirror;
 
 public static class TilemapPlugin
 {
-    public struct TilemapMessage : NetworkMessage
+    public struct TilemapSpawnMessage : NetworkMessage
     {
-
+        
+    }
+    public struct TilemapUpdateMessage : NetworkMessage
+    { 
+        public TilemapUpdateMessage((int,int) position,BlockAsset.BlockAssetId assetId,NetworkIdentity userIdentity)
+        {
+            x = position.Item1;
+            y = position.Item2;
+            this.assetId = (int)assetId;
+            userId = userIdentity.netId;
+        }
+        public int x;
+        public int y;
+        /// <summary>
+        /// <seealso cref="BlockAsset.BlockAssetId"/>
+        /// </summary>
+        public int assetId;
+        /// <summary>
+        /// <seealso cref="NetworkIdentity.spawned"/>
+        /// </summary>
+        public uint userId;
     }
     public struct Chunk
     {
         public const int size = 100;
-        public int offsetX;
         public int offsetY;
         /// <summary>
         /// Notice: 必须是100的倍数
         /// </summary>
-        public (int, int) Offset
-        {
-            get => (offsetX, offsetY);
-            set
-            {
-                offsetX = value.Item1;
-                offsetY = value.Item2;
-            }
-        }
+        public (int, int) Offset { get; set; }
     }
     public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
     public static Dictionary<(int, int), TileBase> tmDictionary = new Dictionary<(int, int), TileBase>();
     public static Dictionary<(int, int), TileBase> itemDictionary = new Dictionary<(int, int), TileBase>();
     public static void Fill(this Tilemap map, TileBase tile, Vector2Int start, Vector2Int end)
     {
-        
         int xDir = start.x < end.x ? 1 : -1;
         int yDir = start.y < end.y ? 1 : -1;
         int xCols = 1 + Mathf.Abs(start.x - end.x);
@@ -46,12 +56,20 @@ public static class TilemapPlugin
             }
         }
     }
-    public static void ReSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tile) => SetTilemap(tilemap, vector2Int, tile);
-    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => SetTilemap(tilemap, (vector2Int.x, vector2Int.y), tile);
-    [System.Obsolete] public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => SetTilemap(tilemap, (vector3Int.x, vector3Int.y), tile);
+    public static void DefaultSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tileBase) => 
+        tilemap.SetTile(new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0), tileBase);
 
-    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase tile) => SetTilemap(tilemap, vector2Ints, tile);
-    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase[] tiles) => SetTilemap(tilemap, vector2Ints, tiles);
+    public static void ReSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tile) => 
+        SetTilemap(tilemap, vector2Int, tile);
+    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => 
+        SetTilemap(tilemap, (vector2Int.x, vector2Int.y), tile);
+    [System.Obsolete] public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => 
+        SetTilemap(tilemap, (vector3Int.x, vector3Int.y), tile);
+
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase tile) => 
+        SetTilemap(tilemap, vector2Ints, tile);
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase[] tiles) => 
+        SetTilemap(tilemap, vector2Ints, tiles);
 
     static void SetTilemap(Tilemap tilemap, (int, int) vector2Int, TileBase tile)
     {
@@ -71,6 +89,7 @@ public static class TilemapPlugin
         }
         tilemap.SetTiles(resultVector3s.ToArray(), tileBases.ToArray());
     }
+
     static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase[] tiles)
     {
         List<Vector3Int> resultVector3s = new List<Vector3Int>();

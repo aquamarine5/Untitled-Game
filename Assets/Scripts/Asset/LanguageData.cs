@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
+[CreateAssetMenu(fileName = "LanguageData", menuName = "AssetDatabase/LanguageData")]
 public class LanguageData:ScriptableObject
 {
     public BuildmapLanguageData buildmapLanguageData;

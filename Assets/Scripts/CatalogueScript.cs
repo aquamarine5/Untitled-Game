@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 public class CatalogueScript : MonoBehaviour
 {
@@ -16,6 +13,7 @@ public class CatalogueScript : MonoBehaviour
     {
         S = this;
     }
+    [System.Obsolete("Use S instaed")]
     public static CatalogueScript ReturnThis()
     {
         return GameObject.FindGameObjectWithTag("Catalogue").GetComponent<CatalogueScript>();

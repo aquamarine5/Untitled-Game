@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 public class FpsShow : MonoBehaviour
 {
