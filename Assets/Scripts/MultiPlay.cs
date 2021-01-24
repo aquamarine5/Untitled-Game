@@ -18,7 +18,6 @@ public class MultiPlay : MonoBehaviour
     private void Update()
     {
         int ping = (int)NetworkTime.rtt * 1000;
-        print(ping);
         if (0 < ping & ping < 200) SetSprite(NetworkPingStatus.Good);
         else if (200 < ping & ping < 1000) SetSprite(NetworkPingStatus.Middle);
         else if (1000 > ping) SetSprite(NetworkPingStatus.Bad);

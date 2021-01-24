@@ -25,7 +25,7 @@ public class CheckUpdate : MonoBehaviour
     float downloadsCD = 0;
     private void Awake()
     {
-        downloadPath = Application.persistentDataPath + "/" + "newApplicationUrl.apk";
+        downloadPath = Application.persistentDataPath + "/Application/newApplicationUrl.apk";
     }
     public static string ConvertToWebByte(ulong bytes)
     {
