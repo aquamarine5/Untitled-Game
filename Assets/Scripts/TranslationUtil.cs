@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public static class TranslationUtil
 {
-    static BuildmapLanguageData buildmapLanguageData = CatalogueScript.S.languageData.buildmapLanguageData;
+    static BuildmapLanguageData buildmapLanguageData = LanguageLibrary.S.buildmapLanguageData;
     static readonly Dictionary<string, string> d = new Dictionary<string, string>()
     {
         ["CaveDigging"] = buildmapLanguageData.CaveDigging,

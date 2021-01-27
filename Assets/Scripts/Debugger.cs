@@ -9,7 +9,7 @@ public class Debugger : MonoBehaviour
     {
         s_text = text;
         DontDestroyOnLoad(this);
-        Application.logMessageReceivedThreaded += OnReceiveLogMessage;
+        //Application.logMessageReceivedThreaded += OnReceiveLogMessage;
     }
     private void Update()
     {

@@ -12,10 +12,7 @@ public class CatalogueScript : MonoBehaviour
     private void Awake()
     {
         S = this;
-    }
-    [System.Obsolete("Use S instaed")]
-    public static CatalogueScript ReturnThis()
-    {
-        return GameObject.FindGameObjectWithTag("Catalogue").GetComponent<CatalogueScript>();
+        LanguageLibrary.S = languageData;
+        BlockLibrary.S = blockAsset;
     }
 }

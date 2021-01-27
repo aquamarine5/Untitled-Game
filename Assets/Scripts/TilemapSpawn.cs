@@ -10,7 +10,6 @@ public class TilemapSpawn : MonoBehaviour
 {
 
     [Header("GameObject")]
-    public CatalogueScript catalogue;
     [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
     [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
     public Tilemap tilemap;
@@ -24,8 +23,9 @@ public class TilemapSpawn : MonoBehaviour
     public Slider slider;
     public Text showTips;
     public Text showSpeed;
-    
+
     [Header("Build map information")]
+    public AnimationCurve mapRender;
     [Range(1,500)]public int spawnMapSpeed = 25;
     [Tooltip("地图缩放程度")][Range(0f,1f)] public float buildMapScale;
     [Range(0f, 1f)] [Tooltip("超过此数的方格将为空")] public float buildBlockScale = 0.5f;
@@ -88,21 +88,22 @@ public class TilemapSpawn : MonoBehaviour
     }
     IEnumerator BuildMap_v2()
     {
-        TargetProgress = 0;
+        TargetProgress = targetSize.x * targetSize.y;
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
-        TargetProgress = targetSize.x * targetSize.y;
+        
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
             {
                 float result = Mathf.PerlinNoise(
-                    buildMapScale + x *buildMapScale, buildMapScale + y *buildMapScale);
+                    buildMapScale + x * buildMapScale, buildMapScale + y * buildMapScale);
+                float externes = mapRender.Evaluate(1f - ((float)(y + 1) / targetSize.y));
                 tilemap.DefaultSetTile((x + offset.x, y + offset.y),
-                    result >= buildBlockScale ? catalogue.blockAsset.glass : catalogue.blockAsset.black);
-                if (RandomUtil.RandomRange(spawnTorch)&result<buildBlockScale) {
-                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), catalogue.blockAsset.torch);
+                   result >= externes ? CatalogueScript.S.blockAsset.glass : CatalogueScript.S.blockAsset.black);
+                if (RandomUtil.RandomRange(spawnTorch) & result < externes){
+                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), CatalogueScript.S.blockAsset.torch);
                 }
             }
             if (x % spawnMapSpeed == 0)
@@ -116,7 +117,7 @@ public class TilemapSpawn : MonoBehaviour
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
         TargetProgress = 0;
-        showSeedText.text += "\n" + catalogue.languageData.RenderShapeCount + ":" + cc2d.shapeCount;
+        showSeedText.text += "\n" + LanguageLibrary.S.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()
@@ -128,7 +129,7 @@ public class TilemapSpawn : MonoBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.DefaultSetTile((-x + i, -1), catalogue.blockAsset.glass_dirt);
+                tilemap.DefaultSetTile((-x + i, -1), CatalogueScript.S.blockAsset.glass_dirt);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }

@@ -1,25 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
-public class MultiPlay : MonoBehaviour
+public class NetworkPing : MonoBehaviour
 {
     public UIButton[] multiPlaySprite;
     public Button button;
     public Image image;
     public enum NetworkPingStatus
     {
-        Bad=0,
-        Middle=1,
-        Good=2
+        Bad = 0,
+        Middle = 1,
+        Good = 2
     }
     private void Update()
     {
         int ping = (int)NetworkTime.rtt * 1000;
-        if (0 < ping & ping < 200) SetSprite(NetworkPingStatus.Good);
-        else if (200 < ping & ping < 1000) SetSprite(NetworkPingStatus.Middle);
+        if (0 < ping && ping < 200) SetSprite(NetworkPingStatus.Good);
+        else if (200 < ping && ping < 1000) SetSprite(NetworkPingStatus.Middle);
         else if (1000 > ping) SetSprite(NetworkPingStatus.Bad);
 
     }
