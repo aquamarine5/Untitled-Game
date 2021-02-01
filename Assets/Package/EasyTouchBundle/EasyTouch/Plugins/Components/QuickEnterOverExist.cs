@@ -12,7 +12,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace HedgehogTeam.EasyTouch{
-[AddComponentMenu("EasyTouch/Quick Enter-Over-Exit")]
+//[AddComponentMenu("EasyTouch/Quick Enter-Over-Exit")]
 public class QuickEnterOverExist : QuickBase {
 
 	#region Event

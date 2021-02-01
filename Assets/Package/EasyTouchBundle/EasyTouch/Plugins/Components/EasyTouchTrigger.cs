@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Mirror;
 
 namespace HedgehogTeam.EasyTouch{
-[AddComponentMenu("EasyTouch/Trigger")]
+//[AddComponentMenu("EasyTouch/Trigger")]
 [System.Serializable]
 public class EasyTouchTrigger : MonoBehaviour {
 

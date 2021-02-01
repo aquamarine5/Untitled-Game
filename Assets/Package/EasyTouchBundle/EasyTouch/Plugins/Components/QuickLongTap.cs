@@ -12,7 +12,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace HedgehogTeam.EasyTouch{
-[AddComponentMenu("EasyTouch/Quick LongTap")]
+//[AddComponentMenu("EasyTouch/Quick LongTap")]
 public class QuickLongTap : QuickBase {
 
 	#region Events

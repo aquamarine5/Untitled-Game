@@ -7,12 +7,12 @@ using UnityEngine.EventSystems;
 public static class ETCMenu{
 
 
-	[MenuItem ("GameObject/EasyTouch Controls/InputManager", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/InputManager")]
 	static void AddInputManager(){
 		ETCInput.instance.Create();
 	}
 
-	[MenuItem ("GameObject/EasyTouch Controls/Joystick", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/Joystick")]
 	static void  AddJoystick(){
 	
 		ETCInput.instance.Create();
@@ -45,7 +45,7 @@ public static class ETCMenu{
 		Selection.activeGameObject = joystick;
 	}
 
-	[MenuItem ("GameObject/EasyTouch Controls/D-Pad", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/D-Pad")]
 	static void  AddDPad(){
 
 		ETCInput.instance.Create();
@@ -69,7 +69,7 @@ public static class ETCMenu{
 		Selection.activeGameObject = button;
 	}
 
-	[MenuItem ("GameObject/EasyTouch Controls/Button", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/Button")]
 	static void  AddButton(){
 
 		ETCInput.instance.Create();
@@ -94,7 +94,7 @@ public static class ETCMenu{
 		Selection.activeGameObject = button;
 	}
 
-	[MenuItem ("GameObject/EasyTouch Controls/TouchPad", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/TouchPad")]
 	static void  AddTouchPad(){
 		ETCInput.instance.Create();
 
@@ -113,7 +113,7 @@ public static class ETCMenu{
 	}
 
 
-	[MenuItem ("GameObject/EasyTouch Controls/Area", false, 0)]
+	[MenuItem ("GameObject/EasyTouch Controls/Area")]
 	public static ETCArea AddJoystickArea(){
 
 		GameObject canvas = SetupUI();

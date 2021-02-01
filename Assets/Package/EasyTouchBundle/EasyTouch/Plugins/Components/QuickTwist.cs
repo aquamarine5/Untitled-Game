@@ -12,7 +12,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace HedgehogTeam.EasyTouch{
-[AddComponentMenu("EasyTouch/Quick Twist")]
+//[AddComponentMenu("EasyTouch/Quick Twist")]
 public class QuickTwist : QuickBase {
 
 	#region Events

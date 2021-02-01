@@ -229,7 +229,7 @@ public class EasyTouchInspector : Editor {
 		if (GUI.changed){
 			EditorUtility.SetDirty(target);
 			#if UNITY_5_3_OR_NEWER
-			EditorSceneManager.MarkSceneDirty( EditorSceneManager.GetActiveScene());
+			EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 			#endif
 		}
 	}

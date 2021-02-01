@@ -63,6 +63,7 @@ public class TilemapSpawn : MonoBehaviour
     }
     private void Awake()
     {
+        Random.Range(10000, 10000000).SetSeed();
         staticSlider = slider;
         staticTips = showTips;
         _targetSize = targetSize;
@@ -80,7 +81,6 @@ public class TilemapSpawn : MonoBehaviour
     }
     public void BuildMap()
     {
-        Random.Range(10000, 10000000).SetSeed();
         loadingPanel.SetActive(true);
         x = 250; y = 500;
         StopCoroutine("Buildmap_v2");

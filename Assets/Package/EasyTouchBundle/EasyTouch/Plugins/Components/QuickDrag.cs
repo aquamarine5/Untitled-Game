@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 using HedgehogTeam.EasyTouch;
 
 namespace HedgehogTeam.EasyTouch{
-[AddComponentMenu("EasyTouch/Quick Drag")]
+//[AddComponentMenu("EasyTouch/Quick Drag")]
 public class QuickDrag: QuickBase {
 
 	#region Events
