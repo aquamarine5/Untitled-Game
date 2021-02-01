@@ -9,7 +9,9 @@
 - a0.1.x -> Base
 - a0.2.x -> Weapon Part-1（武器更新P1）
 - a0.3.x -> Auto Update（自动更新）
-- a0.4.x -> Mirror Networking Test（网络游戏）
+- a0.4.x -> Mirror Networking Test（网络游戏测试）
 - a0.5.x -> Map Rand Spawn（随机生成地图）
 - a0.6.x -> Lost(?)
 - a0.7.x -> Function（函数）
+- a0.8.x -> Mirror Networking Connect（网络游戏连接）
+
