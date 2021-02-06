@@ -1,6 +1,7 @@
 ﻿using Mirror;
 using Mirror.Discovery;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,28 +13,100 @@ public struct ServerRxResponse : NetworkMessage
     public IPEndPoint EndPoint { get; set; }
     public Uri uri;
     public long serverId;
+    /// <summary>
+    /// Player name
+    /// </summary>
+    public string name;
 }
-
+public enum NetworkDiscoverStatus
+{
+    Finding=2,
+    Connected=1,
+    Disabled=0,
+    Closed=0
+}
 [DisallowMultipleComponent]
 [AddComponentMenu("Network/NetworkDiscovery")]
 public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxResponse>
 {
+    public static NetworkRxDiscover S;
+    readonly Dictionary<long, ServerRxResponse> discoveredServers = new Dictionary<long, ServerRxResponse>();
 
     public long ServerId { get; private set; }
     [Tooltip("Transport to be advertised during discovery")]
     public Transport transport;
+
     [Header("UI")]
     public Text text;
+    public GameObject networkObjectPrefab;
+    public Transform networkPanel;
 
+    [Header("NetworkStatus")]
+    public Animator animator;
+    public Sprite bad;
+    public Sprite middle;
+    public Sprite good;
+    public Sprite none;
+    public UIButton abledConnect;
+    public UIButton disabledConnect;
+    [Space(10)]
+    [SerializeField] bool isDiscovering = false;
     public override void Start()
     {
         ServerId = RandomLong();
         if (transport == null)
             transport = Transport.activeTransport;
-
+        S = this;
         base.Start();
+        
     }
-
+    public void OnNetworkButtonClicked(bool isFinded=false)
+    {
+        print(NetworkControl.isNetworkAvailable);
+        if (isFinded) animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Connected);
+        else if (!NetworkControl.isNetworkAvailable)
+            animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Disabled);
+        else
+        {
+            print(isDiscovering);
+            if (isDiscovering)
+            {
+                StopDiscovery();
+                isDiscovering = false;
+                animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Closed);
+            }
+            else
+            {
+                print(1);
+                StartDiscovery();
+                isDiscovering = true;
+                animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Finding);
+            }
+        }
+    }
+    /// <summary>
+    /// Use Android plugin to get wifi SSID
+    /// </summary>
+    /// <returns>Wifi SSID</returns>
+    public static string GetWifiSSID()
+    {
+#if UNITY_ANDROID
+        AndroidJavaClass main = new AndroidJavaClass("com.syz.unitygamePlugin.Main");
+        return main.Call<string>("GetNowWifiSSID");
+#else
+        return "";
+#endif
+    }
+    public void NetworkPanel(bool isOpen)
+    {
+        if (isOpen)
+        {
+            if(NetworkControl.isNetworkAvailable)
+            text.text = $"SSID:{GetWifiSSID()}";
+            networkPanel.gameObject.SetActive(true);
+        }
+        else networkPanel.gameObject.SetActive(false);
+    }
     /// <summary>
     /// Process the request from a client
     /// </summary>
@@ -52,7 +125,8 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
             {
                 version = Application.version,
                 serverId = ServerId,
-                uri = transport.ServerUri()
+                uri = transport.ServerUri(),
+                name = Guid.NewGuid().ToString("D")
             };
         }
         catch (NotImplementedException)
@@ -61,6 +135,7 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
             throw;
         }
     }
+    protected override ServerRxRequest GetRequest() => new ServerRxRequest();
 
     /// <summary>
     /// Process the answer from a server
@@ -79,9 +154,15 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
             Host = response.EndPoint.Address.ToString()
         };
         response.uri = realUri.Uri;
-        if (response.version != Application.version)
-        {
-
-        }
+        // Add ServerResponse to dictionary
+        discoveredServers.Add(response.serverId, response);
+        // Spawn the column of NetworkObject
+        GameObject networkObject = Instantiate(networkObjectPrefab, 
+            new Vector3(0, 40 - (60 * discoveredServers.Count)), new Quaternion(), networkPanel);
+        NetworkObject networkObjectScript = networkObject.GetComponent<NetworkObject>();
+        networkObjectScript.isVersionCorrectly = response.version == Application.version;
+        networkObjectScript.ip = response.uri.AbsoluteUri;
+        networkObjectScript.objectName = response.name;
+        networkObjectScript.UpdateUI();
     }
 }

@@ -6,30 +6,6 @@ using Mirror;
 
 public static class TilemapPlugin
 {
-    public struct TilemapSpawnMessage : NetworkMessage
-    {
-        
-    }
-    public struct TilemapUpdateMessage : NetworkMessage
-    { 
-        public TilemapUpdateMessage((int,int) position,BlockAsset.BlockAssetId assetId,NetworkIdentity userIdentity)
-        {
-            x = position.Item1;
-            y = position.Item2;
-            this.assetId = (int)assetId;
-            userId = userIdentity.netId;
-        }
-        public int x;
-        public int y;
-        /// <summary>
-        /// <seealso cref="BlockAsset.BlockAssetId"/>
-        /// </summary>
-        public int assetId;
-        /// <summary>
-        /// <seealso cref="NetworkIdentity.spawned"/>
-        /// </summary>
-        public uint userId;
-    }
     public struct Chunk
     {
         public const int size = 100;
@@ -39,6 +15,10 @@ public static class TilemapPlugin
         /// </summary>
         public (int, int) Offset { get; set; }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    public static Tilemap mainTilemap;
     public static TileBase[,] tm = new TileBase[TilemapSpawn._targetSize.x, TilemapSpawn._targetSize.y];
     public static Dictionary<(int, int), TileBase> tmDictionary = new Dictionary<(int, int), TileBase>();
     public static Dictionary<(int, int), TileBase> itemDictionary = new Dictionary<(int, int), TileBase>();
@@ -56,28 +36,32 @@ public static class TilemapPlugin
             }
         }
     }
-    public static void DefaultSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tileBase) => 
+    public static void DefaultSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tileBase, bool isCallClient = false)
+    {
         tilemap.SetTile(new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0), tileBase);
+        if (isCallClient) RpcSetTilemapOnline(tilemap, vector2Int, tileBase);
+    }
 
-    public static void ReSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tile) => 
-        SetTilemap(tilemap, vector2Int, tile);
-    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile) => 
-        SetTilemap(tilemap, (vector2Int.x, vector2Int.y), tile);
-    [System.Obsolete] public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile) => 
-        SetTilemap(tilemap, (vector3Int.x, vector3Int.y), tile);
+    public static void ReSetTile(this Tilemap tilemap, (int, int) vector2Int, TileBase tile, bool isCallClient = false) =>
+        SetTilemap(tilemap, vector2Int, tile, isCallClient);
+    public static void ReSetTile(this Tilemap tilemap, Vector2Int vector2Int, TileBase tile, bool isCallClient = false) => 
+        SetTilemap(tilemap, (vector2Int.x, vector2Int.y), tile, isCallClient);
+    [System.Obsolete] public static void ReSetTile(this Tilemap tilemap, Vector3Int vector3Int, TileBase tile, bool isCallClient = false) => 
+        SetTilemap(tilemap, (vector3Int.x, vector3Int.y), tile, isCallClient);
 
-    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase tile) => 
-        SetTilemap(tilemap, vector2Ints, tile);
-    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase[] tiles) => 
-        SetTilemap(tilemap, vector2Ints, tiles);
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase tile, bool isCallClient = false) => 
+        SetTilemap(tilemap, vector2Ints, tile, isCallClient);
+    public static void ReSetTiles(this Tilemap tilemap, (int, int)[] vector2Ints, TileBase[] tiles, bool isCallClient = false) => 
+        SetTilemap(tilemap, vector2Ints, tiles, isCallClient);
 
-    static void SetTilemap(Tilemap tilemap, (int, int) vector2Int, TileBase tile)
+    static void SetTilemap(Tilemap tilemap, (int, int) vector2Int, TileBase tile, bool isCallClient)
     {
         tilemap.SetTile(new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0), tile);
         if (tmDictionary.ContainsKey(vector2Int)) tmDictionary[vector2Int] = tile;
         else tmDictionary.Add(vector2Int, tile);
+        if (isCallClient) RpcSetTilemapOnline(tilemap, vector2Int, tile);
     }
-    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase tile)
+    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase tile, bool isCallClient)
     {
         List<Vector3Int> resultVector3s = new List<Vector3Int>();
         List<TileBase> tileBases = new List<TileBase>();
@@ -90,7 +74,7 @@ public static class TilemapPlugin
         tilemap.SetTiles(resultVector3s.ToArray(), tileBases.ToArray());
     }
 
-    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase[] tiles)
+    static void SetTilemap(Tilemap tilemap, (int, int)[] vector3Ints, TileBase[] tiles, bool isCallClient)
     {
         List<Vector3Int> resultVector3s = new List<Vector3Int>();
         foreach (var i in vector3Ints)
@@ -102,5 +86,10 @@ public static class TilemapPlugin
         {
             tm[vector3Ints[i].Item1, vector3Ints[i].Item2] = tiles[i];
         }
+    }
+    [ClientRpc]
+    public static void RpcSetTilemapOnline(this Tilemap tilemap,(int,int) position,TileBase tile)
+    {
+        tilemap.SetTile(new Vector3Int(position.Item1, position.Item2, 0), tile);
     }
 }

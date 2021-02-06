@@ -7,12 +7,6 @@ public class NetworkPing : MonoBehaviour
     public UIButton[] multiPlaySprite;
     public Button button;
     public Image image;
-    public enum NetworkPingStatus
-    {
-        Bad = 0,
-        Middle = 1,
-        Good = 2
-    }
     private void Update()
     {
         int ping = (int)NetworkTime.rtt * 1000;

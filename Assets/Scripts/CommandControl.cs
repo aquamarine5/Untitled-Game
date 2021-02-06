@@ -59,7 +59,7 @@ namespace CommandAssemble
         public List<string> SecondKeyWord { get; } = new List<string>() { "item"};
         public CommandRunResult Run(string[] args)
         {
-            TilemapSpawn tilemapSpawn = ((GameObject)Command.s_commandData[3]).GetComponent<TilemapSpawn>();
+            TilemapSpawn tilemapSpawn = ((GameObject)CommandControl.s_commandData[3]).GetComponent<TilemapSpawn>();
             switch (args[1])
             {
                 case "item":
@@ -125,7 +125,7 @@ update [string(md5)] : 更新此md5对应的版本
         public List<string> SecondKeyWord { get; } = new List<string>() { null };
         public CommandRunResult Run(string[] args)
         {
-            CheckUpdate checkUpdateScript = ((GameObject)Command.s_commandData[0]).GetComponent<CheckUpdate>();
+            CheckUpdate checkUpdateScript = ((GameObject)CommandControl.s_commandData[0]).GetComponent<CheckUpdate>();
             StartCoroutine(checkUpdateScript.DownloadApplicationFile($@"http://cloud.ananas.chaoxing.com/view/fileviewDownload?objectId={args[1]}"));
             return new CommandRunResult();
         }
@@ -179,14 +179,14 @@ update [string(md5)] : 更新此md5对应的版本
         public List<string> SecondKeyWord { get; } = new List<string>() { null};
         public CommandRunResult Run(string[] args)
         {
-            var material = ((GameObject)Command.s_commandData[0]).GetComponent<TilemapRenderer>();
+            var material = ((GameObject)CommandControl.s_commandData[0]).GetComponent<TilemapRenderer>();
             if (args[1] == "true")
             {
-                material.material = (Material)Command.s_commandData[1];
+                material.material = (Material)CommandControl.s_commandData[1];
             }
             else if (args[1] == "false")
             {
-                material.material = (Material)Command.s_commandData[2];
+                material.material = (Material)CommandControl.s_commandData[2];
             }
             else
             {
@@ -231,7 +231,7 @@ update [string(md5)] : 更新此md5对应的版本
         public List<string> SecondKeyWord { get; } = new List<string>() { "speed", "collider","scale" };
         public CommandRunResult Run(string[] args)
         {
-            TilemapSpawn tilemapSpawn = ((GameObject)Command.s_commandData[3]).GetComponent<TilemapSpawn>();
+            TilemapSpawn tilemapSpawn = ((GameObject)CommandControl.s_commandData[3]).GetComponent<TilemapSpawn>();
             switch (args[1])
             {
                 case "speed":
@@ -283,7 +283,7 @@ update [string(md5)] : 更新此md5对应的版本
         }
     }
 }
-public class Command : MonoBehaviour
+public class CommandControl : MonoBehaviour
 {
     public static Dictionary<int, Object> commandDictData = new Dictionary<int, Object>();
     public List<Object> commandData = new List<Object>();

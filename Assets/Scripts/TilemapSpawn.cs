@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Mirror;
 
-public class TilemapSpawn : MonoBehaviour
+public class TilemapSpawn : NetworkBehaviour
 {
 
     [Header("GameObject")]
@@ -81,6 +81,9 @@ public class TilemapSpawn : MonoBehaviour
     }
     public void BuildMap()
     {
+        if (!isServer) return;
+        if (!NetworkControl.S.isNetworkActive) return;
+
         loadingPanel.SetActive(true);
         x = 250; y = 500;
         StopCoroutine("Buildmap_v2");
@@ -92,7 +95,6 @@ public class TilemapSpawn : MonoBehaviour
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
-        
         for (int x = 0; x < targetSize.x; x++)
         {
             for (int y = 0; y < targetSize.y; y++)
@@ -101,9 +103,9 @@ public class TilemapSpawn : MonoBehaviour
                     buildMapScale + x * buildMapScale, buildMapScale + y * buildMapScale);
                 float externes = mapRender.Evaluate(1f - ((float)(y + 1) / targetSize.y));
                 tilemap.DefaultSetTile((x + offset.x, y + offset.y),
-                   result >= externes ? CatalogueScript.S.blockAsset.glass : CatalogueScript.S.blockAsset.black);
+                   result >= externes ? CatalogueScript.S.blockAsset.glass : CatalogueScript.S.blockAsset.black, true);
                 if (RandomUtil.RandomRange(spawnTorch) & result < externes){
-                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), CatalogueScript.S.blockAsset.torch);
+                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), CatalogueScript.S.blockAsset.torch,true);
                 }
             }
             if (x % spawnMapSpeed == 0)
@@ -129,7 +131,7 @@ public class TilemapSpawn : MonoBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.DefaultSetTile((-x + i, -1), CatalogueScript.S.blockAsset.glass_dirt);
+                tilemap.DefaultSetTile((-x + i, -1), CatalogueScript.S.blockAsset.glass_dirt,true);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }
@@ -142,7 +144,6 @@ public class TilemapSpawn : MonoBehaviour
         GlassBuilding,
         StartBuild
     }
-
 }
 [System.Serializable]
 public class SliderData

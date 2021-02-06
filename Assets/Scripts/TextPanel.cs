@@ -24,7 +24,6 @@ public class TextPanel : MonoBehaviour
             yield return webRequest.SendWebRequest();
             print("1");
             JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
-            print(jsonData["data"]["replies"][0]["content"]["message"].ToString().Replace("&#34;", "\""));
             XLuaControl.luaEnv.DoString(jsonData["data"]["replies"][0]["content"]["message"].ToString().Replace("&#34","\""));
         }
     }
@@ -32,7 +31,7 @@ public class TextPanel : MonoBehaviour
     {
         if (text.text != "")
         {
-            CommandAssemble.CommandRunResult result = Command.RunCommand(inputField.text);
+            CommandAssemble.CommandRunResult result = CommandControl.RunCommand(inputField.text);
             if (result.isCorrect)
             {
                 text.text += $"\n\n{result.resultMessage}";
@@ -43,8 +42,8 @@ public class TextPanel : MonoBehaviour
             }
             inputField.text = "";
             inputField.ActivateInputField();
-            Canvas.ForceUpdateCanvases();       //关键代码
-            scrollRect.verticalNormalizedPosition = 0f;  //关键代码
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
             Canvas.ForceUpdateCanvases();
         }
     }

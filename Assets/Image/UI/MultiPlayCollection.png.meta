@@ -10,10 +10,16 @@ TextureImporter:
     second: Add-pressed
   - first:
       213: -8708208472593098611
-    second: Remove-pressed
+    second: Remove
   - first:
       213: -6311474765291184522
     second: MultiplayObject
+  - first:
+      213: -4057297813347407437
+    second: Goto_disabled
+  - first:
+      213: -5001546013545706796
+    second: Goto_disabled-pressed
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -197,7 +203,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay_disabled-presse
+      name: Multiplay_disabled-pressed
       rect:
         serializedVersion: 2
         x: 16
@@ -281,7 +287,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay_finding-1
+      name: Multiplay-finding-1-pressed
       rect:
         serializedVersion: 2
         x: 16
@@ -302,7 +308,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay_finding-1-
+      name: Multiplay-finding-1
       rect:
         serializedVersion: 2
         x: 16
@@ -323,7 +329,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay_finding-2-pressed
+      name: Multiplay-finding-2-pressed
       rect:
         serializedVersion: 2
         x: 32
@@ -344,7 +350,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay_finding-3-pressed
+      name: Multiplay-finding-3-pressed
       rect:
         serializedVersion: 2
         x: 48
@@ -365,7 +371,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay-finding-4
+      name: Multiplay-finding-4-pressed
       rect:
         serializedVersion: 2
         x: 64
@@ -428,7 +434,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Multiplay-finding-4-pressed
+      name: Multiplay-finding-4
       rect:
         serializedVersion: 2
         x: 64
@@ -449,7 +455,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Goto-pressed
+      name: Goto
       rect:
         serializedVersion: 2
         x: 0
@@ -470,7 +476,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Goto
+      name: Goto-pressed
       rect:
         serializedVersion: 2
         x: 0
@@ -512,7 +518,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Remove
+      name: Remove-pressed
       rect:
         serializedVersion: 2
         x: 0
@@ -554,7 +560,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Remove-pressed
+      name: Remove
       rect:
         serializedVersion: 2
         x: 0
@@ -578,12 +584,12 @@ TextureImporter:
       name: MultiplayObject
       rect:
         serializedVersion: 2
-        x: 17
-        y: 70
-        width: 47
+        x: 15
+        y: 69
+        width: 69
         height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 2, y: 2, z: 2, w: 2}
       outline: []
       physicsShape: []
@@ -591,6 +597,48 @@ TextureImporter:
       bones: []
       spriteID: 67e1afdf3232968a0800000000000000
       internalID: -6311474765291184522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goto_disabled
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 13
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b9657f922591b7c0800000000000000
+      internalID: -4057297813347407437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goto_disabled-pressed
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 3
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4da46d66660f69ab0800000000000000
+      internalID: -5001546013545706796
       vertices: []
       indices: 
       edges: []
