@@ -6,6 +6,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="BlockAsset",menuName ="AssetDatabase/BlockAsset")]
 public class BlockAsset : ScriptableObject
 {
+    /// <summary>
+    /// <seealso cref="CatalogueScript"/>
+    /// </summary>
+    public static BlockAsset BlockAssetInstance { get; set; }
+
     [Header("Common Tile")]
     public TileBase glass;
     public TileBase glass_dirt;
@@ -28,5 +33,8 @@ public class BlockAsset : ScriptableObject
 }
 public class BlockLibrary
 {
-    public static BlockAsset S;
+    /// <summary>
+    /// <seealso cref="CatalogueScript"/>
+    /// </summary>
+    public static BlockAsset BlockAssetInstance { get; set; }
 }

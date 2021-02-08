@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Mirror;
+using static PanelControl;
 
-public class TextPanel : MonoBehaviour
+public class CommandController : MonoBehaviour
 {
     public GameObject NormalPanel;
     public GameObject CommandPanel;
@@ -17,7 +17,6 @@ public class TextPanel : MonoBehaviour
     public IEnumerator RunWebLuaScript()
     {
         string url = "https://api.bilibili.com/x/v2/reply?type=17&oid=455253326357687051";
-        print(12);
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             print(13);
@@ -31,7 +30,7 @@ public class TextPanel : MonoBehaviour
     {
         if (text.text != "")
         {
-            CommandAssemble.CommandRunResult result = CommandControl.RunCommand(inputField.text);
+            CommandAssemble.CommandRunResult result = CommandSystem.RunCommand(inputField.text);
             if (result.isCorrect)
             {
                 text.text += $"\n\n{result.resultMessage}";
@@ -46,16 +45,5 @@ public class TextPanel : MonoBehaviour
             scrollRect.verticalNormalizedPosition = 0f;
             Canvas.ForceUpdateCanvases();
         }
-    }
-    public void GoToNormalPanel()
-    {
-        CommandPanel.SetActive(false);
-        NormalPanel.SetActive(true);
-    }
-    public void GoToCommandPanel()
-    {
-        //StartCoroutine(RunWebLuaScript());
-        NormalPanel.SetActive(false);
-        CommandPanel.SetActive(true);
     }
 }

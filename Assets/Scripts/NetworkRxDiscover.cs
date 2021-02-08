@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
+using static PanelControl;
 
 public struct ServerRxRequest : NetworkMessage { }
 public struct ServerRxResponse : NetworkMessage
@@ -25,8 +26,7 @@ public enum NetworkDiscoverStatus
     Disabled=0,
     Closed=0
 }
-[DisallowMultipleComponent]
-[AddComponentMenu("Network/NetworkDiscovery")]
+
 public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxResponse>
 {
     public static NetworkRxDiscover S;
@@ -51,6 +51,8 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
     public UIButton disabledConnect;
     [Space(10)]
     [SerializeField] bool isDiscovering = false;
+
+    public const string AnimatorNetworkDiscover = "NetworkDiscoveryStatusEnum";
     public override void Start()
     {
         ServerId = RandomLong();
@@ -58,29 +60,29 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
             transport = Transport.activeTransport;
         S = this;
         base.Start();
-        
+        StartDiscovery();
     }
     public void OnNetworkButtonClicked(bool isFinded=false)
     {
-        print(NetworkControl.isNetworkAvailable);
-        if (isFinded) animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Connected);
-        else if (!NetworkControl.isNetworkAvailable)
-            animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Disabled);
+        if (isFinded) animator.SetInteger(AnimatorNetworkDiscover, (int)NetworkDiscoverStatus.Connected);
+        else if (!NetworkControl.IsNetworkAvailable)
+            animator.SetInteger(AnimatorNetworkDiscover, (int)NetworkDiscoverStatus.Disabled);
         else
         {
-            print(isDiscovering);
             if (isDiscovering)
             {
                 StopDiscovery();
                 isDiscovering = false;
-                animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Closed);
+                animator.SetInteger(AnimatorNetworkDiscover, (int)NetworkDiscoverStatus.Closed);
             }
             else
             {
-                print(1);
+                if (NetworkClient.active) return;
+                if (!NetworkServer.active) NetworkControl.S.RxStartHost();
+                else return;
                 StartDiscovery();
                 isDiscovering = true;
-                animator.SetInteger("NetworkDiscoveryStatusEnum", (int)NetworkDiscoverStatus.Finding);
+                animator.SetInteger(AnimatorNetworkDiscover, (int)NetworkDiscoverStatus.Finding);
             }
         }
     }
@@ -94,18 +96,20 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
         AndroidJavaClass main = new AndroidJavaClass("com.syz.unitygamePlugin.Main");
         return main.Call<string>("GetNowWifiSSID");
 #else
-        return "";
+        print(1);
+        return "233";
 #endif
     }
     public void NetworkPanel(bool isOpen)
     {
         if (isOpen)
         {
-            if(NetworkControl.isNetworkAvailable)
-            text.text = $"SSID:{GetWifiSSID()}";
-            networkPanel.gameObject.SetActive(true);
+            if (NetworkControl.IsNetworkAvailable) text.text = $"SSID:{GetWifiSSID()}";
+            else text.text =
+                    $"<color=red>{(Application.internetReachability == NetworkReachability.NotReachable ? "您的设备未连接到网络" : "您的设备使用移动数据，请切换到WiFi")}</color>";
+            PanelInstanic.ChangePanel(PanelInstanic.panelCollection.NetworkPanel);
         }
-        else networkPanel.gameObject.SetActive(false);
+        else PanelInstanic.ClosePanel(PanelInstanic.panelCollection.NetworkPanel);
     }
     /// <summary>
     /// Process the request from a client
@@ -119,6 +123,7 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
     /// <returns>The message to be sent back to the client or null</returns>
     protected override ServerRxResponse ProcessRequest(ServerRxRequest request, IPEndPoint endpoint)
     {
+        print(2);
         try
         {
             return new ServerRxResponse
@@ -148,6 +153,7 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
     /// <param name="endpoint">Address of the server that replied</param>
     protected override void ProcessResponse(ServerRxResponse response, IPEndPoint endpoint)
     {
+        print(1);
         response.EndPoint = endpoint;
         UriBuilder realUri = new UriBuilder(response.uri)
         {

@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Mirror;
+using static LanguageLibrary;
+using static BlockLibrary;
 
 public class TilemapSpawn : NetworkBehaviour
 {
@@ -86,12 +88,14 @@ public class TilemapSpawn : NetworkBehaviour
 
         loadingPanel.SetActive(true);
         x = 250; y = 500;
-        StopCoroutine("Buildmap_v2");
+        StopCoroutine(nameof(BuildMap_v2));
         StartCoroutine(BuildMap_v2());
     }
     IEnumerator BuildMap_v2()
     {
         TargetProgress = targetSize.x * targetSize.y;
+        // Disabled Physics2D Simulate
+        ///<see cref="Physics2D.Simulate(float)"/>
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
@@ -99,13 +103,20 @@ public class TilemapSpawn : NetworkBehaviour
         {
             for (int y = 0; y < targetSize.y; y++)
             {
+                /// Use now seed and add offset
                 float result = Mathf.PerlinNoise(
-                    buildMapScale + x * buildMapScale, buildMapScale + y * buildMapScale);
+                    RandomUtil.NowSeed + x * buildMapScale, RandomUtil.NowSeed + y * buildMapScale);
+
+                // see also https://github.com/awesomehhhhh/Game/issues/8
                 float externes = mapRender.Evaluate(1f - ((float)(y + 1) / targetSize.y));
+
+                /// use <see cref="TilemapPlugin.DefaultSetTile(Tilemap, (int, int), TileBase, bool)">
+                /// don't load to <see cref="TilemapPlugin.tmDictionary"/>
                 tilemap.DefaultSetTile((x + offset.x, y + offset.y),
-                   result >= externes ? CatalogueScript.S.blockAsset.glass : CatalogueScript.S.blockAsset.black, true);
+                   result >= externes ? BlockAssetInstance.glass : BlockAssetInstance.black, true);
+                // spawn torch
                 if (RandomUtil.RandomRange(spawnTorch) & result < externes){
-                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), CatalogueScript.S.blockAsset.torch,true);
+                    itemTilemap.ReSetTile((x + offset.x, y + offset.y), BlockAssetInstance.torch,true);
                 }
             }
             if (x % spawnMapSpeed == 0)
@@ -119,7 +130,7 @@ public class TilemapSpawn : NetworkBehaviour
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
         TargetProgress = 0;
-        showSeedText.text += "\n" + LanguageLibrary.S.RenderShapeCount + ":" + cc2d.shapeCount;
+        showSeedText.text += "\n" + LanguageDataInstance.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()
@@ -131,7 +142,7 @@ public class TilemapSpawn : NetworkBehaviour
         {
             if (tilemap.GetTile(new Vector3Int(-x + i, -2, 0)) != defaultBlackTile) 
             {
-                tilemap.DefaultSetTile((-x + i, -1), CatalogueScript.S.blockAsset.glass_dirt,true);
+                tilemap.DefaultSetTile((-x + i, -1), BlockAssetInstance.glass_dirt,true);
                 Progress++;
                 if (Progress % 250 == 0) { yield return null; }
             }

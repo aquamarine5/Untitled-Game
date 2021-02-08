@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Mirror;
+using Mirror.Experimental;
 using UnityEngine;
-using UnityEngine.UI;
-using Mirror;
+using NetworkTransformBase = Mirror.NetworkTransformBase;
 
 public class NetworkControl : NetworkManager
 {
@@ -10,32 +9,36 @@ public class NetworkControl : NetworkManager
     /// If the network environment is WIFI return true.<br/>
     /// <seealso cref="Application.internetReachability"/>
     /// </summary>
-    public static bool isNetworkAvailable => Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork;
+    public static bool IsNetworkAvailable => Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork;
     public static NetworkControl S { get; private set; }
+    public NetworkRxDiscover discover;
     [Header("Player Require Argument")]
+    public GameObject player;
     public Cinemachine.CinemachineVirtualCamera cinemachineVirtualCamera;
     public PlayerMove playerMove;
-    [Space(10)]
-    public GameObject localPlayer;
-    
+
     public override void Awake()
     {
         S = this;
         base.Awake();
     }
-    public override void OnStartHost()
+    public void RxStartHost()
     {
-        NetworkRxDiscover.S.AdvertiseServer();
-        if(isNetworkAvailable)
-            base.OnStartHost();
+        if (IsNetworkAvailable)
+        {
+            discover.AdvertiseServer();
+            StartHost();
+        }
         else
         {
             Debug.LogError("FAILED");
+            NetworkRxDiscover.S.text.text = 
+                $"<color=red>{(Application.internetReachability == NetworkReachability.NotReachable ? "您的设备未连接到网络" : "您的设备使用移动数据，请切换到WiFi")}</color>";
         }
     }
     public override void OnStartClient()
     {
-        if(isNetworkAvailable)
+        if (IsNetworkAvailable)
             base.OnStartClient();
         else
         {
@@ -44,11 +47,8 @@ public class NetworkControl : NetworkManager
     }
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        GameObject player = Instantiate(playerPrefab, GetStartPosition().position, new Quaternion());
-        NetworkServer.AddPlayerForConnection(conn, player);
-        if (conn.identity.isLocalPlayer) { 
-            localPlayer = player;
-        }
+        GameObject clientPlayer = Instantiate(playerPrefab, GetStartPosition().position, new Quaternion());
+        NetworkServer.AddPlayerForConnection(conn, clientPlayer);
     }
 }
 
@@ -70,4 +70,21 @@ public enum NetworkPingStatus
     /// <see cref="NetworkRxDiscover.none"/>
     /// </summary>
     None = 100
+}
+
+public static class NetworkPlugin
+{
+    public static void SetNetworkComponentActive(this NetworkIdentity networkIdentity, bool isActive)
+    {
+        GameObject gameObject = networkIdentity.gameObject;
+        gameObject.GetComponent<NetworkAnimator>().SetEnabled(isActive);
+        gameObject.GetComponent<NetworkRigidbody>().SetEnabled(isActive);
+        gameObject.GetComponent<NetworkRigidbody2D>().SetEnabled(isActive);
+        gameObject.GetComponent<NetworkTransformBase>().SetEnabled(isActive);
+    }
+    static void SetEnabled(this MonoBehaviour monoBehaviour, bool isEnabled) 
+    {
+        if (monoBehaviour == null) return;
+        monoBehaviour.enabled = isEnabled; 
+    }
 }

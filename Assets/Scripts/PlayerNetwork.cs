@@ -9,6 +9,5 @@ public class PlayerNetwork : NetworkBehaviour
     {
         NetworkControl.S.cinemachineVirtualCamera.Follow = transform;
         NetworkControl.S.playerMove.rd2d = GetComponent<Rigidbody2D>();
-        
     }
 }

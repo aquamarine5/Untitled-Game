@@ -10,7 +10,6 @@ public static class RandomUtil
         {
             nowSeed = value;
             Random.InitState(nowSeed);
-            //CatalogueScript.S.seedText.text = $"Seed:{value}";
         }
     }
     public static int SetSeed(this int seed)

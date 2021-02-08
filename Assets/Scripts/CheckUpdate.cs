@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static PanelControl;
 
 public class CheckUpdate : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class CheckUpdate : MonoBehaviour
     }
     public void CheckUpdated()
     {
-        panel.SetActive(true);
+        PanelInstanic.ClosePanel(PanelInstanic.panelCollection.UpdatePanel);
         if (isBackstage == false)
         {
             StartCoroutine(WebRequests($"https://api.bilibili.com/x/space/acc/info?mid={b_id}&jsonp=jsonp"));
@@ -84,8 +85,7 @@ public class CheckUpdate : MonoBehaviour
     public void OnBackstage()
     {
         isBackstage = true;
-        print(isBackstage);
-        panel.SetActive(false);
+        PanelInstanic.ChangePanel(PanelInstanic.panelCollection.UpdatePanel);
     }
     public IEnumerator DownloadApplicationFile(string downloadFileName, bool isCommand = false)
     {
@@ -99,7 +99,6 @@ public class CheckUpdate : MonoBehaviour
             ulong size = downloader.downloadedBytes;
             while (!downloader.isDone)
             {
-
                 downloadsCD += Time.deltaTime;
                 if (isOnStart && downloadsCD >= 0.1) speed.text = ConvertToWebByte(downloader.downloadedBytes * 10 - 0) + "/s";
                 if (isOnStart && downloadsCD >= 0.5) speed.text = ConvertToWebByte(downloader.downloadedBytes * 2 - 0) + "/s"; isOnStart = false;

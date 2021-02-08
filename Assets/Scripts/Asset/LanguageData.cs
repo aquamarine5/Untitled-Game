@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 [System.Serializable]
 [CreateAssetMenu(fileName = "LanguageData", menuName = "AssetDatabase/LanguageData")]
 public class LanguageData:ScriptableObject
@@ -11,7 +12,10 @@ public class LanguageData:ScriptableObject
 }
 public static class LanguageLibrary
 {
-    public static LanguageData S;
+    /// <summary>
+    /// <seealso cref="CatalogueScript"/>
+    /// </summary>
+    public static LanguageData LanguageDataInstance { get; set; }
 }
 [System.Serializable]
 public struct BuildmapLanguageData

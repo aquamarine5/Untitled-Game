@@ -9,10 +9,12 @@ public class CatalogueScript : MonoBehaviour
     public BlockAsset blockAsset;
     public LanguageData languageData;
     public XLuaControl xLuaScript;
+
     private void Awake()
     {
         S = this;
-        LanguageLibrary.S = languageData;
-        BlockLibrary.S = blockAsset;
+        BlockAsset.BlockAssetInstance = blockAsset;
+        LanguageLibrary.LanguageDataInstance = languageData;
+        BlockLibrary.BlockAssetInstance = blockAsset;
     }
 }
