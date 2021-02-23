@@ -5,12 +5,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Mirror;
-using static LanguageLibrary;
-using static BlockLibrary;
+using static CatalogueScript;
 
 public class TilemapSpawn : NetworkBehaviour
 {
-
     [Header("GameObject")]
     [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
     [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
@@ -95,7 +93,6 @@ public class TilemapSpawn : NetworkBehaviour
     {
         TargetProgress = targetSize.x * targetSize.y;
         // Disabled Physics2D Simulate
-        ///<see cref="Physics2D.Simulate(float)"/>
         Physics2D.simulationMode = SimulationMode2D.Script;
         if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
@@ -103,15 +100,15 @@ public class TilemapSpawn : NetworkBehaviour
         {
             for (int y = 0; y < targetSize.y; y++)
             {
-                /// Use now seed and add offset
+                // Use now seed and add offset
                 float result = Mathf.PerlinNoise(
                     RandomUtil.NowSeed + x * buildMapScale, RandomUtil.NowSeed + y * buildMapScale);
 
                 // see also https://github.com/awesomehhhhh/Game/issues/8
                 float externes = mapRender.Evaluate(1f - ((float)(y + 1) / targetSize.y));
 
-                /// use <see cref="TilemapPlugin.DefaultSetTile(Tilemap, (int, int), TileBase, bool)">
-                /// don't load to <see cref="TilemapPlugin.tmDictionary"/>
+                // use TilemapPlugin.DefaultSetTile(Tilemap, (int, int), TileBase, bool)"
+                // don't load to "TilemapPlugin.tmDictionary"
                 tilemap.DefaultSetTile((x + offset.x, y + offset.y),
                    result >= externes ? BlockAssetInstance.glass : BlockAssetInstance.black, true);
                 // spawn torch

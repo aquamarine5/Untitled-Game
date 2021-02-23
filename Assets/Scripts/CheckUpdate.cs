@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using static PanelControl;
+using static CatalogueScript;
 
 public class CheckUpdate : MonoBehaviour
 {
@@ -38,7 +38,7 @@ public class CheckUpdate : MonoBehaviour
     }
     public void CheckUpdated()
     {
-        PanelInstanic.ClosePanel(PanelInstanic.panelCollection.UpdatePanel);
+        PanelInstance.ClosePanel(PanelInstance.panelCollection.UpdatePanel);
         if (isBackstage == false)
         {
             StartCoroutine(WebRequests($"https://api.bilibili.com/x/space/acc/info?mid={b_id}&jsonp=jsonp"));
@@ -85,7 +85,7 @@ public class CheckUpdate : MonoBehaviour
     public void OnBackstage()
     {
         isBackstage = true;
-        PanelInstanic.ChangePanel(PanelInstanic.panelCollection.UpdatePanel);
+        PanelInstance.ChangePanel(PanelInstance.panelCollection.UpdatePanel);
     }
     public IEnumerator DownloadApplicationFile(string downloadFileName, bool isCommand = false)
     {
@@ -128,7 +128,7 @@ public class CheckUpdate : MonoBehaviour
             {
                 slider.value = 1f;
                 text.text = 100.ToString("F2") + "%";
-                InstallApp(downloadPath);
+                InstallApp(downloadFileName);
             }
         }
     }

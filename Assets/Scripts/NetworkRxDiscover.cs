@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
-using static PanelControl;
+using static CatalogueScript;
 
 public struct ServerRxRequest : NetworkMessage { }
 public struct ServerRxResponse : NetworkMessage
@@ -62,7 +62,7 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
         base.Start();
         StartDiscovery();
     }
-    public void OnNetworkButtonClicked(bool isFinded=false)
+    public void OnNetworkButtonClicked(bool isFinded = false)
     {
         if (isFinded) animator.SetInteger(AnimatorNetworkDiscover, (int)NetworkDiscoverStatus.Connected);
         else if (!NetworkControl.IsNetworkAvailable)
@@ -107,9 +107,9 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
             if (NetworkControl.IsNetworkAvailable) text.text = $"SSID:{GetWifiSSID()}";
             else text.text =
                     $"<color=red>{(Application.internetReachability == NetworkReachability.NotReachable ? "您的设备未连接到网络" : "您的设备使用移动数据，请切换到WiFi")}</color>";
-            PanelInstanic.ChangePanel(PanelInstanic.panelCollection.NetworkPanel);
+            PanelInstance.ChangePanel(PanelInstance.panelCollection.NetworkPanel);
         }
-        else PanelInstanic.ClosePanel(PanelInstanic.panelCollection.NetworkPanel);
+        else PanelInstance.ClosePanel(PanelInstance.panelCollection.NetworkPanel);
     }
     /// <summary>
     /// Process the request from a client
@@ -123,7 +123,6 @@ public class NetworkRxDiscover : NetworkDiscoveryBase<ServerRxRequest, ServerRxR
     /// <returns>The message to be sent back to the client or null</returns>
     protected override ServerRxResponse ProcessRequest(ServerRxRequest request, IPEndPoint endpoint)
     {
-        print(2);
         try
         {
             return new ServerRxResponse

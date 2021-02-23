@@ -3,8 +3,19 @@ using UnityEngine.UI;
 
 public class CatalogueScript : MonoBehaviour
 {
-    public static CatalogueScript S;
-    [Tooltip("显示Seed的UI.Text")] public Text seedText;
+    public static BlockAsset BlockAssetInstance => BlockLibrary.BlockAssetInstance;
+    public static LanguageData LanguageDataInstance => LanguageLibrary.LanguageDataInstance;
+    public static PanelControl PanelInstance => PanelControl.PanelInstance;
+    public static CatalogueScript CatalogueInstance;
+
+    [Header("Tilemap asset")]
+    public GameObject tilemapChunkMaster;
+    public GameObject tilemapChunkPrefab;
+
+    [Header("Static asset")]
+    public Text seedText;
+
+    [Header("ScriptableObject asset")]
     public WeaponBase weaponBaseScript;
     public BlockAsset blockAsset;
     public LanguageData languageData;
@@ -12,8 +23,7 @@ public class CatalogueScript : MonoBehaviour
 
     private void Awake()
     {
-        S = this;
-        BlockAsset.BlockAssetInstance = blockAsset;
+        CatalogueInstance = this;
         LanguageLibrary.LanguageDataInstance = languageData;
         BlockLibrary.BlockAssetInstance = blockAsset;
     }

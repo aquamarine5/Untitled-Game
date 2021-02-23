@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class PanelControl : MonoBehaviour
 {
-    
-    public static PanelControl PanelInstanic;
+    public static PanelControl PanelInstance;
     public PanelCollection panelCollection;
     private void Awake()
     {
-        PanelInstanic = this;
+        PanelInstance = this;
     }
     /// <summary>
     /// Change the panel and closed others.
@@ -24,7 +23,13 @@ public class PanelControl : MonoBehaviour
         panelCollection.MasterPanel.SetActive(isShowMasterUI);
         panelGameObject.SetActive(true);
     }
+    /// <summary>
+    /// Only for UnityEditor<br/><seealso cref="ChangePanel(GameObject, bool)"/>, bool is true
+    /// </summary>
     public void ChangePanelWithoutClosedMaster(GameObject panelGameObject) => ChangePanel(panelGameObject, true);
+    /// <summary>
+    /// Only for UnityEditor<br/><seealso cref="ChangePanel(GameObject, bool)"/>, bool is false
+    /// </summary>
     public void ChangePanelClosedMaster(GameObject panelGameObject) => ChangePanel(panelGameObject, false);
     public void ClosePanel(GameObject panelGameObject) => panelGameObject.SetActive(false);
 

@@ -1,6 +1,7 @@
 ﻿using Mirror;
 using Mirror.Experimental;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using NetworkTransformBase = Mirror.NetworkTransformBase;
 
 public class NetworkControl : NetworkManager
@@ -13,7 +14,7 @@ public class NetworkControl : NetworkManager
     public static NetworkControl S { get; private set; }
     public NetworkRxDiscover discover;
     [Header("Player Require Argument")]
-    public GameObject player;
+    public GameObject disconnectedPlayer;
     public Cinemachine.CinemachineVirtualCamera cinemachineVirtualCamera;
     public PlayerMove playerMove;
 
@@ -47,8 +48,10 @@ public class NetworkControl : NetworkManager
     }
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        GameObject clientPlayer = Instantiate(playerPrefab, GetStartPosition().position, new Quaternion());
-        NetworkServer.AddPlayerForConnection(conn, clientPlayer);
+        /// when <see cref="NetworkServer.connections.Count"/> ==0 meaning <seealso cref="NetworkManager.StartHost"/>
+        NetworkServer.AddPlayerForConnection(conn, NetworkServer.connections.Count == 0 
+            ? disconnectedPlayer
+            : Instantiate(playerPrefab, GetStartPosition().position , new Quaternion()));
     }
 }
 
