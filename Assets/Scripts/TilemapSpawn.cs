@@ -10,8 +10,6 @@ using static CatalogueScript;
 public class TilemapSpawn : NetworkBehaviour
 {
     [Header("GameObject")]
-    [Tooltip("Tilemap's collider")] public TilemapCollider2D tilemapCollider;
-    [Tooltip("Tilemap's composite collider")] public CompositeCollider2D cc2d;
     public Tilemap tilemap;
     public Tile defaultBlackTile;
     public Tilemap itemTilemap;
@@ -94,11 +92,19 @@ public class TilemapSpawn : NetworkBehaviour
         TargetProgress = targetSize.x * targetSize.y;
         // Disabled Physics2D Simulate
         Physics2D.simulationMode = SimulationMode2D.Script;
-        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
+        //if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         buildMapStatus = BuildMapStatus.CaveDigging;
         for (int x = 0; x < targetSize.x; x++)
         {
-            for (int y = 0; y < targetSize.y; y++)
+            // if use for (int y = 0; y < targetSize.y; y++) it is:
+            //    /|\  /|\
+            //     |    |
+            // but because chunk so we must
+            //     |    |
+            //    \|/  \|/
+            /// <seealso cref="TilemapChunk.ConvertToLocalPosition((int, int))"/>
+            /// <exception cref="PositionNotInChunkException"/>
+            for (int y = targetSize.y; y >0; y--)
             {
                 // Use now seed and add offset
                 float result = Mathf.PerlinNoise(
@@ -106,10 +112,11 @@ public class TilemapSpawn : NetworkBehaviour
 
                 // see also https://github.com/awesomehhhhh/Game/issues/8
                 float externes = mapRender.Evaluate(1f - ((float)(y + 1) / targetSize.y));
+                externes = 0.5f;
 
                 // use TilemapPlugin.DefaultSetTile(Tilemap, (int, int), TileBase, bool)"
                 // don't load to "TilemapPlugin.tmDictionary"
-                tilemap.DefaultSetTile((x + offset.x, y + offset.y),
+                tilemap.ReSetTile((x + offset.x, y + offset.y),
                    result >= externes ? BlockAssetInstance.glass : BlockAssetInstance.black, true);
                 // spawn torch
                 if (RandomUtil.RandomRange(spawnTorch) & result < externes){
@@ -122,17 +129,15 @@ public class TilemapSpawn : NetworkBehaviour
                 yield return null;
             }
         }
-        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = true;
+        //if (!isUpdateColliderOnFrame) tilemapCollider.enabled = true;
         Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
         buildMapStatus = BuildMapStatus.GlassBuilding;
         yield return StartCoroutine(PlantGlass());
         TargetProgress = 0;
-        showSeedText.text += "\n" + LanguageDataInstance.RenderShapeCount + ":" + cc2d.shapeCount;
         loadingPanel.SetActive(false);
     }
     IEnumerator PlantGlass()
     {
-        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = false;
         TargetProgress = targetSize.x;
         Progress = 0;
         for (int i = 0; i < targetSize.x; i++)
@@ -144,7 +149,6 @@ public class TilemapSpawn : NetworkBehaviour
                 if (Progress % 250 == 0) { yield return null; }
             }
         }
-        if (!isUpdateColliderOnFrame) tilemapCollider.enabled = true;
     }
     public enum BuildMapStatus
     {

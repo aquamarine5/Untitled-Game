@@ -31,6 +31,10 @@ public static class TilemapUtil
     }
     #endregion
 
+    public static (int, int) ConvertToTuple(this Vector2Int vector2Int) => (vector2Int.x, vector2Int.y);
+
+    public static Vector2Int ConvertToVector(this (int, int) tuple) => new Vector2Int(tuple.Item1, tuple.Item2);
+
     /// <summary>
     /// Convert tilemap position to chunk position<br/>
     /// For example,<br/>
@@ -43,10 +47,20 @@ public static class TilemapUtil
 
     public static (int, int) ConvertToChunkPosition((int,int) position) => (position.Item1 / 10, position.Item2 / 10);
 
+    /// <summary>
+    /// Convert chunk's transfrom's position chunk position
+    /// </summary>
+    /// <param name="tilemapChunk">The chunk.</param>
+    /// <returns>Chunk position</returns>
+    public static (int, int) ConvertToChunkPosition(TilemapChunk tilemapChunk) => ((int)tilemapChunk.transform.position.x / 10, (int)tilemapChunk.transform.position.y / 10);
+
     public static TilemapChunk AddChunk((int, int) position)
     {
-        return Object.Instantiate(CatalogueInstance.tilemapChunkPrefab, new Vector3(position.Item1 * 10, position.Item2 * 10),
-            Quaternion.identity, CatalogueInstance.tilemapChunkMaster.transform).GetComponent<TilemapChunk>();
+        GameObject gameObject = Object.Instantiate(CatalogueInstance.tilemapChunkPrefab, new Vector3(position.Item1 * 10, position.Item2 * 10),
+            Quaternion.identity, CatalogueInstance.tilemapChunkMaster.transform);
+        gameObject.name = $"Chunk ({position.Item1},{position.Item2})";
+        tilemapChunkDictionary.Add(position, gameObject.GetComponent<TilemapChunk>());
+        return gameObject.GetComponent<TilemapChunk>();
     }
 
     #region RxSetTile
@@ -71,15 +85,32 @@ public static class TilemapUtil
 
     static void SetTilemap(Tilemap tilemap, (int, int) vector2Int, TileBase tile, bool isCallClient)
     {
-        if (tilemapChunkDictionary.TryGetValue(ConvertToChunkPosition(vector2Int), out TilemapChunk tilemapChunk)) 
+        var chunkPosition = ConvertToChunkPosition(vector2Int);
+        // Get chunk, create a new chunk if isn't exist.
+        TilemapChunk tilemapChunk = tilemapChunkDictionary.ContainsKey(chunkPosition) 
+            ? tilemapChunkDictionary[chunkPosition] 
+            : AddChunk(chunkPosition);
+        Debug.Log(tile);
+        var tilemapPosition = new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0);
+        tilemap.SetTile(tilemapPosition, tile);
+        var colliderType = tilemap.GetColliderType(tilemapPosition);
+        // don't set collider when tile's colliderType is None
+        if (colliderType == Tile.ColliderType.Sprite || colliderType == Tile.ColliderType.Grid) 
         {
-            
+            // Use tilemap.GetSprite instead TileBase.GetTileData
+            Sprite sprite = tilemap.GetSprite(tilemapPosition);
+            // Create a buffer list to save data
+            List<Vector2> physicsShape = new List<Vector2>();
+            // see also : https://docs.unity3d.com/cn/2020.1/ScriptReference/Sprite.GetPhysicsShape.html
+            // 精灵可能有孔和不连续部分，因此其轮廓不一定由单个物理形状定义。
+            for (int shapeId = 0; shapeId < sprite.GetPhysicsShapeCount(); ++shapeId)
+            {
+                physicsShape.Clear();
+                // GetPhysicsShape will write shape data to physicsShape
+                sprite.GetPhysicsShape(shapeId, physicsShape);
+                tilemapChunk.SetCollider(tilemapChunk.ConvertToLocalPosition(vector2Int), physicsShape.ToArray());
+            }
         }
-        else
-        {
-            tilemapChunk = AddChunk(ConvertToChunkPosition(vector2Int));
-        }
-        tilemap.SetTile(new Vector3Int(vector2Int.Item1, vector2Int.Item2, 0), tile);
         if (tmDictionary.ContainsKey(vector2Int)) tmDictionary[vector2Int] = tile;
         else tmDictionary.Add(vector2Int, tile);
         if (isCallClient) RpcSetTilemapOnline(tilemap, vector2Int, tile);
@@ -126,4 +157,15 @@ public static class TilemapUtil
         tilemap.SetTiles(positions, tiles);
     }
     #endregion
+}
+public class PositionNotInChunkException : System.Exception
+{
+    public Vector2Int requestPosition;
+    public (int, int) chunkPosition;
+    public override string ToString() =>
+        $"Chunk position : {ConvertTupleToString(chunkPosition)}\nRequest position : {ConvertVector2ToString(requestPosition)}\n{base.ToString()}";
+    public override string Message => 
+        $"Chunk position : {ConvertTupleToString(chunkPosition)}\nRequest position : {ConvertVector2ToString(requestPosition)}\n{base.Message}";
+    string ConvertTupleToString((int, int) input) => $"({input.Item1},{input.Item2})";
+    string ConvertVector2ToString(Vector2Int input) => $"({input.x},{input.y})";
 }
