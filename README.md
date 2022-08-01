@@ -1,9 +1,9 @@
 # Untitled-Game
-## 感谢
-- 感谢王霆轶捐助 ￥6
+## Acknowledge
+- 感谢不愿透露名称的小伙伴捐助 ￥6
 ## 安装包
 - 详细见Releases，因为自己开发有些许任性导致最新的Release未必是最稳定版本，之前的版本或许更加稳定
-- **因为超星网盘调整的原因，自动更新已不可用**
+- **因为超星网盘调整的原因，自动更新可能不可用**
 ## 依赖
 - EasyTouch
 - [XLua](https://github.com/Tencent/xLua)
@@ -23,5 +23,6 @@
 - a0.5.x -> Map Rand Spawn（随机生成地图）
 - a0.6.x -> Lost(?)
 - a0.7.x -> Function（函数）
-- a0.8.x -> Mirror Networking Connect（网络游戏连接）
+- a0.8.x -> Mirror Network Connect（网络游戏连接）
+- a0.9.x -> Mirror Network Discover
 
